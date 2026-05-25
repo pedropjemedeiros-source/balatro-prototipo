@@ -102,6 +102,12 @@
   .opp-box .oname{color:var(--text-dim);font-size:12px}
   .opp-box .oscore{color:var(--gold);font-size:15px;font-weight:600}
   .opp-box .ostatus{font-size:11px;color:rgba(255,255,255,0.4)}
+  input[type=number]{background:rgba(0,0,0,0.4);border:1px solid rgba(212,168,67,0.4);border-radius:8px;color:var(--text);font-family:'Crimson Pro',serif;font-size:16px;padding:10px 14px;width:100%;outline:none;transition:border-color .2s;-moz-appearance:textfield}
+  input[type=number]::-webkit-inner-spin-button,input[type=number]::-webkit-outer-spin-button{-webkit-appearance:none;margin:0}
+  input[type=number]:focus{border-color:var(--gold)}
+  .quick-btns{display:flex;gap:6px;margin-top:7px;}
+  .quick-btn{flex:1;background:rgba(212,168,67,0.1);border:1px solid rgba(212,168,67,0.35);border-radius:6px;color:var(--gold);font-family:'Crimson Pro',serif;font-size:12px;padding:5px 4px;cursor:pointer;transition:all .15s;white-space:nowrap;}
+  .quick-btn:hover{background:rgba(212,168,67,0.25);border-color:var(--gold);}
   @media(max-width:480px){.logo h1{font-size:36px}.card{width:56px;height:84px}.card-suit{font-size:22px}.card-rank{font-size:16px}}
   .loading-overlay{position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(13,31,13,0.92);z-index:200;display:none;align-items:center;justify-content:center;flex-direction:column;gap:14px}
   .loading-overlay.show{display:flex}
@@ -134,12 +140,13 @@
     <div class="field-group">
       <div>
         <div class="field-label">Pontuação para Vencer</div>
-        <select id="winningScoreInput">
-          <option value="1000">1.000 pts — Partida Rápida ⚡</option>
-          <option value="2500">2.500 pts — Partida Normal 🃏</option>
-          <option value="5000" selected>5.000 pts — Partida Longa 🎰</option>
-          <option value="10000">10.000 pts — Partida Épica 🏆</option>
-        </select>
+        <input type="number" id="winningScoreInput" value="5000" min="100" max="9999999" step="100" placeholder="Ex: 5000"/>
+        <div class="quick-btns">
+          <button class="quick-btn" onclick="setWinScore('winningScoreInput',500)">500 ⚡</button>
+          <button class="quick-btn" onclick="setWinScore('winningScoreInput',1000)">1.000 🃏</button>
+          <button class="quick-btn" onclick="setWinScore('winningScoreInput',5000)">5.000 🎰</button>
+          <button class="quick-btn" onclick="setWinScore('winningScoreInput',10000)">10.000 🏆</button>
+        </div>
       </div>
     </div>
     <button class="btn btn-gold" onclick="createRoom()">Criar Sala</button>
@@ -171,12 +178,13 @@
       <div class="waiting-msg" id="waitingMsg">Aguardando jogadores...</div>
       <div id="hostScoreConfig" style="display:none;margin-bottom:12px;">
         <div class="field-label" style="margin-bottom:6px;">Alterar Meta de Pontuação</div>
-        <select id="waitingWinningScore" onchange="updateWinningScore()">
-          <option value="1000">1.000 pts — Rápida ⚡</option>
-          <option value="2500">2.500 pts — Normal 🃏</option>
-          <option value="5000" selected>5.000 pts — Longa 🎰</option>
-          <option value="10000">10.000 pts — Épica 🏆</option>
-        </select>
+        <input type="number" id="waitingWinningScore" value="5000" min="100" max="9999999" step="100" oninput="updateWinningScore()"/>
+        <div class="quick-btns">
+          <button class="quick-btn" onclick="setWinScore('waitingWinningScore',500);updateWinningScore()">500 ⚡</button>
+          <button class="quick-btn" onclick="setWinScore('waitingWinningScore',1000);updateWinningScore()">1.000 🃏</button>
+          <button class="quick-btn" onclick="setWinScore('waitingWinningScore',5000);updateWinningScore()">5.000 🎰</button>
+          <button class="quick-btn" onclick="setWinScore('waitingWinningScore',10000);updateWinningScore()">10.000 🏆</button>
+        </div>
       </div>
       <button class="btn btn-gold" id="startBtn" onclick="startGame()" style="display:none;">Iniciar Jogo</button>
       <button class="btn btn-outline" onclick="leaveRoom()" style="margin-top:8px;">Sair</button>
@@ -232,6 +240,8 @@
 //  BALATRO ONLINE — PeerJS WebRTC (P2P direto)
 //  Substitui GunDB por WebRTC puro via PeerJS
 // ═══════════════════════════════════════════════════════
+
+function setWinScore(id,val){const el=document.getElementById(id);if(el){el.value=val;}}
 
 // ── UI Helpers ────────────────────────────────────────
 function setStatus(cls,txt){const el=document.getElementById('connStatus');el.className='conn-status '+cls;el.textContent=txt;}
