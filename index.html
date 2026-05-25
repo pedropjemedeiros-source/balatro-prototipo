@@ -570,10 +570,12 @@ const JOKER_POOL=[
 ];
 function pickJokers(n=1){const p=[...JOKER_POOL];shuffle(p);return p.slice(0,n);}
 
-// Baralho local por jogador — reembaralha automaticamente quando esvazia
+// Baralho local por jogador — reembaralha automaticamente quando esvazia,
+// excluindo sempre as cartas que ainda estão na mão do jogador
 function drawCard(){
   if(!myDeck.length){
-    myDeck=makeDeck();
+    const inHand=new Set(myHand.map(c=>c.suit+c.rank));
+    myDeck=shuffle(makeDeck().filter(c=>!inHand.has(c.suit+c.rank)));
     log('🔀 <span class="log-hi">Novo baralho embaralhado!</span>');
   }
   return myDeck.pop();
@@ -671,9 +673,11 @@ async function startGame(){
 function enterGameScreen(room){
   gamePhase='playing'; currentRound=room.round; blindGoal=room.blindGoal||300;
   WINNING_SCORE=room.winningScore||5000;
-  myDeck=[]; // reseta baralho local a cada rodada/revanche
   const me=room.players.find(p=>p.id===myId);if(me)jokers=me.jokers||[];
   myHand=room.hands[myId]||[];
+  // Inicializa baralho local excluindo as cartas já distribuídas na mão
+  const inHand=new Set(myHand.map(c=>c.suit+c.rank));
+  myDeck=shuffle(makeDeck().filter(c=>!inHand.has(c.suit+c.rank)));
   handsLeft=me?(me.handsLeft??4):4; discardsLeft=me?(me.discardsLeft??3):3; myRoundScore=me?(me.roundScore||0):0;
   selected.clear(); document.getElementById('result-overlay').classList.remove('show');
   showScreen('game'); updateGameUI(room);
