@@ -135,6 +135,10 @@
   .conn-status.ok{color:#27ae60}
   .conn-status.err{color:#e74c3c}
   .conn-status.wait{color:var(--gold)}
+  .lock-btn{background:rgba(0,0,0,0.4);border:1px solid rgba(212,168,67,0.35);border-radius:8px;color:var(--text-dim);font-family:'Crimson Pro',serif;font-size:12px;padding:4px 10px;cursor:pointer;transition:all .2s;white-space:nowrap;display:flex;align-items:center;gap:5px;}
+  .lock-btn:hover{border-color:var(--gold);color:var(--gold);}
+  .lock-btn.locked{background:rgba(231,76,60,0.15);border-color:rgba(231,76,60,0.6);color:#e74c3c;}
+  .lock-btn.unlocked{background:rgba(39,174,96,0.12);border-color:rgba(39,174,96,0.5);color:#27ae60;}
 </style>
 </head>
 <body>
@@ -256,6 +260,7 @@
         </div>
       </div>
       <button class="btn btn-gold" id="startBtn" onclick="startGame()" style="display:none;">Iniciar Jogo</button>
+      <button id="lockToggleWaitBtn" class="lock-btn" onclick="toggleRoomLock()" style="display:none;width:100%;justify-content:center;margin-top:8px;">🔓 Sala Aberta</button>
       <button class="btn btn-outline" onclick="leaveRoom()" style="margin-top:8px;">Sair</button>
       <div id="waitingMsgBox" class="msg-box" style="display:none;margin-top:12px;"></div>
     </div>
@@ -265,7 +270,10 @@
 <div id="game" class="screen">
   <div class="game-header">
     <div class="round-badge">RODADA <span id="roundNum">1</span> · Meta: <span id="blindGoal">300</span> pts 🏆</div>
-    <div class="game-scores" id="headerScores"></div>
+    <div style="display:flex;align-items:center;gap:8px;">
+      <button id="lockToggleBtn" class="lock-btn" onclick="toggleRoomLock()" style="display:none;" title="Abrir/fechar sala para novos jogadores">🔒 Sala Fechada</button>
+      <div class="game-scores" id="headerScores"></div>
+    </div>
   </div>
   <div class="opp-panel" id="oppPanel"></div>
   <div class="jokers-row" id="jokersRow"></div>
@@ -293,6 +301,10 @@
   <h2 id="resultTitle">Resultado</h2>
   <div class="result-scores" id="resultScores"></div>
   <button class="btn btn-gold" id="resultBtn" style="max-width:220px;">Próxima Rodada</button>
+  <div id="gameOverActions" style="display:none;flex-direction:column;gap:8px;width:100%;max-width:220px;margin-top:4px;">
+    <button id="goLobbyBtn" class="btn btn-outline" onclick="goToLobby()">🚪 Voltar ao Lobby</button>
+    <button id="goMenuBtn" class="btn btn-red" onclick="goToMenu()" style="font-size:13px;">🏠 Menu Principal</button>
+  </div>
 </div>
 
 <div id="loadingOverlay" class="loading-overlay">
@@ -431,17 +443,22 @@ function onPeerMessage(msg,fromPlayerId){
   // ── Host recebe pedido de entrada de um guest ──
   else if(msg.type==='join'&&isHost){
     const room=sharedGameState;
+    const isExistingPlayer=!!room.players.find(p=>p.id===msg.player.id);
     if(room.phase!=='waiting'){
-      // Sala já iniciou: notifica o guest
-      if(peerConns.length>0){
-        const entry=peerConns.find(e=>e.playerId===fromPlayerId||e.playerId===null);
-        if(entry&&entry.conn.open) try{entry.conn.send({type:'error',msg:'Jogo já em andamento!'});}catch(e){}
-      }
+      // Jogo em andamento: bloqueia qualquer um
+      const entry=peerConns.find(e=>e.playerId===fromPlayerId||e.playerId===null);
+      if(entry&&entry.conn.open) try{entry.conn.send({type:'error',msg:'Jogo já em andamento!'});}catch(e){}
       return;
     }
-    if(room.players.length>=4) return;
+    if(room.locked&&!isExistingPlayer){
+      // Sala travada: bloqueia apenas jogadores novos
+      const entry=peerConns.find(e=>e.playerId===fromPlayerId||e.playerId===null);
+      if(entry&&entry.conn.open) try{entry.conn.send({type:'error',msg:'Esta sala não aceita mais jogadores!'});}catch(e){}
+      return;
+    }
+    if(room.players.length>=4&&!isExistingPlayer) return;
     // Adiciona apenas se ainda não está na sala
-    if(!room.players.find(p=>p.id===msg.player.id)){
+    if(!isExistingPlayer){
       room.players.push(msg.player);
     }
     sharedGameState=room;
@@ -934,6 +951,12 @@ function renderWaitingRoom(){
   if(isHost&&room.players.length>=2){msg.textContent='Pronto para começar!';btn.style.display='block';}
   else if(room.players.length<2){msg.textContent='Aguardando pelo menos 2 jogadores...';btn.style.display='none';}
   else{msg.textContent=`${room.players.length} jogadores na sala. Aguardando o host...`;btn.style.display='none';}
+  // Botão de travar sala (só host, só multiplayer)
+  const lockWaitBtn=document.getElementById('lockToggleWaitBtn');
+  if(lockWaitBtn){
+    lockWaitBtn.style.display=isHost&&!isBotMode?'flex':'none';
+    updateLockBtnUI(lockWaitBtn,room.locked);
+  }
 }
 
 async function updateWinningScore(){
@@ -959,7 +982,7 @@ async function startGame(){
   const room=await stGet(roomCode);
   if(room.players.length<2){showWaitMsg('Precisa de pelo menos 2 jogadores!','error');return;}
   const hp=room.handsPerRound||4;
-  room.phase='playing'; room.round=1; room.blindGoal=300;
+  room.phase='playing'; room.round=1; room.blindGoal=300; room.locked=false;
   // Dá cartas e reseta stats de todos os jogadores
   for(const p of room.players){
     p.roundScore=0; p.done=false; p.handsLeft=hp; p.discardsLeft=3;
@@ -981,6 +1004,12 @@ function enterGameScreen(room){
   handsLeft=me?(me.handsLeft??hp):hp; discardsLeft=me?(me.discardsLeft??3):3; myRoundScore=me?(me.roundScore||0):0;
   selected.clear(); document.getElementById('result-overlay').classList.remove('show');
   showScreen('game'); updateGameUI(room);
+  // Botão de travar sala no header (só host, só multiplayer)
+  const lockBtn=document.getElementById('lockToggleBtn');
+  if(lockBtn){
+    lockBtn.style.display=isHost&&!isBotMode?'flex':'none';
+    updateLockBtnUI(lockBtn,room.locked);
+  }
   // Inicia/reinicia ticker de bots se em modo solo
   if(isBotMode){
     if(botInterval)clearInterval(botInterval);
@@ -1148,6 +1177,8 @@ function showRoundResult(room){
   const btn=document.getElementById('resultBtn');
   btn.textContent=isHost?'Próxima Rodada':'Aguardando host...';
   btn.onclick=isHost?nextRound:null;
+  btn.style.display='';
+  document.getElementById('gameOverActions').style.display='none';
   document.getElementById('result-overlay').classList.add('show');
 }
 
@@ -1176,7 +1207,46 @@ function showGameOver(room){
   btn.textContent=isHost?'🔄 Revanche':'Aguardando revanche...';
   btn.disabled=!isHost;
   btn.onclick=isHost?startRematch:null;
+  document.getElementById('gameOverActions').style.display='flex';
+  if(isBotMode){
+    // Modo bot: só mostra botão de voltar ao lobby (menu principal)
+    document.getElementById('goLobbyBtn').style.display='none';
+    document.getElementById('goMenuBtn').textContent='🏠 Voltar ao Lobby';
+  } else {
+    // Multiplayer: mostra os dois botões normalmente
+    document.getElementById('goLobbyBtn').style.display='';
+    document.getElementById('goMenuBtn').textContent='🏠 Menu Principal';
+  }
   document.getElementById('result-overlay').classList.add('show');
+}
+
+function goToLobby(){
+  document.getElementById('result-overlay').classList.remove('show');
+  if(botInterval){clearInterval(botInterval);botInterval=null;}
+  isBotMode=false;
+  // Volta à sala de espera sem destruir a conexão P2P
+  // Marca a sala como travada: apenas os jogadores já presentes podem continuar
+  if(sharedGameState){
+    sharedGameState.phase='waiting';
+    sharedGameState.locked=true;
+    lsSet(roomCode,sharedGameState);
+    broadcastToGuests({type:'state',room:sharedGameState});
+    onRoomUpdate(sharedGameState);
+  }
+  showScreen('waiting-screen');
+  renderWaitingRoom();
+}
+
+function goToMenu(){
+  document.getElementById('result-overlay').classList.remove('show');
+  destroyPeer();
+  if(botInterval){clearInterval(botInterval);botInterval=null;}
+  isBotMode=false;
+  myName='';myId='';roomCode='';isHost=false;sharedGameState=null;
+  myHand=[];selected=new Set();jokers=[];myDeck=[];myDiscard=[];
+  handsLeft=4;discardsLeft=3;myRoundScore=0;currentRound=1;maxRounds=3;blindGoal=300;
+  gamePhase='lobby';myScreenShown=false;peerConns=[];
+  showScreen('lobby');
 }
 
 async function startRematch(){
@@ -1192,6 +1262,29 @@ async function startRematch(){
     }
     await stSet(roomCode,room);
   }catch(e){}
+}
+
+function updateLockBtnUI(btn,locked){
+  if(!btn)return;
+  if(locked){
+    btn.textContent='🔒 Sala Fechada';
+    btn.className=btn.className.replace(/\b(locked|unlocked)\b/g,'').trim()+' locked';
+  } else {
+    btn.textContent='🔓 Sala Aberta';
+    btn.className=btn.className.replace(/\b(locked|unlocked)\b/g,'').trim()+' unlocked';
+  }
+}
+
+async function toggleRoomLock(){
+  if(!isHost||!sharedGameState)return;
+  sharedGameState.locked=!sharedGameState.locked;
+  const locked=sharedGameState.locked;
+  lsSet(roomCode,sharedGameState);
+  broadcastToGuests({type:'state',room:sharedGameState});
+  // Atualiza ambos os botões
+  updateLockBtnUI(document.getElementById('lockToggleBtn'),locked);
+  updateLockBtnUI(document.getElementById('lockToggleWaitBtn'),locked);
+  log(locked?'🔒 <span class="log-hi">Sala fechada</span> — novos jogadores não podem entrar':'🔓 <span class="log-hi">Sala aberta</span> — novos jogadores podem entrar');
 }
 
 // ── Init ──────────────────────────────────────────────
