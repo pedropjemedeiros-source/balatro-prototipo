@@ -109,6 +109,23 @@
   .quick-btn{flex:1;background:rgba(212,168,67,0.1);border:1px solid rgba(212,168,67,0.35);border-radius:6px;color:var(--gold);font-family:'Crimson Pro',serif;font-size:12px;padding:5px 4px;cursor:pointer;transition:all .15s;white-space:nowrap;}
   .quick-btn:hover{background:rgba(212,168,67,0.25);border-color:var(--gold);}
   @media(max-width:480px){.logo h1{font-size:36px}.card{width:56px;height:84px}.card-suit{font-size:22px}.card-rank{font-size:16px}}
+  .joker-toggle{background:rgba(0,0,0,0.4);border:1px solid rgba(255,255,255,0.12);border-radius:7px;padding:7px 9px;cursor:pointer;transition:all .15s;opacity:.38;user-select:none;}
+  .joker-toggle.on{background:rgba(155,89,182,0.18);border-color:#9b59b6;opacity:1;}
+  .joker-toggle:hover{opacity:.7;}
+  .joker-grid{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-top:8px;max-height:260px;overflow-y:auto;padding-right:2px;}
+  .joker-grid::-webkit-scrollbar{width:4px}.joker-grid::-webkit-scrollbar-track{background:transparent}.joker-grid::-webkit-scrollbar-thumb{background:rgba(212,168,67,0.3);border-radius:2px}
+  .jt-name{font-weight:700;font-size:11px;color:#d7bde2;}
+  .jt-desc{font-size:10px;color:rgba(215,189,226,0.55);margin-top:1px;}
+  .section-toggle-btn{display:flex;justify-content:space-between;align-items:center;cursor:pointer;padding:6px 0;border-bottom:1px solid rgba(212,168,67,0.15);margin-bottom:8px;}
+  .section-toggle-btn .field-label{margin:0;}
+  .section-toggle-btn .stb-arrow{color:var(--gold);font-size:12px;}
+  .bot-section{background:rgba(212,168,67,0.06);border:1px solid rgba(212,168,67,0.25);border-radius:10px;padding:16px;margin-top:4px;}
+  .bot-section h3{font-family:'Cinzel',serif;color:var(--gold);font-size:14px;margin-bottom:12px;text-align:center;}
+  .bot-diff{display:flex;gap:6px;margin-top:7px;}
+  .bot-diff-btn{flex:1;background:rgba(0,0,0,0.3);border:1px solid rgba(212,168,67,0.3);border-radius:6px;color:var(--text-dim);font-family:'Crimson Pro',serif;font-size:13px;padding:7px 4px;cursor:pointer;transition:all .15s;text-align:center;}
+  .bot-diff-btn.active{background:rgba(212,168,67,0.2);border-color:var(--gold);color:var(--gold);}
+  .opp-box.bot-box{border-color:rgba(155,89,182,0.4);}
+  .bot-badge{font-size:9px;background:rgba(155,89,182,0.3);border-radius:4px;padding:1px 5px;color:#d7bde2;margin-left:4px;}
   .loading-overlay{position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(13,31,13,0.92);z-index:200;display:none;align-items:center;justify-content:center;flex-direction:column;gap:14px}
   .loading-overlay.show{display:flex}
   .spinner{width:38px;height:38px;border:3px solid rgba(212,168,67,0.2);border-top-color:var(--gold);border-radius:50%;animation:spin .8s linear infinite}
@@ -149,8 +166,52 @@
         </div>
       </div>
     </div>
+    <div class="field-group">
+      <div>
+        <div class="field-label">Mãos por Rodada</div>
+        <input type="number" id="handsPerRoundInput" value="4" min="1" max="10" step="1" placeholder="Ex: 4"/>
+        <div class="quick-btns">
+          <button class="quick-btn" onclick="setWinScore('handsPerRoundInput',2)">2 🤏</button>
+          <button class="quick-btn" onclick="setWinScore('handsPerRoundInput',4)">4 🖐</button>
+          <button class="quick-btn" onclick="setWinScore('handsPerRoundInput',6)">6 🃏</button>
+          <button class="quick-btn" onclick="setWinScore('handsPerRoundInput',8)">8 🎰</button>
+        </div>
+      </div>
+    </div>
     <button class="btn btn-gold" onclick="createRoom()">Criar Sala</button>
     <hr class="divider">
+    <!-- Joker Config -->
+    <div style="margin-bottom:16px;">
+      <div class="section-toggle-btn" onclick="toggleJokerConfig()">
+        <div class="field-label">🃏 Coringas do Jogo</div>
+        <span id="jokerConfigArrow" class="stb-arrow">▼ configurar</span>
+      </div>
+      <div id="jokerConfigGrid" style="display:none;" class="joker-grid"></div>
+      <div id="jokerConfigCount" style="font-size:11px;color:var(--text-dim);text-align:right;margin-top:4px;display:none;"></div>
+    </div>
+    <hr class="divider">
+    <!-- Bot Mode -->
+    <div class="bot-section">
+      <h3>🤖 Jogar Solo vs Bot</h3>
+      <div class="field-group" style="margin-bottom:10px;">
+        <div>
+          <div class="field-label">Número de Bots</div>
+          <input type="number" id="botCount" value="1" min="1" max="3" step="1"/>
+          <div class="quick-btns">
+            <button class="quick-btn" onclick="setWinScore('botCount',1)">1 🤖</button>
+            <button class="quick-btn" onclick="setWinScore('botCount',2)">2 🤖🤖</button>
+            <button class="quick-btn" onclick="setWinScore('botCount',3)">3 🤖🤖🤖</button>
+          </div>
+        </div>
+      </div>
+      <div class="field-label">Dificuldade</div>
+      <div class="bot-diff">
+        <div class="bot-diff-btn active" id="diff_facil" onclick="selectDiff('facil')">😴 Fácil</div>
+        <div class="bot-diff-btn" id="diff_medio" onclick="selectDiff('medio')">🎯 Médio</div>
+        <div class="bot-diff-btn" id="diff_dificil" onclick="selectDiff('dificil')">💀 Difícil</div>
+      </div>
+      <button class="btn btn-gold" onclick="startBotGame()" style="margin-top:12px;">Iniciar Partida Solo ▶</button>
+    </div>
     <div class="field-group">
       <div>
         <div class="field-label">Código da Sala</div>
@@ -174,7 +235,7 @@
         <div class="room-code-val" id="displayRoomCode">----</div>
       </div>
       <div id="waitingPlayers" class="players-waiting"></div>
-      <div class="score-config-info">Meta: <strong id="waitingScoreDisplay">5.000 pts</strong></div>
+      <div class="score-config-info">Meta: <strong id="waitingScoreDisplay">5.000 pts</strong> · Mãos: <strong id="waitingHandsDisplay">4</strong></div>
       <div class="waiting-msg" id="waitingMsg">Aguardando jogadores...</div>
       <div id="hostScoreConfig" style="display:none;margin-bottom:12px;">
         <div class="field-label" style="margin-bottom:6px;">Alterar Meta de Pontuação</div>
@@ -184,6 +245,14 @@
           <button class="quick-btn" onclick="setWinScore('waitingWinningScore',1000);updateWinningScore()">1.000 🃏</button>
           <button class="quick-btn" onclick="setWinScore('waitingWinningScore',5000);updateWinningScore()">5.000 🎰</button>
           <button class="quick-btn" onclick="setWinScore('waitingWinningScore',10000);updateWinningScore()">10.000 🏆</button>
+        </div>
+        <div class="field-label" style="margin-bottom:6px;margin-top:10px;">Mãos por Rodada</div>
+        <input type="number" id="waitingHandsPerRound" value="4" min="1" max="10" step="1" oninput="updateHandsPerRound()"/>
+        <div class="quick-btns">
+          <button class="quick-btn" onclick="setWinScore('waitingHandsPerRound',2);updateHandsPerRound()">2 🤏</button>
+          <button class="quick-btn" onclick="setWinScore('waitingHandsPerRound',4);updateHandsPerRound()">4 🖐</button>
+          <button class="quick-btn" onclick="setWinScore('waitingHandsPerRound',6);updateHandsPerRound()">6 🃏</button>
+          <button class="quick-btn" onclick="setWinScore('waitingHandsPerRound',8);updateHandsPerRound()">8 🎰</button>
         </div>
       </div>
       <button class="btn btn-gold" id="startBtn" onclick="startGame()" style="display:none;">Iniciar Jogo</button>
@@ -266,9 +335,10 @@ let WINNING_SCORE=5000; // Atualizado dinamicamente a partir da sala
 
 // ── Estado do jogo ────────────────────────────────────
 let myName='',myId='',roomCode='',isHost=false,sharedGameState=null;
-let myHand=[],selected=new Set(),jokers=[],myDeck=[];
+let myHand=[],selected=new Set(),jokers=[],myDeck=[],myDiscard=[];
 let handsLeft=4,discardsLeft=3,myRoundScore=0,currentRound=1,maxRounds=3,blindGoal=300;
 let gamePhase='lobby';
+let isBotMode=false,botInterval=null,botDifficulty='facil';
 
 // ── Estado PeerJS ─────────────────────────────────────
 // peer       = instância do Peer local
@@ -395,6 +465,7 @@ async function createRoom(){
   const name=document.getElementById('nameInput').value.trim();
   if(!name){showLobbyMsg('Digite seu nome!','error');return;}
   const wsEl=document.getElementById('winningScoreInput');const chosenScore=wsEl?parseInt(wsEl.value)||5000:5000;
+  const hpEl=document.getElementById('handsPerRoundInput');const chosenHands=hpEl?Math.max(1,parseInt(hpEl.value)||4):4;
   myName=name; myId=genId(); roomCode=genCode(); isHost=true; jokers=pickJokers(1);
   showLoading('Criando sala...'); destroyPeer();
 
@@ -464,8 +535,8 @@ async function createRoom(){
 
   // Estado inicial da sala
   const room={
-    code:roomCode,host:myId,phase:'waiting',round:1,winningScore:chosenScore,
-    players:[{id:myId,name:myName,score:0,roundScore:0,jokers,ready:false,done:false,handsLeft:4,discardsLeft:3}],
+    code:roomCode,host:myId,phase:'waiting',round:1,winningScore:chosenScore,handsPerRound:chosenHands,
+    players:[{id:myId,name:myName,score:0,roundScore:0,jokers,ready:false,done:false,handsLeft:chosenHands,discardsLeft:3}],
     deck:makeDeck(),hands:{},results:[]
   };
   sharedGameState=room; lsSet(roomCode,room); myScreenShown=true;
@@ -553,6 +624,8 @@ async function joinRoom(){
 // ── Sair da sala ──────────────────────────────────────
 function leaveRoom(){
   gamePhase='lobby'; myScreenShown=false; sharedGameState=null;
+  if(botInterval){clearInterval(botInterval);botInterval=null;}
+  isBotMode=false;
   destroyPeer(); showScreen('lobby');
   setStatus('ok','✅ pronto');
 }
@@ -570,28 +643,208 @@ function shuffle(a){for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random
 function dealHand(deck,n=8){return deck.splice(0,n);}
 
 const JOKER_POOL=[
-  {name:'Coringa Clássico',effect:'mult+3',desc:'+3 Mult'},
-  {name:'Pilha de Fichas',effect:'chips+20',desc:'+20 Chips'},
-  {name:'Duplicador',effect:'mult_x2',desc:'Mult ×2 (não carta alta)'},
-  {name:'Rei do Flush',effect:'flush_mult',desc:'+4 Mult em Flush'},
-  {name:'Amante dos Pares',effect:'pair_chips',desc:'+30 Chips em Par'},
-  {name:'Ás Selvagem',effect:'chips+50',desc:'+50 Chips'},
-  {name:'Multiplicador Louco',effect:'mult+6',desc:'+6 Mult'},
+  // ── Bônus Gerais ──────────────────────────────────────
+  {id:'j01',name:'Coringa Clássico',   effect:'mult+3',          desc:'+3 Mult em qualquer jogada'},
+  {id:'j02',name:'Pilha de Fichas',    effect:'chips+20',         desc:'+20 Chips em qualquer jogada'},
+  {id:'j03',name:'Duplicador',         effect:'mult_x2',          desc:'Mult ×2 (exceto Carta Alta)'},
+  {id:'j06',name:'Ás Selvagem',        effect:'chips+50',         desc:'+50 Chips em qualquer jogada'},
+  {id:'j07',name:'Multiplicador Louco',effect:'mult+6',           desc:'+6 Mult em qualquer jogada'},
+  {id:'j14',name:'Ouro Puro',          effect:'chips_x15',        desc:'Chips ×1.5 em qualquer jogada'},
+  // ── Por Tipo de Mão ───────────────────────────────────
+  {id:'j05',name:'Amante dos Pares',   effect:'pair_chips+30',    desc:'+30 Chips em Par'},
+  {id:'j21',name:'Par Explosivo',      effect:'two_pair_mult+5',  desc:'+5 Mult em Dois Pares ou melhor'},
+  {id:'j09',name:'Trincador',          effect:'three_chips+25',   desc:'+25 Chips em Trinca ou melhor'},
+  {id:'j08',name:'Sequenciador',       effect:'straight_mult+5',  desc:'+5 Mult em Sequência ou melhor'},
+  {id:'j04',name:'Rei do Flush',       effect:'flush_mult+4',     desc:'+4 Mult em Flush ou melhor'},
+  {id:'j10',name:'Full Coringa',       effect:'full_mult+8',      desc:'+8 Mult em Full House ou melhor'},
+  {id:'j11',name:'Quadruplista',       effect:'four_mult+10',     desc:'+10 Mult em Quadra ou melhor'},
+  {id:'j20',name:'Loucura Total',      effect:'sf_mult_x3',       desc:'Mult ×3 em Straight Flush'},
+  // ── Por Naipe ─────────────────────────────────────────
+  {id:'j15',name:'Espadista',          effect:'spade_chips+10',   desc:'+10 Chips por ♠ jogada'},
+  {id:'j16',name:'Coração Quente',     effect:'heart_chips+10',   desc:'+10 Chips por ♥ jogada'},
+  {id:'j17',name:'Diamanteiro',        effect:'diamond_chips+10', desc:'+10 Chips por ♦ jogada'},
+  {id:'j18',name:'Trevoso',            effect:'club_chips+10',    desc:'+10 Chips por ♣ jogada'},
+  // ── Por Valor/Rank ────────────────────────────────────
+  {id:'j12',name:'Ninja das Cartas',   effect:'cards_chips+15',   desc:'+15 Chips por carta jogada'},
+  {id:'j13',name:'Vampiro',            effect:'ace_mult+2',        desc:'+2 Mult por Ás na jogada'},
+  {id:'j22',name:'Caçador de Ases',    effect:'ace_chips+20',      desc:'+20 Chips por Ás jogado'},
+  {id:'j19',name:'Rei das Figuras',    effect:'face_chips+5',      desc:'+5 Chips por J, Q ou K jogado'},
 ];
-function pickJokers(n=1){const p=[...JOKER_POOL];shuffle(p);return p.slice(0,n);}
 
-// Baralho local por jogador — reembaralha automaticamente quando esvazia,
-// excluindo sempre as cartas que ainda estão na mão do jogador
+function getEnabledJokers(){
+  const disabled=JSON.parse(localStorage.getItem('blt_disabled_jokers')||'[]');
+  const pool=JOKER_POOL.filter(j=>!disabled.includes(j.id));
+  return pool.length>=3?pool:[...JOKER_POOL];
+}
+function pickJokersFrom(pool,n=1){const p=[...(pool||JOKER_POOL)];shuffle(p);return p.slice(0,n);}
+function pickJokers(n=1){return pickJokersFrom(getEnabledJokers(),n);}
+
+// ── Joker Config UI ───────────────────────────────────
+function toggleJokerConfig(){
+  const grid=document.getElementById('jokerConfigGrid');
+  const arrow=document.getElementById('jokerConfigArrow');
+  const cnt=document.getElementById('jokerConfigCount');
+  if(!grid)return;
+  const open=grid.style.display==='none';
+  grid.style.display=open?'grid':'none';
+  if(cnt)cnt.style.display=open?'block':'none';
+  if(arrow)arrow.textContent=open?'▲ fechar':'▼ configurar';
+  if(open)renderJokerConfigGrid();
+}
+function renderJokerConfigGrid(){
+  const grid=document.getElementById('jokerConfigGrid');if(!grid)return;
+  const disabled=JSON.parse(localStorage.getItem('blt_disabled_jokers')||'[]');
+  grid.innerHTML=JOKER_POOL.map(j=>{
+    const on=!disabled.includes(j.id);
+    return `<div class="joker-toggle ${on?'on':''}" onclick="toggleJoker('${j.id}')" id="jtog_${j.id}"><div class="jt-name">🃏 ${j.name}</div><div class="jt-desc">${j.desc}</div></div>`;
+  }).join('');
+  updateJokerCount();
+}
+function toggleJoker(id){
+  const el=document.getElementById('jtog_'+id);if(!el)return;
+  const disabled=JSON.parse(localStorage.getItem('blt_disabled_jokers')||'[]');
+  const idx=disabled.indexOf(id);
+  if(idx>=0){disabled.splice(idx,1);el.classList.add('on');}
+  else{disabled.push(id);el.classList.remove('on');}
+  localStorage.setItem('blt_disabled_jokers',JSON.stringify(disabled));
+  updateJokerCount();
+}
+function updateJokerCount(){
+  const cnt=document.getElementById('jokerConfigCount');if(!cnt)return;
+  const n=getEnabledJokers().length;
+  cnt.textContent=`${n} de ${JOKER_POOL.length} coringas ativos`;
+}
+
+// ── Bot Difficulty ────────────────────────────────────
+function selectDiff(d){
+  botDifficulty=d;
+  ['facil','medio','dificil'].forEach(x=>{
+    const el=document.getElementById('diff_'+x);
+    if(el)el.classList.toggle('active',x===d);
+  });
+}
+
+// ── Bot AI ────────────────────────────────────────────
+function getCombinations(arr,size){
+  if(size===0)return[[]];
+  if(arr.length<size)return[];
+  const[first,...rest]=arr;
+  return[
+    ...getCombinations(rest,size-1).map(c=>[first,...c]),
+    ...getCombinations(rest,size)
+  ];
+}
+function botBestPlay(hand,jkrs,difficulty){
+  // Fácil: joga aleatório 1-3 cartas; Médio: melhor 1-5; Difícil: melhor 1-5 com preferência por pontuação alta
+  if(difficulty==='facil'){
+    const sz=Math.min(hand.length,Math.ceil(Math.random()*3));
+    return shuffle([...hand]).slice(0,sz||1);
+  }
+  let best={score:-1,cards:[]};
+  const maxSz=Math.min(5,hand.length);
+  for(let sz=1;sz<=maxSz;sz++){
+    for(const combo of getCombinations(hand,sz)){
+      const ev=evaluateHandCards(combo,jkrs);
+      if(ev.score>best.score)best={score:ev.score,cards:combo};
+    }
+  }
+  return best.cards.length?best.cards:[hand[0]];
+}
+
+function tickBots(){
+  if(!isBotMode||gamePhase!=='playing')return;
+  const room=sharedGameState;
+  if(!room||room.phase!=='playing')return;
+  const hp=room.handsPerRound||4;
+  let changed=false;
+  for(const p of room.players){
+    if(!p.isBot||p.done||p.handsLeft<=0)continue;
+    const hand=room.hands[p.id]||[];
+    if(!hand.length)continue;
+    const diff=room.botDifficulty||'facil';
+    const playCards=botBestPlay(hand,p.jokers||[],diff);
+    const ev=evaluateHandCards(playCards,p.jokers||[]);
+    p.roundScore=(p.roundScore||0)+ev.score;
+    p.handsLeft--;
+    const playedKeys=new Set(playCards.map(c=>c.suit+c.rank));
+    let newHand=hand.filter(c=>!playedKeys.has(c.suit+c.rank));
+    const needed=8-newHand.length;
+    for(let i=0;i<needed;i++){if(room.deck.length)newHand.push(room.deck.pop());}
+    room.hands[p.id]=newHand;
+    if(p.handsLeft<=0)p.done=true;
+    if(Math.random()<0.3&&(p.jokers||[]).length<3){
+      const nj=pickJokersFrom(getEnabledJokers(),1)[0];
+      if(nj)p.jokers=[...(p.jokers||[]),nj].slice(-3);
+    }
+    changed=true;
+  }
+  if(changed){
+    const ws=room.winningScore||WINNING_SCORE;
+    const winner=room.players.find(p=>(p.score||0)+(p.roundScore||0)>=ws);
+    if(winner&&room.phase==='playing'){
+      room.players.forEach(p=>{p.score=(p.score||0)+(p.roundScore||0);});
+      room.phase='game_over';room.winner=winner.id;
+    } else {
+      const allDone=room.players.every(p=>p.done);
+      if(allDone&&room.phase==='playing'){
+        room.players.forEach(p=>{p.score=(p.score||0)+(p.roundScore||0);});
+        room.phase=room.round>=maxRounds?'game_over':'round_over';
+      }
+    }
+    sharedGameState=room;
+    onRoomUpdate(room);
+  }
+}
+
+function startBotGame(){
+  const name=document.getElementById('nameInput').value.trim();
+  if(!name){showLobbyMsg('Digite seu nome!','error');return;}
+  const wsEl=document.getElementById('winningScoreInput');const chosenScore=wsEl?parseInt(wsEl.value)||5000:5000;
+  const hpEl=document.getElementById('handsPerRoundInput');const chosenHands=hpEl?Math.max(1,parseInt(hpEl.value)||4):4;
+  const bcEl=document.getElementById('botCount');const botCount=bcEl?Math.min(3,Math.max(1,parseInt(bcEl.value)||1)):1;
+  const diff=botDifficulty||'facil';
+  const enabledJokers=getEnabledJokers();
+  myName=name;myId=genId();roomCode='LOCAL';isHost=true;isBotMode=true;
+  jokers=pickJokersFrom(enabledJokers,1);
+  const botNames=['🤖 HAL-9000','🎰 Deep Blue','👾 AlphaCard'];
+  const bots=[];
+  for(let i=0;i<botCount;i++){
+    bots.push({id:'bot_'+i,name:botNames[i],score:0,roundScore:0,jokers:pickJokersFrom(enabledJokers,1),ready:true,done:false,handsLeft:chosenHands,discardsLeft:3,isBot:true});
+  }
+  const allPlayers=[{id:myId,name:myName,score:0,roundScore:0,jokers,ready:true,done:false,handsLeft:chosenHands,discardsLeft:3},...bots];
+  const deck=makeDeck();const hands={};
+  for(const p of allPlayers)hands[p.id]=dealHand(deck);
+  const room={code:roomCode,host:myId,phase:'playing',round:1,blindGoal:300,winningScore:chosenScore,handsPerRound:chosenHands,botDifficulty:diff,enabledJokers,players:allPlayers,deck,hands,results:[]};
+  sharedGameState=room;myScreenShown=true;
+  gamePhase='playing';
+  enterGameScreen(room);
+  setStatus('ok',`✅ solo · ${botCount} bot${botCount>1?'s':''}`);
+}
+
+// Baralho local por jogador — cartas jogadas/descartadas vão para myDiscard.
+// Quando o deck esvazia, cada carta do descarte tem chance aleatória (50–90%) de voltar.
+// O resto espera no descarte até o próximo reembaralho.
 function drawCard(){
   if(!myDeck.length){
-    const inHand=new Set(myHand.map(c=>c.suit+c.rank));
-    myDeck=shuffle(makeDeck().filter(c=>!inHand.has(c.suit+c.rank)));
-    log('🔀 <span class="log-hi">Novo baralho embaralhado!</span>');
+    const newDeck=[], staying=[];
+    for(const card of myDiscard){
+      // Chance aleatória entre 50% e 90% de cada carta retornar ao deck
+      const returnChance=0.5+Math.random()*0.4;
+      if(Math.random()<returnChance) newDeck.push(card);
+      else staying.push(card);
+    }
+    // Garante pelo menos 1 carta se nenhuma retornou
+    if(!newDeck.length && staying.length){
+      newDeck.push(...staying.splice(0,Math.ceil(staying.length/2)));
+    }
+    myDeck=shuffle(newDeck);
+    myDiscard=staying;
+    log(`🔀 <span class="log-hi">Deck reembaralhado!</span> ${myDeck.length} carta${myDeck.length!==1?'s':''} voltaram · ${myDiscard.length} no descarte`);
   }
   return myDeck.pop();
 }
 
-function evaluateHand(cards){
+function evaluateHandCards(cards,jkrs){
   if(!cards.length)return{type:'Nenhuma',chips:0,mult:1,score:0};
   const ranks=cards.map(c=>c.rank),suits=cards.map(c=>c.suit),vals=ranks.map(r=>RANK_VALS[r]);
   const rc={};for(const r of ranks)rc[r]=(rc[r]||0)+1;
@@ -610,17 +863,36 @@ function evaluateHand(cards){
   else if(counts[0]===2&&counts[1]===2){type='Dois Pares';chips=baseChips+20;mult=2;}
   else if(counts[0]===2){type='Par';chips=baseChips+10;mult=2;}
   else{type='Carta Alta';chips=baseChips+5;mult=1;}
-  for(const j of jokers){
-    if(j.effect==='mult+3')mult+=3;
-    else if(j.effect==='mult+6')mult+=6;
-    else if(j.effect==='chips+20')chips+=20;
-    else if(j.effect==='chips+50')chips+=50;
-    else if(j.effect==='mult_x2'&&type!=='Carta Alta')mult=Math.floor(mult*2);
-    else if(j.effect==='flush_mult'&&isFlush)mult+=4;
-    else if(j.effect==='pair_chips'&&type==='Par')chips+=30;
+  const hier=['Carta Alta','Par','Dois Pares','Trinca','Sequência','Flush','Full House','Quadra','Straight Flush'];
+  const ti=hier.indexOf(type);
+  for(const j of (jkrs||[])){
+    const e=j.effect;
+    if(e==='mult+3')mult+=3;
+    else if(e==='mult+6')mult+=6;
+    else if(e==='chips+20')chips+=20;
+    else if(e==='chips+50')chips+=50;
+    else if(e==='mult_x2'&&type!=='Carta Alta')mult=Math.floor(mult*2);
+    else if(e==='flush_mult+4'&&ti>=5)mult+=4;
+    else if(e==='pair_chips+30'&&type==='Par')chips+=30;
+    else if(e==='straight_mult+5'&&ti>=4)mult+=5;
+    else if(e==='three_chips+25'&&ti>=3)chips+=25;
+    else if(e==='full_mult+8'&&ti>=6)mult+=8;
+    else if(e==='four_mult+10'&&ti>=7)mult+=10;
+    else if(e==='cards_chips+15')chips+=cards.length*15;
+    else if(e==='ace_mult+2'){const aces=ranks.filter(r=>r==='A').length;mult+=aces*2;}
+    else if(e==='chips_x15')chips=Math.round(chips*1.5);
+    else if(e==='spade_chips+10')chips+=suits.filter(s=>s==='♠').length*10;
+    else if(e==='heart_chips+10')chips+=suits.filter(s=>s==='♥').length*10;
+    else if(e==='diamond_chips+10')chips+=suits.filter(s=>s==='♦').length*10;
+    else if(e==='club_chips+10')chips+=suits.filter(s=>s==='♣').length*10;
+    else if(e==='face_chips+5'){const f=ranks.filter(r=>['J','Q','K'].includes(r)).length;chips+=f*5;}
+    else if(e==='sf_mult_x3'&&type==='Straight Flush')mult=Math.floor(mult*3);
+    else if(e==='two_pair_mult+5'&&ti>=2)mult+=5;
+    else if(e==='ace_chips+20'){const aces=ranks.filter(r=>r==='A').length;chips+=aces*20;}
   }
   return{type,chips,mult,score:chips*mult};
 }
+function evaluateHand(cards){return evaluateHandCards(cards,jokers);}
 
 // ── Multiplayer callbacks ─────────────────────────────
 function onRoomUpdate(room){
@@ -644,14 +916,20 @@ function renderWaitingRoom(){
     else html+=`<div class="player-slot empty"><div class="dot"></div><span>Aguardando...</span></div>`;
   }
   document.getElementById('waitingPlayers').innerHTML=html;
-  // Mostra meta de pontuação
+  // Mostra meta de pontuação e mãos por rodada
   const ws=room.winningScore||5000;
+  const hp=room.handsPerRound||4;
   const wsDisp=document.getElementById('waitingScoreDisplay');
   if(wsDisp)wsDisp.textContent=ws.toLocaleString('pt-BR')+' pts';
+  const hpDisp=document.getElementById('waitingHandsDisplay');
+  if(hpDisp)hpDisp.textContent=hp;
   // Config do host
   const hostCfg=document.getElementById('hostScoreConfig');
   if(hostCfg)hostCfg.style.display=isHost?'block':'none';
-  if(isHost){const sel=document.getElementById('waitingWinningScore');if(sel)sel.value=String(ws);}
+  if(isHost){
+    const sel=document.getElementById('waitingWinningScore');if(sel)sel.value=String(ws);
+    const selH=document.getElementById('waitingHandsPerRound');if(selH)selH.value=String(hp);
+  }
   const msg=document.getElementById('waitingMsg'),btn=document.getElementById('startBtn');
   if(isHost&&room.players.length>=2){msg.textContent='Pronto para começar!';btn.style.display='block';}
   else if(room.players.length<2){msg.textContent='Aguardando pelo menos 2 jogadores...';btn.style.display='none';}
@@ -667,14 +945,24 @@ async function updateWinningScore(){
   renderWaitingRoom();
 }
 
+async function updateHandsPerRound(){
+  if(!isHost||!sharedGameState)return;
+  const sel=document.getElementById('waitingHandsPerRound');if(!sel)return;
+  const val=Math.max(1,parseInt(sel.value)||4);
+  sharedGameState.handsPerRound=val;
+  broadcastToGuests({type:'state',room:sharedGameState});
+  renderWaitingRoom();
+}
+
 async function startGame(){
   if(!isHost)return;
   const room=await stGet(roomCode);
   if(room.players.length<2){showWaitMsg('Precisa de pelo menos 2 jogadores!','error');return;}
+  const hp=room.handsPerRound||4;
   room.phase='playing'; room.round=1; room.blindGoal=300;
   // Dá cartas e reseta stats de todos os jogadores
   for(const p of room.players){
-    p.roundScore=0; p.done=false; p.handsLeft=4; p.discardsLeft=3;
+    p.roundScore=0; p.done=false; p.handsLeft=hp; p.discardsLeft=3;
     room.hands[p.id]=dealHand(room.deck);
   }
   await stSet(roomCode,room);
@@ -685,12 +973,21 @@ function enterGameScreen(room){
   WINNING_SCORE=room.winningScore||5000;
   const me=room.players.find(p=>p.id===myId);if(me)jokers=me.jokers||[];
   myHand=room.hands[myId]||[];
-  // Inicializa baralho local excluindo as cartas já distribuídas na mão
+  // Inicializa baralho local excluindo as cartas já na mão; descarte vazio
   const inHand=new Set(myHand.map(c=>c.suit+c.rank));
   myDeck=shuffle(makeDeck().filter(c=>!inHand.has(c.suit+c.rank)));
-  handsLeft=me?(me.handsLeft??4):4; discardsLeft=me?(me.discardsLeft??3):3; myRoundScore=me?(me.roundScore||0):0;
+  myDiscard=[];
+  const hp=room.handsPerRound||4;
+  handsLeft=me?(me.handsLeft??hp):hp; discardsLeft=me?(me.discardsLeft??3):3; myRoundScore=me?(me.roundScore||0):0;
   selected.clear(); document.getElementById('result-overlay').classList.remove('show');
   showScreen('game'); updateGameUI(room);
+  // Inicia/reinicia ticker de bots se em modo solo
+  if(isBotMode){
+    if(botInterval)clearInterval(botInterval);
+    const diff=room.botDifficulty||'facil';
+    const tickMs=diff==='dificil'?1100:diff==='medio'?1900:2800;
+    botInterval=setInterval(tickBots,tickMs);
+  }
 }
 
 function syncGameState(room){
@@ -763,6 +1060,9 @@ async function playHand(){
   const ev=evaluateHand(selCards);
   myRoundScore+=ev.score; handsLeft--;
   const numPlayed=selected.size;
+  // Cartas jogadas vão para o descarte (não voltam imediatamente ao deck)
+  const playedCards=myHand.filter((_,i)=>selected.has(i));
+  myDiscard.push(...playedCards);
   myHand=myHand.filter((_,i)=>!selected.has(i)); selected.clear();
   log(`🃏 <span class="log-hi">${ev.type}</span> · ${ev.chips} × ${ev.mult} = <span class="log-hi">+${ev.score} pts</span>`);
   document.getElementById('myRoundScore').textContent=myRoundScore;
@@ -824,6 +1124,9 @@ async function discardSelected(){
   if(selected.size===0){log('⚠️ Selecione cartas para descartar!');return;}
   if(discardsLeft<=0){log('⚠️ Sem descartes restantes!');return;}
   const numDiscarded=selected.size;
+  // Cartas descartadas vão para o descarte (não voltam imediatamente ao deck)
+  const discardedCards=myHand.filter((_,i)=>selected.has(i));
+  myDiscard.push(...discardedCards);
   myHand=myHand.filter((_,i)=>!selected.has(i)); discardsLeft--; selected.clear();
   log(`🗑 Cartas descartadas · ${discardsLeft} descartes restantes`);
   document.getElementById('discardsLeft').textContent=discardsLeft;
@@ -852,9 +1155,10 @@ async function nextRound(){
   if(!isHost)return;
   try{
     const room=await stGet(roomCode);
+    const hp=room.handsPerRound||4;
     room.round=(room.round||1)+1; room.phase='playing'; room.blindGoal=300*room.round; room.deck=makeDeck(); room.winningScore=room.winningScore||WINNING_SCORE;
     for(const p of room.players){
-      p.roundScore=0; p.done=false; p.handsLeft=4; p.discardsLeft=3;
+      p.roundScore=0; p.done=false; p.handsLeft=hp; p.discardsLeft=3;
       const nj=pickJokers(1)[0]; p.jokers=[...(p.jokers||[]),nj].slice(-3);
       room.hands[p.id]=dealHand(room.deck);
     }
@@ -879,9 +1183,10 @@ async function startRematch(){
   if(!isHost)return;
   try{
     const room=await stGet(roomCode);
+    const hp=room.handsPerRound||4;
     room.round=1; room.phase='playing'; room.blindGoal=300; room.deck=makeDeck(); room.winner=null; room.winningScore=room.winningScore||WINNING_SCORE;
     for(const p of room.players){
-      p.score=0; p.roundScore=0; p.done=false; p.handsLeft=4; p.discardsLeft=3;
+      p.score=0; p.roundScore=0; p.done=false; p.handsLeft=hp; p.discardsLeft=3;
       p.jokers=pickJokers(1);
       room.hands[p.id]=dealHand(room.deck);
     }
