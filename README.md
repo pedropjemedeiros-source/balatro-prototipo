@@ -1,81 +1,129 @@
+[README.md](https://github.com/user-attachments/files/28241749/README.md)
 # 🃏 Balatro Online
 
-Versão multiplayer do Balatro rodando 100% no navegador, sem servidor ou instalação. Comunicação entre jogadores via **WebRTC P2P** usando [PeerJS](https://peerjs.com/).
+Um fan-made multiplayer do Balatro rodando direto no navegador — sem servidor, sem instalação, sem conta. Basta abrir o arquivo HTML e jogar com seus amigos em tempo real via WebRTC (PeerJS).
+
+> **Aviso:** Este é um projeto não oficial, criado por fãs para fins educacionais e de entretenimento. Balatro é uma marca registrada da [LocalThunk](https://www.playbalatro.com/).
+
+---
+
+## ✨ Funcionalidades
+
+### 🌐 Multiplayer P2P
+- Conexão direta entre dispositivos via **WebRTC (PeerJS)** — sem servidor de jogo
+- Até **4 jogadores** por sala
+- Código de sala de 4 letras para compartilhar com amigos
+- Funciona entre **dispositivos diferentes** (celular, computador, tablet)
+
+### 🤖 Modo Solo vs Bot
+- Jogue contra **1 a 3 bots** com inteligência artificial
+- Três níveis de dificuldade: **Fácil 😴 · Médio 🎯 · Difícil 💀**
+- Bots jogam automaticamente com estratégias baseadas na dificuldade
+
+### 🃏 Coringas (Jokers)
+- **22 coringas únicos** com efeitos variados
+- Bônus de chips, multiplicadores, efeitos por naipe, por rank e por tipo de mão
+- Configuração livre: ative ou desative cada coringa antes de iniciar a partida
+- Jogadores ganham coringas aleatórios ao longo da partida
+
+### ⚙️ Configuração da Partida
+- **Pontuação para vencer** — de 500 a 999.999 pts (atalhos rápidos incluídos)
+- **Mãos por rodada** — de 1 a 10
+- Configurações alteráveis pelo host também na sala de espera
+
+### 🔒 Controle de Acesso à Sala
+- Botão **Abrir/Fechar sala** disponível durante o jogo e na sala de espera
+- 🔓 **Sala Aberta** — qualquer pessoa com o código pode entrar
+- 🔒 **Sala Fechada** — novos jogadores são bloqueados; quem já está continua normalmente
+- Ao retornar ao lobby após um game over, a sala fecha automaticamente
+
+### 🎮 Fluxo do Jogo
+- Rodadas com meta de pontuação crescente (blind goal)
+- Mãos avaliadas com as combinações clássicas de poker
+- Descartes para substituir cartas indesejadas
+- Placar em tempo real de todos os jogadores
+- Ao fim do jogo: opção de **Revanche**, **Voltar ao Lobby** ou **Menu Principal**
+
+---
 
 ## 🚀 Como Jogar
 
-1. Abra o `index.html` no Chrome (ou qualquer navegador moderno)
+### Multiplayer com amigos
+
+1. Abra o arquivo `balatro_prototipo_.html` no **Google Chrome**
+2. Digite seu nome e clique em **Criar Sala**
+3. Compartilhe o **código de 4 letras** com seus amigos
+4. Os amigos abrem o mesmo arquivo, digitam o nome e o código, e clicam em **Entrar na Sala**
+5. Quando todos estiverem na sala, o host clica em **Iniciar Jogo**
+
+### Solo vs Bot
+
+1. Abra o arquivo no Chrome
 2. Digite seu nome
-3. **Criar Sala** → compartilhe o código de 4 letras com seus amigos
-4. **Entrar na Sala** → cole o código que o host enviou
-5. O host configura a meta de pontuação e inicia o jogo
+3. Na seção **Jogar Solo vs Bot**, escolha o número de bots e a dificuldade
+4. Clique em **Iniciar Partida Solo ▶**
 
-## ⚙️ Configurações da Sala (host)
+> **Dica:** Para jogar entre dispositivos diferentes na mesma rede local ou pela internet, todos precisam abrir o mesmo arquivo HTML. A conexão é feita diretamente entre os navegadores.
 
-| Opção | Descrição |
-|-------|-----------|
-| ⚡ 1.000 pts | Partida rápida |
-| 🃏 2.500 pts | Partida normal |
-| 🎰 5.000 pts | Partida longa (padrão) |
-| 🏆 10.000 pts | Partida épica |
+---
 
-## 🃏 Combinações e Pontuação
+## 🃏 Combinações de Cartas
 
-> **Pontuação = (Valor das cartas + Chips extras) × Mult**
+| Combinação | Chips base | Multiplicador |
+|---|---|---|
+| Carta Alta | chips + 5 | ×1 |
+| Par | chips + 10 | ×2 |
+| Dois Pares | chips + 20 | ×2 |
+| Trinca | chips + 20 | ×3 |
+| Sequência | chips + 30 | ×4 |
+| Flush | chips + 35 | ×4 |
+| Full House | chips + 40 | ×4 |
+| Quadra | chips + 60 | ×7 |
+| Straight Flush | chips + 100 | ×8 |
 
-| Mão | Chips extras | Mult |
-|-----|:-----------:|:----:|
-| Straight Flush | +100 | ×8 |
-| Quadra | +60 | ×7 |
-| Full House | +40 | ×4 |
-| Flush | +35 | ×4 |
-| Sequência | +30 | ×4 |
-| Trinca | +20 | ×3 |
-| Dois Pares | +20 | ×2 |
-| Par | +10 | ×2 |
-| Carta Alta | +5 | ×1 |
+> Os coringas modificam chips e multiplicador antes do cálculo final: **Score = Chips × Mult**
 
-## 🎲 Coringas
+---
 
-Há 30% de chance de ganhar um coringa aleatório após cada jogada (máximo 3 por jogador):
+## 🧩 Tecnologias
 
-| Coringa | Efeito |
-|---------|--------|
-| 🃏 Coringa Base | +50 Chips em qualquer mão |
-| 👑 Rei do Flush | +4 Mult em Flush |
-| 💕 Amante dos Pares | +30 Chips em Par |
+- **HTML + CSS + JavaScript** puro — zero dependências de build
+- **[PeerJS](https://peerjs.com/)** (v1.5.4) para conexão WebRTC P2P
+- **Google Fonts** — Cinzel + Crimson Pro
+- **LocalStorage** como backup de estado local
 
-## 🎮 Regras
-
-- Até **4 jogadores** simultâneos
-- Cada jogador recebe **8 cartas**; a mão é reabastecida após cada jogada
-- **4 mãos** e **3 descartes** por rodada
-- Quando o deck esgota, um novo baralho é embaralhado automaticamente 🔀
-- Primeiro a atingir a meta de pontuação configurada vence
-- Ao fim de cada rodada, os jogadores podem continuar ou reiniciar
-
-## 🛠 Tecnologias
-
-- HTML + CSS + JavaScript puro — sem framework, sem build
-- [PeerJS 1.5.4](https://cdn.jsdelivr.net/npm/peerjs@1.5.4/) para WebRTC P2P
-- Google Fonts (Cinzel + Crimson Pro)
+---
 
 ## 📁 Estrutura
 
 ```
-index.html   ← Jogo completo (HTML + CSS + JS em arquivo único)
-README.md
+balatro-online/
+└── balatro_prototipo_.html   # Jogo completo em arquivo único
+└── README.md
 ```
 
-## ⚠️ Limitações
+Tudo em um único arquivo HTML autocontido. Sem npm, sem build, sem servidor.
 
-- Requer internet para o servidor de sinalização do PeerJS
-- Melhor experiência no **Chrome** (desktop ou Android)
-- NAT simétrico pode bloquear conexões P2P em algumas redes corporativas
+---
 
-## 🌐 Como hospedar no GitHub Pages
+## ⚠️ Requisitos
 
-1. Crie um repositório público no GitHub
-2. Suba os arquivos (`index.html` e `README.md`)
-3. Vá em **Settings → Pages → Source: main branch → / (root)**
-4. Acesse em `https://seu-usuario.github.io/nome-do-repo`
+- **Google Chrome** (recomendado — WebRTC mais estável)
+- Conexão com a internet (necessária para o servidor de sinalização PeerJS e fontes do Google)
+- Não requer nenhuma instalação ou conta
+
+---
+
+## 🛠️ Limitações conhecidas
+
+- A conexão P2P pode falhar em redes corporativas com firewall restritivo
+- O estado do jogo não persiste entre recarregamentos de página
+- Suporte a mobile funciona, mas a experiência é otimizada para desktop
+
+---
+
+## 📝 Licença
+
+Este projeto é um **fan-made não comercial**. Todo o crédito pelo jogo original vai para [LocalThunk](https://www.playbalatro.com/). Este repositório não tem nenhuma afiliação oficial com os criadores do Balatro.
+
+Distribuído sob a licença **MIT** para o código desenvolvido aqui.
