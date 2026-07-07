@@ -3,33 +3,45 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>🃏 Balatro Online</title>
+<title>🃏 Cassino Online</title>
 <style>
   @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@700;900&family=Crimson+Pro:ital,wght@0,400;0,600;1,400&display=swap');
   *{margin:0;padding:0;box-sizing:border-box}
-  :root{--felt:#1a3d1a;--felt-light:#1e4a1e;--gold:#d4a843;--gold-light:#f0c96e;--card-bg:#fef9f0;--card-red:#c0392b;--card-border:#d4b896;--dark:#0d1f0d;--panel:rgba(0,0,0,0.35);--text:#f5e6c8;--text-dim:#a89060}
+  :root{--felt:#1a3d1a;--felt-light:#1e4a1e;--gold:#d4a843;--gold-light:#f0c96e;--card-bg:#fef9f0;--card-red:#c0392b;--card-border:#d4b896;--dark:#0d1f0d;--panel:rgba(0,0,0,0.35);--text:#f5e6c8;--text-dim:rgba(245,230,200,0.6)}
   body{font-family:'Crimson Pro',serif;background:var(--dark);color:var(--text);min-height:100vh;overflow-x:hidden}
   #app{min-height:100vh;display:flex;flex-direction:column;position:relative}
   .screen{display:none;flex-direction:column;flex:1;padding:20px}
   .screen.active{display:flex}
-  #lobby{align-items:center;justify-content:center;background:radial-gradient(ellipse at 50% 40%,#1e4a1e 0%,#0d1f0d 70%);gap:20px}
+  
+  /* MENU PRINCIPAL */
+  #main-menu{align-items:center;justify-content:center;background:radial-gradient(ellipse at 50% 40%,#1e4a1e 0%,#0d1f0d 70%);gap:20px}
   .logo{text-align:center}
   .logo h1{font-family:'Cinzel',serif;font-size:52px;font-weight:900;color:var(--gold);text-shadow:0 0 30px rgba(212,168,67,0.5),2px 2px 0 #000;letter-spacing:4px}
   .logo p{font-style:italic;color:var(--text-dim);font-size:16px;margin-top:4px}
+  .games-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;width:100%;max-width:500px;margin:20px 0}
+  .game-card{background:var(--panel);border:2px solid rgba(212,168,67,0.3);border-radius:12px;padding:24px;cursor:pointer;transition:all .3s;text-align:center;display:flex;flex-direction:column;align-items:center;gap:12px}
+  .game-card:hover{border-color:var(--gold);background:rgba(212,168,67,0.1);transform:translateY(-4px)}
+  .game-card-icon{font-size:48px}
+  .game-card-name{font-family:'Cinzel',serif;color:var(--gold);font-size:20px;font-weight:700}
+  .game-card-desc{font-size:12px;color:var(--text-dim)}
+  
+  /* LOBBY */
+  #lobby{align-items:center;justify-content:center;background:radial-gradient(ellipse at 50% 40%,#1e4a1e 0%,#0d1f0d 70%);gap:20px}
   .lobby-box{background:var(--panel);border:1px solid rgba(212,168,67,0.3);border-radius:12px;padding:28px;width:100%;max-width:400px}
   .lobby-box h2{font-family:'Cinzel',serif;color:var(--gold);font-size:18px;margin-bottom:16px;text-align:center}
+  .btn-back{background:rgba(212,168,67,0.1);border:1px solid rgba(212,168,67,0.35);border-radius:8px;color:var(--gold);font-family:'Crimson Pro',serif;font-size:12px;padding:8px 12px;cursor:pointer;margin-bottom:12px;width:100%}
+  .btn-back:hover{background:rgba(212,168,67,0.2)}
+  
   .field-group{display:flex;flex-direction:column;gap:10px;margin-bottom:16px}
   .field-label{font-size:13px;color:var(--text-dim);text-transform:uppercase;letter-spacing:1px;margin-bottom:4px}
-  input[type=text]{background:rgba(0,0,0,0.4);border:1px solid rgba(212,168,67,0.4);border-radius:8px;color:var(--text);font-family:'Crimson Pro',serif;font-size:16px;padding:10px 14px;width:100%;outline:none;transition:border-color .2s}
+  input[type=text]{background:rgba(0,0,0,0.4);border:1px solid rgba(212,168,67,0.4);border-radius:8px;color:var(--text);font-family:'Crimson Pro',serif;font-size:16px;padding:10px 14px;width:100%;outline:none}
   input[type=text]:focus{border-color:var(--gold)}
   input[type=text]::placeholder{color:rgba(245,230,200,0.3)}
-  select{background:rgba(0,0,0,0.4);border:1px solid rgba(212,168,67,0.4);border-radius:8px;color:var(--text);font-family:'Crimson Pro',serif;font-size:16px;padding:10px 14px;width:100%;outline:none;transition:border-color .2s;cursor:pointer;-webkit-appearance:none;appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23d4a843' stroke-width='1.5' fill='none'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 12px center}
+  select{background:rgba(0,0,0,0.4);border:1px solid rgba(212,168,67,0.4);border-radius:8px;color:var(--text);font-family:'Crimson Pro',serif;font-size:16px;padding:10px 14px;width:100%;outline:none;transition:.2s}
   select:focus{border-color:var(--gold)}
   select option{background:#1a3d1a;color:var(--text)}
   .score-config-info{background:rgba(212,168,67,0.08);border:1px solid rgba(212,168,67,0.25);border-radius:8px;padding:10px 14px;font-size:13px;color:var(--text-dim);text-align:center;margin-bottom:12px}
   .score-config-info strong{color:var(--gold)}
-  .done-banner{background:rgba(39,174,96,0.12);border:1px solid rgba(39,174,96,0.4);border-radius:10px;padding:20px;text-align:center;color:#27ae60}
-  .done-banner .done-icon{font-size:36px;display:block;margin-bottom:8px}
   .btn{border:none;border-radius:8px;cursor:pointer;font-family:'Cinzel',serif;font-weight:700;font-size:14px;letter-spacing:1px;padding:12px 20px;transition:all .2s;width:100%}
   .btn:hover{transform:translateY(-1px)}
   .btn:active{transform:translateY(0)}
@@ -40,6 +52,13 @@
   .btn-red{background:linear-gradient(135deg,#c0392b,#922b21);color:white}
   .btn:disabled{opacity:.4;cursor:not-allowed;transform:none}
   .divider{border:none;border-top:1px solid rgba(212,168,67,0.2);margin:16px 0}
+  
+  .quick-btns{display:flex;gap:6px;margin-top:7px}
+  .quick-btn{flex:1;background:rgba(212,168,67,0.1);border:1px solid rgba(212,168,67,0.35);border-radius:6px;color:var(--gold);font-family:'Crimson Pro',serif;font-size:12px;padding:5px 4px;cursor:pointer;transition:all .15s}
+  .quick-btn:hover{background:rgba(212,168,67,0.25);border-color:var(--gold)}
+  
+  /* WAITING SCREEN */
+  #waiting-screen{background:radial-gradient(ellipse at 50% 40%,#1e4a1e 0%,#0d1f0d 70%)}
   .room-code-display{background:rgba(0,0,0,0.5);border:1px solid var(--gold);border-radius:8px;padding:16px;text-align:center;margin-bottom:16px}
   .room-code-label{font-size:12px;color:var(--text-dim);text-transform:uppercase;letter-spacing:1px}
   .room-code-val{font-family:'Cinzel',serif;font-size:32px;color:var(--gold);letter-spacing:8px;margin-top:4px}
@@ -50,7 +69,11 @@
   .player-slot.empty{opacity:.4;font-style:italic}
   .player-you{color:var(--gold);font-weight:600}
   .waiting-msg{text-align:center;font-style:italic;color:var(--text-dim);font-size:14px;margin-bottom:12px}
+  
+  /* GAME SCREENS */
   #game{background:radial-gradient(ellipse at 50% 50%,var(--felt-light) 0%,var(--felt) 40%,var(--dark) 100%);gap:0;padding:0;min-height:100vh}
+  #poker, #truco, #blackjack{background:radial-gradient(ellipse at 50% 50%,var(--felt-light) 0%,var(--felt) 40%,var(--dark) 100%);gap:0;padding:0;min-height:100vh}
+  
   .game-header{display:flex;justify-content:space-between;align-items:center;padding:10px 16px;background:rgba(0,0,0,0.5);border-bottom:1px solid rgba(212,168,67,0.2);flex-shrink:0}
   .game-header .round-badge{font-family:'Cinzel',serif;color:var(--gold);font-size:13px}
   .game-scores{display:flex;gap:16px;flex-wrap:wrap}
@@ -58,253 +81,171 @@
   .score-chip .sname{color:var(--text-dim)}
   .score-chip .sval{color:var(--gold);font-weight:600;margin-left:4px}
   .score-chip.mine{border-color:var(--gold)}
-  .blind-info{background:rgba(0,0,0,0.4);border:1px solid rgba(212,168,67,0.2);border-radius:8px;padding:8px 14px;text-align:center;margin:10px 16px 0;flex-shrink:0}
-  .blind-info .blind-label{font-size:11px;color:var(--text-dim);text-transform:uppercase;letter-spacing:1px}
-  .blind-info .blind-val{font-family:'Cinzel',serif;font-size:20px;color:#e74c3c}
-  .blind-progress{background:rgba(255,255,255,0.1);border-radius:4px;height:6px;margin-top:6px}
-  .blind-fill{height:100%;border-radius:4px;background:linear-gradient(90deg,#27ae60,#f0c96e);transition:width .5s}
-  .jokers-row{padding:8px 16px 4px;display:flex;gap:8px;flex-shrink:0;flex-wrap:wrap}
-  .joker-card{background:linear-gradient(135deg,#2c1654,#4a1980);border:1px solid #9b59b6;border-radius:8px;padding:6px 10px;font-size:12px;color:#d7bde2;white-space:nowrap;cursor:default}
-  .joker-card .jname{font-weight:600;color:#d7bde2}
-  .joker-card .jdesc{color:rgba(215,189,226,0.6);font-size:11px}
-  .hand-area{flex:1;display:flex;flex-direction:column;justify-content:flex-end;padding:0 16px 8px}
-  .hand-meta{display:flex;justify-content:space-between;align-items:center;padding:6px 0;font-size:13px}
-  .hand-type-badge{background:rgba(212,168,67,0.15);border:1px solid rgba(212,168,67,0.4);border-radius:12px;padding:3px 10px;color:var(--gold);font-family:'Cinzel',serif;font-size:12px}
-  .hand-chips{font-size:13px;color:var(--text-dim)}
-  .hand-chips span{color:var(--gold);font-weight:600}
-  .cards-container{display:flex;gap:8px;justify-content:center;align-items:flex-end;min-height:140px;padding:8px 0 4px;flex-wrap:wrap}
-  .card{background:var(--card-bg);border:1.5px solid var(--card-border);border-radius:10px;width:68px;height:100px;display:flex;flex-direction:column;align-items:center;justify-content:center;cursor:pointer;transition:all .18s;position:relative;flex-shrink:0;user-select:none}
-  .card:hover{transform:translateY(-12px);box-shadow:0 8px 20px rgba(0,0,0,0.5)}
-  .card.selected{transform:translateY(-18px);border-color:var(--gold);box-shadow:0 0 0 2px var(--gold),0 10px 24px rgba(0,0,0,0.5)}
-  .card-suit{font-size:28px;line-height:1}
-  .card-rank{font-family:'Cinzel',serif;font-weight:700;font-size:20px;color:#1a1a1a;margin-top:2px}
-  .card.red .card-rank{color:var(--card-red)}
-  .actions-bar{display:flex;gap:8px;padding:8px 16px 12px;flex-shrink:0}
-  .actions-bar .btn{flex:1;padding:10px;font-size:13px}
-  .resource-bar{display:flex;gap:12px;padding:4px 16px 8px;flex-shrink:0}
-  .resource-item{display:flex;align-items:center;gap:5px;background:rgba(0,0,0,0.3);border-radius:8px;padding:4px 10px;font-size:13px}
-  .resource-item .ri-val{color:var(--gold);font-weight:600}
-  #result-overlay{display:none;position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.85);z-index:100;align-items:center;justify-content:center;flex-direction:column;gap:16px;padding:24px;text-align:center}
-  #result-overlay.show{display:flex}
-  #result-overlay h2{font-family:'Cinzel',serif;font-size:32px;color:var(--gold)}
-  .result-scores{display:flex;flex-direction:column;gap:8px;width:100%;max-width:300px}
-  .result-row{background:rgba(255,255,255,0.05);border:1px solid rgba(212,168,67,0.2);border-radius:8px;padding:10px 16px;display:flex;justify-content:space-between}
-  .result-row.winner{border-color:var(--gold);background:rgba(212,168,67,0.1)}
+  
+  .game-content{flex:1;display:flex;flex-direction:column;justify-content:center;align-items:center;padding:20px;gap:20px}
   .game-log{background:rgba(0,0,0,0.4);border-top:1px solid rgba(212,168,67,0.15);padding:6px 16px;font-size:12px;color:var(--text-dim);min-height:32px;flex-shrink:0}
   .log-hi{color:var(--gold)}
+  
   .msg-box{background:rgba(0,0,0,0.4);border:1px solid rgba(212,168,67,0.3);border-radius:8px;padding:12px 16px;font-size:14px;text-align:center;color:var(--text-dim);margin-top:8px}
   .msg-box.error{border-color:rgba(231,76,60,0.5);color:#e74c3c}
   .msg-box.success{border-color:rgba(39,174,96,0.5);color:#27ae60}
+  
   .small{font-size:12px;color:var(--text-dim);text-align:center}
-  #waiting-screen{background:radial-gradient(ellipse at 50% 40%,#1e4a1e 0%,#0d1f0d 70%)}
-  .opp-panel{display:flex;gap:8px;padding:8px 16px 0;flex-wrap:wrap;flex-shrink:0}
-  .opp-box{background:rgba(0,0,0,0.35);border:1px solid rgba(212,168,67,0.2);border-radius:8px;padding:8px 12px;font-size:13px;flex:1;min-width:100px}
-  .opp-box .oname{color:var(--text-dim);font-size:12px}
-  .opp-box .oscore{color:var(--gold);font-size:15px;font-weight:600}
-  .opp-box .ostatus{font-size:11px;color:rgba(255,255,255,0.4)}
-  input[type=number]{background:rgba(0,0,0,0.4);border:1px solid rgba(212,168,67,0.4);border-radius:8px;color:var(--text);font-family:'Crimson Pro',serif;font-size:16px;padding:10px 14px;width:100%;outline:none;transition:border-color .2s;-moz-appearance:textfield}
-  input[type=number]::-webkit-inner-spin-button,input[type=number]::-webkit-outer-spin-button{-webkit-appearance:none;margin:0}
-  input[type=number]:focus{border-color:var(--gold)}
-  .quick-btns{display:flex;gap:6px;margin-top:7px;}
-  .quick-btn{flex:1;background:rgba(212,168,67,0.1);border:1px solid rgba(212,168,67,0.35);border-radius:6px;color:var(--gold);font-family:'Crimson Pro',serif;font-size:12px;padding:5px 4px;cursor:pointer;transition:all .15s;white-space:nowrap;}
-  .quick-btn:hover{background:rgba(212,168,67,0.25);border-color:var(--gold);}
-  @media(max-width:480px){.logo h1{font-size:36px}.card{width:56px;height:84px}.card-suit{font-size:22px}.card-rank{font-size:16px}}
-  .joker-toggle{background:rgba(0,0,0,0.4);border:1px solid rgba(255,255,255,0.12);border-radius:7px;padding:7px 9px;cursor:pointer;transition:all .15s;opacity:.38;user-select:none;}
-  .joker-toggle.on{background:rgba(155,89,182,0.18);border-color:#9b59b6;opacity:1;}
-  .joker-toggle:hover{opacity:.7;}
-  .joker-grid{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-top:8px;max-height:260px;overflow-y:auto;padding-right:2px;}
-  .joker-grid::-webkit-scrollbar{width:4px}.joker-grid::-webkit-scrollbar-track{background:transparent}.joker-grid::-webkit-scrollbar-thumb{background:rgba(212,168,67,0.3);border-radius:2px}
-  .jt-name{font-weight:700;font-size:11px;color:#d7bde2;}
-  .jt-desc{font-size:10px;color:rgba(215,189,226,0.55);margin-top:1px;}
-  .section-toggle-btn{display:flex;justify-content:space-between;align-items:center;cursor:pointer;padding:6px 0;border-bottom:1px solid rgba(212,168,67,0.15);margin-bottom:8px;}
-  .section-toggle-btn .field-label{margin:0;}
-  .section-toggle-btn .stb-arrow{color:var(--gold);font-size:12px;}
-  .bot-section{background:rgba(212,168,67,0.06);border:1px solid rgba(212,168,67,0.25);border-radius:10px;padding:16px;margin-top:4px;}
-  .bot-section h3{font-family:'Cinzel',serif;color:var(--gold);font-size:14px;margin-bottom:12px;text-align:center;}
-  .bot-diff{display:flex;gap:6px;margin-top:7px;}
-  .bot-diff-btn{flex:1;background:rgba(0,0,0,0.3);border:1px solid rgba(212,168,67,0.3);border-radius:6px;color:var(--text-dim);font-family:'Crimson Pro',serif;font-size:13px;padding:7px 4px;cursor:pointer;transition:all .15s;text-align:center;}
-  .bot-diff-btn.active{background:rgba(212,168,67,0.2);border-color:var(--gold);color:var(--gold);}
-  .opp-box.bot-box{border-color:rgba(155,89,182,0.4);}
-  .bot-badge{font-size:9px;background:rgba(155,89,182,0.3);border-radius:4px;padding:1px 5px;color:#d7bde2;margin-left:4px;}
+  .conn-status{position:fixed;top:8px;right:10px;font-size:11px;padding:3px 8px;border-radius:10px;z-index:300;background:rgba(0,0,0,0.6)}
+  .conn-status.ok{color:#27ae60}
+  .conn-status.err{color:#e74c3c}
+  .conn-status.wait{color:var(--gold)}
+  
   .loading-overlay{position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(13,31,13,0.92);z-index:200;display:none;align-items:center;justify-content:center;flex-direction:column;gap:14px}
   .loading-overlay.show{display:flex}
   .spinner{width:38px;height:38px;border:3px solid rgba(212,168,67,0.2);border-top-color:var(--gold);border-radius:50%;animation:spin .8s linear infinite}
   @keyframes spin{to{transform:rotate(360deg)}}
   .loading-text{color:var(--text-dim);font-style:italic;font-size:15px}
-  .conn-status{position:fixed;top:8px;right:10px;font-size:11px;padding:3px 8px;border-radius:10px;z-index:300;background:rgba(0,0,0,0.6)}
-  .conn-status.ok{color:#27ae60}
-  .conn-status.err{color:#e74c3c}
-  .conn-status.wait{color:var(--gold)}
-  .lock-btn{background:rgba(0,0,0,0.4);border:1px solid rgba(212,168,67,0.35);border-radius:8px;color:var(--text-dim);font-family:'Crimson Pro',serif;font-size:12px;padding:4px 10px;cursor:pointer;transition:all .2s;white-space:nowrap;display:flex;align-items:center;gap:5px;}
-  .lock-btn:hover{border-color:var(--gold);color:var(--gold);}
-  .lock-btn.locked{background:rgba(231,76,60,0.15);border-color:rgba(231,76,60,0.6);color:#e74c3c;}
-  .lock-btn.unlocked{background:rgba(39,174,96,0.12);border-color:rgba(39,174,96,0.5);color:#27ae60;}
+  
+  @media(max-width:480px){.logo h1{font-size:36px}.games-grid{grid-template-columns:1fr}}
 </style>
 </head>
 <body>
 <div id="connStatus" class="conn-status wait">⏳ carregando...</div>
 <div id="app">
 
-<div id="lobby" class="screen active">
+<!-- MENU PRINCIPAL -->
+<div id="main-menu" class="screen active">
   <div class="logo">
-    <h1>🃏 BALATRO</h1>
-    <p>Multiplayer Online · Funciona no Chrome</p>
+    <h1>🃏 CASSINO</h1>
+    <p>Multiplayer Online · Escolha seu Jogo</p>
   </div>
-  <div class="lobby-box">
-    <h2>ENTRAR NO JOGO</h2>
-    <div class="field-group">
-      <div>
-        <div class="field-label">Seu Nome</div>
-        <input type="text" id="nameInput" placeholder="Como quer ser chamado?" maxlength="15"/>
-      </div>
+  <div class="games-grid">
+    <div class="game-card" onclick="selectGame('balatro')">
+      <div class="game-card-icon">🎰</div>
+      <div class="game-card-name">BALATRO</div>
+      <div class="game-card-desc">Poker Roguelike</div>
     </div>
-    <div class="field-group">
-      <div>
-        <div class="field-label">Pontuação para Vencer</div>
-        <input type="number" id="winningScoreInput" value="5000" min="100" max="9999999" step="100" placeholder="Ex: 5000"/>
-        <div class="quick-btns">
-          <button class="quick-btn" onclick="setWinScore('winningScoreInput',500)">500 ⚡</button>
-          <button class="quick-btn" onclick="setWinScore('winningScoreInput',1000)">1.000 🃏</button>
-          <button class="quick-btn" onclick="setWinScore('winningScoreInput',5000)">5.000 🎰</button>
-          <button class="quick-btn" onclick="setWinScore('winningScoreInput',10000)">10.000 🏆</button>
-        </div>
-      </div>
+    <div class="game-card" onclick="selectGame('poker')">
+      <div class="game-card-icon">♠️</div>
+      <div class="game-card-name">POKER</div>
+      <div class="game-card-desc">Texas Hold'em</div>
     </div>
-    <div class="field-group">
-      <div>
-        <div class="field-label">Mãos por Rodada</div>
-        <input type="number" id="handsPerRoundInput" value="4" min="1" max="10" step="1" placeholder="Ex: 4"/>
-        <div class="quick-btns">
-          <button class="quick-btn" onclick="setWinScore('handsPerRoundInput',2)">2 🤏</button>
-          <button class="quick-btn" onclick="setWinScore('handsPerRoundInput',4)">4 🖐</button>
-          <button class="quick-btn" onclick="setWinScore('handsPerRoundInput',6)">6 🃏</button>
-          <button class="quick-btn" onclick="setWinScore('handsPerRoundInput',8)">8 🎰</button>
-        </div>
-      </div>
+    <div class="game-card" onclick="selectGame('truco')">
+      <div class="game-card-icon">🎯</div>
+      <div class="game-card-name">TRUCO</div>
+      <div class="game-card-desc">Jogo Clássico</div>
     </div>
-    <button class="btn btn-gold" onclick="createRoom()">Criar Sala</button>
-    <hr class="divider">
-    <!-- Joker Config -->
-    <div style="margin-bottom:16px;">
-      <div class="section-toggle-btn" onclick="toggleJokerConfig()">
-        <div class="field-label">🃏 Coringas do Jogo</div>
-        <span id="jokerConfigArrow" class="stb-arrow">▼ configurar</span>
-      </div>
-      <div id="jokerConfigGrid" style="display:none;" class="joker-grid"></div>
-      <div id="jokerConfigCount" style="font-size:11px;color:var(--text-dim);text-align:right;margin-top:4px;display:none;"></div>
+    <div class="game-card" onclick="selectGame('blackjack')">
+      <div class="game-card-icon">🖤</div>
+      <div class="game-card-name">21</div>
+      <div class="game-card-desc">Blackjack</div>
     </div>
-    <hr class="divider">
-    <!-- Bot Mode -->
-    <div class="bot-section">
-      <h3>🤖 Jogar Solo vs Bot</h3>
-      <div class="field-group" style="margin-bottom:10px;">
-        <div>
-          <div class="field-label">Número de Bots</div>
-          <input type="number" id="botCount" value="1" min="1" max="3" step="1"/>
-          <div class="quick-btns">
-            <button class="quick-btn" onclick="setWinScore('botCount',1)">1 🤖</button>
-            <button class="quick-btn" onclick="setWinScore('botCount',2)">2 🤖🤖</button>
-            <button class="quick-btn" onclick="setWinScore('botCount',3)">3 🤖🤖🤖</button>
-          </div>
-        </div>
-      </div>
-      <div class="field-label">Dificuldade</div>
-      <div class="bot-diff">
-        <div class="bot-diff-btn active" id="diff_facil" onclick="selectDiff('facil')">😴 Fácil</div>
-        <div class="bot-diff-btn" id="diff_medio" onclick="selectDiff('medio')">🎯 Médio</div>
-        <div class="bot-diff-btn" id="diff_dificil" onclick="selectDiff('dificil')">💀 Difícil</div>
-      </div>
-      <button class="btn btn-gold" onclick="startBotGame()" style="margin-top:12px;">Iniciar Partida Solo ▶</button>
-    </div>
-    <div class="field-group">
-      <div>
-        <div class="field-label">Código da Sala</div>
-        <input type="text" id="roomCodeInput" placeholder="Ex: ABCD" maxlength="4"
-          style="text-transform:uppercase;letter-spacing:4px;text-align:center;"
-          oninput="this.value=this.value.toUpperCase()"/>
-      </div>
-    </div>
-    <button class="btn btn-outline" onclick="joinRoom()">Entrar na Sala</button>
-    <div id="lobbyMsg" class="msg-box" style="display:none;"></div>
   </div>
   <div class="small" style="margin-top:4px;">Até 4 jogadores · Sem instalação · Funciona entre dispositivos</div>
 </div>
 
+<!-- LOBBY (GENÉRICO) -->
+<div id="lobby" class="screen">
+  <div style="flex:1;display:flex;align-items:center;justify-content:center;">
+    <div class="lobby-box">
+      <button class="btn-back" onclick="backToMenu()">← Voltar ao Menu</button>
+      <h2 id="lobbyTitle">ENTRAR NO JOGO</h2>
+      <div class="field-group">
+        <div>
+          <div class="field-label">Seu Nome</div>
+          <input type="text" id="nameInput" placeholder="Como quer ser chamado?" maxlength="15"/>
+        </div>
+      </div>
+      <div class="field-group">
+        <div>
+          <div class="field-label">Pontuação para Vencer</div>
+          <input type="number" id="winningScoreInput" value="5000" min="100" max="9999999" step="100" placeholder="Ex: 5000"/>
+          <div class="quick-btns">
+            <button class="quick-btn" onclick="setWinScore('winningScoreInput',500)">500 ⚡</button>
+            <button class="quick-btn" onclick="setWinScore('winningScoreInput',1000)">1K 🃏</button>
+            <button class="quick-btn" onclick="setWinScore('winningScoreInput',5000)">5K 🎰</button>
+            <button class="quick-btn" onclick="setWinScore('winningScoreInput',10000)">10K 🏆</button>
+          </div>
+        </div>
+      </div>
+      <button class="btn btn-gold" id="createRoomBtn" onclick="createRoom()">Criar Sala</button>
+      <hr class="divider">
+      <div class="field-group">
+        <div>
+          <div class="field-label">Código da Sala</div>
+          <input type="text" id="roomCodeInput" placeholder="Ex: ABCD" maxlength="4"
+            style="text-transform:uppercase;letter-spacing:4px;text-align:center;"
+            oninput="this.value=this.value.toUpperCase()"/>
+        </div>
+      </div>
+      <button class="btn btn-outline" onclick="joinRoom()">Entrar na Sala</button>
+      <div id="lobbyMsg" class="msg-box" style="display:none;"></div>
+    </div>
+  </div>
+</div>
+
+<!-- WAITING SCREEN -->
 <div id="waiting-screen" class="screen">
   <div style="flex:1;display:flex;align-items:center;justify-content:center;">
     <div class="lobby-box">
+      <button class="btn-back" onclick="leaveRoom()">← Voltar</button>
       <h2>SALA DE ESPERA</h2>
       <div class="room-code-display">
         <div class="room-code-label">Código da Sala — Mande para seus amigos!</div>
         <div class="room-code-val" id="displayRoomCode">----</div>
       </div>
       <div id="waitingPlayers" class="players-waiting"></div>
-      <div class="score-config-info">Meta: <strong id="waitingScoreDisplay">5.000 pts</strong> · Mãos: <strong id="waitingHandsDisplay">4</strong></div>
+      <div class="score-config-info">Meta: <strong id="waitingScoreDisplay">5.000 pts</strong></div>
       <div class="waiting-msg" id="waitingMsg">Aguardando jogadores...</div>
-      <div id="hostScoreConfig" style="display:none;margin-bottom:12px;">
-        <div class="field-label" style="margin-bottom:6px;">Alterar Meta de Pontuação</div>
-        <input type="number" id="waitingWinningScore" value="5000" min="100" max="9999999" step="100" oninput="updateWinningScore()"/>
-        <div class="quick-btns">
-          <button class="quick-btn" onclick="setWinScore('waitingWinningScore',500);updateWinningScore()">500 ⚡</button>
-          <button class="quick-btn" onclick="setWinScore('waitingWinningScore',1000);updateWinningScore()">1.000 🃏</button>
-          <button class="quick-btn" onclick="setWinScore('waitingWinningScore',5000);updateWinningScore()">5.000 🎰</button>
-          <button class="quick-btn" onclick="setWinScore('waitingWinningScore',10000);updateWinningScore()">10.000 🏆</button>
-        </div>
-        <div class="field-label" style="margin-bottom:6px;margin-top:10px;">Mãos por Rodada</div>
-        <input type="number" id="waitingHandsPerRound" value="4" min="1" max="10" step="1" oninput="updateHandsPerRound()"/>
-        <div class="quick-btns">
-          <button class="quick-btn" onclick="setWinScore('waitingHandsPerRound',2);updateHandsPerRound()">2 🤏</button>
-          <button class="quick-btn" onclick="setWinScore('waitingHandsPerRound',4);updateHandsPerRound()">4 🖐</button>
-          <button class="quick-btn" onclick="setWinScore('waitingHandsPerRound',6);updateHandsPerRound()">6 🃏</button>
-          <button class="quick-btn" onclick="setWinScore('waitingHandsPerRound',8);updateHandsPerRound()">8 🎰</button>
-        </div>
-      </div>
       <button class="btn btn-gold" id="startBtn" onclick="startGame()" style="display:none;">Iniciar Jogo</button>
-      <button id="lockToggleWaitBtn" class="lock-btn" onclick="toggleRoomLock()" style="display:none;width:100%;justify-content:center;margin-top:8px;">🔓 Sala Aberta</button>
       <button class="btn btn-outline" onclick="leaveRoom()" style="margin-top:8px;">Sair</button>
       <div id="waitingMsgBox" class="msg-box" style="display:none;margin-top:12px;"></div>
     </div>
   </div>
 </div>
 
+<!-- BALATRO GAME -->
 <div id="game" class="screen">
   <div class="game-header">
     <div class="round-badge">RODADA <span id="roundNum">1</span> · Meta: <span id="blindGoal">300</span> pts 🏆</div>
-    <div style="display:flex;align-items:center;gap:8px;">
-      <button id="lockToggleBtn" class="lock-btn" onclick="toggleRoomLock()" style="display:none;" title="Abrir/fechar sala para novos jogadores">🔒 Sala Fechada</button>
-      <div class="game-scores" id="headerScores"></div>
-    </div>
+    <div class="game-scores" id="headerScores"></div>
   </div>
-  <div class="opp-panel" id="oppPanel"></div>
-  <div class="jokers-row" id="jokersRow"></div>
-  <div class="hand-area">
-    <div class="hand-meta">
-      <div class="hand-type-badge" id="handTypeBadge">Selecione cartas</div>
-      <div class="hand-chips">Chips: <span id="handChips">0</span> × Mult: <span id="handMult">1</span></div>
-    </div>
-    <div class="cards-container" id="cardsContainer"></div>
-  </div>
-  <div class="resource-bar">
-    <div class="resource-item"><span>🖐</span><span class="ri-val" id="handsLeft">4</span><span style="color:var(--text-dim);font-size:12px;">mãos</span></div>
-    <div class="resource-item"><span>🗑</span><span class="ri-val" id="discardsLeft">3</span><span style="color:var(--text-dim);font-size:12px;">descartes</span></div>
-    <div class="resource-item"><span>⭐</span><span class="ri-val" id="myRoundScore">0</span><span style="color:var(--text-dim);font-size:12px;">pts</span></div>
-  </div>
-  <div class="actions-bar">
-    <button class="btn btn-gold" onclick="playHand()">Jogar ✓</button>
-    <button class="btn btn-outline" onclick="discardSelected()">Descartar 🔄</button>
-    <button class="btn btn-red" onclick="sortHand()">Ordenar</button>
+  <div class="game-content" id="gameContent">
+    <div style="text-align:center;color:var(--text-dim)">Preparando jogo...</div>
   </div>
   <div class="game-log" id="gameLog">Boas-vindas ao Balatro Online!</div>
 </div>
 
-<div id="result-overlay">
-  <h2 id="resultTitle">Resultado</h2>
-  <div class="result-scores" id="resultScores"></div>
-  <button class="btn btn-gold" id="resultBtn" style="max-width:220px;">Próxima Rodada</button>
-  <div id="gameOverActions" style="display:none;flex-direction:column;gap:8px;width:100%;max-width:220px;margin-top:4px;">
-    <button id="goLobbyBtn" class="btn btn-outline" onclick="goToLobby()">🚪 Voltar ao Lobby</button>
-    <button id="goMenuBtn" class="btn btn-red" onclick="goToMenu()" style="font-size:13px;">🏠 Menu Principal</button>
+<!-- POKER GAME -->
+<div id="poker" class="screen">
+  <div class="game-header">
+    <div class="round-badge">RODADA <span id="pokerRoundNum">1</span></div>
+    <div class="game-scores" id="pokerScores"></div>
   </div>
+  <div class="game-content" id="pokerContent">
+    <div style="text-align:center;color:var(--text-dim)">Preparando Poker...</div>
+  </div>
+  <div class="game-log" id="pokerLog">Bem-vindo ao Poker Online!</div>
+</div>
+
+<!-- TRUCO GAME -->
+<div id="truco" class="screen">
+  <div class="game-header">
+    <div class="round-badge">RODADA <span id="trucoRoundNum">1</span></div>
+    <div class="game-scores" id="trucoScores"></div>
+  </div>
+  <div class="game-content" id="trucoContent">
+    <div style="text-align:center;color:var(--text-dim)">Preparando Truco...</div>
+  </div>
+  <div class="game-log" id="trucoLog">Bem-vindo ao Truco Online!</div>
+</div>
+
+<!-- BLACKJACK GAME -->
+<div id="blackjack" class="screen">
+  <div class="game-header">
+    <div class="round-badge">RODADA <span id="blackjackRoundNum">1</span></div>
+    <div class="game-scores" id="blackjackScores"></div>
+  </div>
+  <div class="game-content" id="blackjackContent">
+    <div style="text-align:center;color:var(--text-dim)">Preparando 21...</div>
+  </div>
+  <div class="game-log" id="blackjackLog">Bem-vindo ao Blackjack Online!</div>
 </div>
 
 <div id="loadingOverlay" class="loading-overlay">
@@ -314,983 +255,417 @@
 
 </div>
 
-<!-- PeerJS: WebRTC P2P — comunicação direta entre dispositivos -->
+<!-- PeerJS: WebRTC P2P -->
 <script src="https://cdn.jsdelivr.net/npm/peerjs@1.5.4/dist/peerjs.min.js"></script>
 <script>
 // ═══════════════════════════════════════════════════════
-//  BALATRO ONLINE — PeerJS WebRTC (P2P direto)
-//  Substitui GunDB por WebRTC puro via PeerJS
+//  CASSINO ONLINE — MÚLTIPLOS JOGOS
 // ═══════════════════════════════════════════════════════
 
-function setWinScore(id,val){const el=document.getElementById(id);if(el){el.value=val;}}
+let currentGame = 'balatro'; // Jogo selecionado
+let myName = '', myId = '', roomCode = '', isHost = false;
+let gamePhase = 'menu';
+let peer = null, peerConns = [];
 
 // ── UI Helpers ────────────────────────────────────────
-function setStatus(cls,txt){const el=document.getElementById('connStatus');el.className='conn-status '+cls;el.textContent=txt;}
-function genId(){return Math.random().toString(36).substr(2,9);}
-function genCode(){const c='ABCDEFGHJKLMNPQRSTUVWXYZ';return Array.from({length:4},()=>c[Math.floor(Math.random()*c.length)]).join('');}
-function showScreen(id){document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));document.getElementById(id).classList.add('active');}
-function showLobbyMsg(msg,type=''){const el=document.getElementById('lobbyMsg');el.textContent=msg;el.className='msg-box'+(type?' '+type:'');el.style.display='block';}
-function showWaitMsg(msg,type=''){const el=document.getElementById('waitingMsgBox');el.textContent=msg;el.className='msg-box'+(type?' '+type:'');el.style.display='block';setTimeout(()=>el.style.display='none',3000);}
-function log(msg){document.getElementById('gameLog').innerHTML='<span>'+msg+'</span>';}
-function showLoading(txt){document.getElementById('loadingOverlay').classList.add('show');document.getElementById('loadingText').textContent=txt||'Carregando...';}
-function hideLoading(){document.getElementById('loadingOverlay').classList.remove('show');}
-
-// ── LocalStorage (backup local) ───────────────────────
-function lsSet(code,data){try{localStorage.setItem('blt4_'+code,JSON.stringify(data));}catch(e){}}
-function lsGet(code){try{const v=localStorage.getItem('blt4_'+code);return v?JSON.parse(v):null;}catch(e){return null;}}
-
-// ── Constantes do jogo ────────────────────────────────
-const SUITS=['♠','♥','♦','♣'];
-const RANKS=['2','3','4','5','6','7','8','9','10','J','Q','K','A'];
-const RANK_VALS={'2':2,'3':3,'4':4,'5':5,'6':6,'7':7,'8':8,'9':9,'10':10,'J':10,'Q':10,'K':10,'A':11};
-let WINNING_SCORE=5000; // Atualizado dinamicamente a partir da sala
-
-// ── Estado do jogo ────────────────────────────────────
-let myName='',myId='',roomCode='',isHost=false,sharedGameState=null;
-let myHand=[],selected=new Set(),jokers=[],myDeck=[],myDiscard=[];
-let handsLeft=4,discardsLeft=3,myRoundScore=0,currentRound=1,maxRounds=3,blindGoal=300;
-let gamePhase='lobby';
-let isBotMode=false,botInterval=null,botDifficulty='facil';
-
-// ── Estado PeerJS ─────────────────────────────────────
-// peer       = instância do Peer local
-// peerConns  = [{ conn, playerId }] — host guarda conns dos guests; guest guarda conn do host
-// myScreenShown = flag para transição de tela no guest
-let peer=null, peerConns=[], myScreenShown=false;
-
-// ── Funções PeerJS ─────────────────────────────────────
-function broadcastToGuests(data){
-  peerConns.forEach(({conn})=>{if(conn&&conn.open){try{conn.send(data);}catch(e){}}});
+function setStatus(cls, txt) {
+  const el = document.getElementById('connStatus');
+  el.className = 'conn-status ' + cls;
+  el.textContent = txt;
 }
-function sendToHost(data){
-  if(peerConns.length>0&&peerConns[0].conn&&peerConns[0].conn.open){
-    try{peerConns[0].conn.send(data);}catch(e){}
+
+function showScreen(id) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+}
+
+function showLobbyMsg(msg, type = '') {
+  const el = document.getElementById('lobbyMsg');
+  el.textContent = msg;
+  el.className = 'msg-box' + (type ? ' ' + type : '');
+  el.style.display = 'block';
+}
+
+function showLoading(txt) {
+  document.getElementById('loadingOverlay').classList.add('show');
+  document.getElementById('loadingText').textContent = txt || 'Carregando...';
+}
+
+function hideLoading() {
+  document.getElementById('loadingOverlay').classList.remove('show');
+}
+
+function setWinScore(id, val) {
+  const el = document.getElementById(id);
+  if (el) {
+    el.value = val;
   }
 }
-function destroyPeer(){
-  if(peer){try{peer.destroy();}catch(e){} peer=null;}
-  peerConns=[];
+
+function genId() {
+  return Math.random().toString(36).substr(2, 9);
 }
 
-// ── Sincronização de estado ───────────────────────────
-// stSet: host salva e faz broadcast; guest envia para o host
-async function stSet(code,room){
-  sharedGameState=room;
-  lsSet(code,room);
-  if(isHost){
-    broadcastToGuests({type:'state',room});
-    onRoomUpdate(room);   // host atualiza própria UI
-  } else {
-    sendToHost({type:'pstate',room,playerId:myId});
-    // guest atualiza UI local imediatamente (sem esperar broadcast do host)
-    // O host vai re-broadcast e onRoomUpdate será chamado novamente com estado definitivo
+function genCode() {
+  const c = 'ABCDEFGHJKLMNPQRSTUVWXYZ';
+  return Array.from({ length: 4 }, () => c[Math.floor(Math.random() * c.length)]).join('');
+}
+
+// ── MENU PRINCIPAL ────────────────────────────────────
+function selectGame(game) {
+  currentGame = game;
+  const gameNames = {
+    'balatro': 'Balatro',
+    'poker': 'Poker',
+    'truco': 'Truco',
+    'blackjack': '21'
+  };
+  document.getElementById('lobbyTitle').textContent = gameNames[game].toUpperCase();
+  showScreen('lobby');
+  gamePhase = 'lobby';
+}
+
+function backToMenu() {
+  gamePhase = 'menu';
+  currentGame = 'balatro';
+  showScreen('main-menu');
+  destroyPeer();
+  setStatus('ok', '✅ pronto');
+}
+
+function destroyPeer() {
+  if (peer) {
+    try { peer.destroy(); } catch (e) { }
+    peer = null;
   }
+  peerConns = [];
 }
-async function stGet(code){return sharedGameState||lsGet(code);}
 
-// ── Handler de mensagens PeerJS ───────────────────────
-function onPeerMessage(msg,fromPlayerId){
-  // ── Guest recebe estado completo do host ──
-  if(msg.type==='state'){
-    sharedGameState=msg.room;
-    lsSet(roomCode,msg.room);
-    // Primeira vez: transitar do lobby para sala de espera
-    if(!myScreenShown){
-      myScreenShown=true;
-      document.getElementById('displayRoomCode').textContent=roomCode;
+// ── SALA MULTIPLAYER ──────────────────────────────────
+function createRoom() {
+  const name = document.getElementById('nameInput').value.trim();
+  if (!name) {
+    showLobbyMsg('Digite seu nome!', 'error');
+    return;
+  }
+
+  myName = name;
+  myId = genId();
+  roomCode = genCode();
+  isHost = true;
+
+  showLoading('Criando sala...');
+  destroyPeer();
+
+  // PeerJS
+  peer = new Peer('game' + currentGame + roomCode, {
+    debug: 0,
+    config: {
+      iceServers: [
+        { urls: 'stun:stun.l.google.com:19302' },
+        { urls: 'stun:stun1.l.google.com:19302' }
+      ]
+    }
+  });
+
+  let settled = false;
+  peer.on('open', () => {
+    if (!settled) {
+      settled = true;
+      setupHostListeners();
       hideLoading();
       showScreen('waiting-screen');
+      document.getElementById('displayRoomCode').textContent = roomCode;
+      renderWaitingRoom();
+      setStatus('ok', '✅ sala criada');
     }
-    onRoomUpdate(msg.room);
-  }
-
-  // ── Host recebe estado parcial de um guest ──
-  else if(msg.type==='pstate'&&isHost){
-    const room=sharedGameState;
-    const pid=msg.playerId;
-    // Atualiza apenas o jogador que enviou (evita sobrescrever dados dos outros)
-    if(msg.room&&msg.room.players){
-      const gp=msg.room.players.find(p=>p.id===pid);
-      if(gp){
-        const idx=room.players.findIndex(p=>p.id===pid);
-        if(idx>=0) room.players[idx]=gp;
-      }
-    }
-    // Atualiza mão do remetente
-    if(msg.room&&msg.room.hands&&msg.room.hands[pid]!==undefined){
-      room.hands[pid]=msg.room.hands[pid];
-    }
-    // Host verifica vitória por pontuação ou se todos terminaram (autoridade do host)
-    const wsPstate=room.winningScore||WINNING_SCORE;
-    const winnerPstate=room.players.find(p=>(p.score||0)+(p.roundScore||0)>=wsPstate);
-    if(winnerPstate&&room.phase==='playing'){
-      room.players.forEach(p=>{p.score=(p.score||0)+(p.roundScore||0);});
-      room.phase='game_over';
-      room.winner=winnerPstate.id;
-    } else {
-      const allFinished=room.players.every(p=>p.done);
-      if(allFinished&&room.phase==='playing'){
-        room.players.forEach(p=>{p.score=(p.score||0)+(p.roundScore||0);});
-        room.phase=room.round>=maxRounds?'game_over':'round_over';
-      }
-    }
-    sharedGameState=room;
-    lsSet(roomCode,room);
-    broadcastToGuests({type:'state',room});
-    onRoomUpdate(room);
-  }
-
-  // ── Host recebe pedido de entrada de um guest ──
-  else if(msg.type==='join'&&isHost){
-    const room=sharedGameState;
-    const isExistingPlayer=!!room.players.find(p=>p.id===msg.player.id);
-    if(room.phase!=='waiting'){
-      // Jogo em andamento: bloqueia qualquer um
-      const entry=peerConns.find(e=>e.playerId===fromPlayerId||e.playerId===null);
-      if(entry&&entry.conn.open) try{entry.conn.send({type:'error',msg:'Jogo já em andamento!'});}catch(e){}
-      return;
-    }
-    if(room.locked&&!isExistingPlayer){
-      // Sala travada: bloqueia apenas jogadores novos
-      const entry=peerConns.find(e=>e.playerId===fromPlayerId||e.playerId===null);
-      if(entry&&entry.conn.open) try{entry.conn.send({type:'error',msg:'Esta sala não aceita mais jogadores!'});}catch(e){}
-      return;
-    }
-    if(room.players.length>=4&&!isExistingPlayer) return;
-    // Adiciona apenas se ainda não está na sala
-    if(!isExistingPlayer){
-      room.players.push(msg.player);
-    }
-    sharedGameState=room;
-    lsSet(roomCode,room);
-    // Broadcast para todos os guests (inclusive o novo) e atualiza UI do host
-    broadcastToGuests({type:'state',room});
-    onRoomUpdate(room);
-  }
-
-  // ── Guest recebe mensagem de erro do host ──
-  else if(msg.type==='error'){
-    hideLoading();
-    showLobbyMsg(msg.msg||'Erro ao entrar na sala.','error');
-    destroyPeer();
-    showScreen('lobby');
-  }
-}
-
-// ── Cria sala (HOST) ──────────────────────────────────
-async function createRoom(){
-  const name=document.getElementById('nameInput').value.trim();
-  if(!name){showLobbyMsg('Digite seu nome!','error');return;}
-  const wsEl=document.getElementById('winningScoreInput');const chosenScore=wsEl?parseInt(wsEl.value)||5000:5000;
-  const hpEl=document.getElementById('handsPerRoundInput');const chosenHands=hpEl?Math.max(1,parseInt(hpEl.value)||4):4;
-  myName=name; myId=genId(); roomCode=genCode(); isHost=true; jokers=pickJokers(1);
-  showLoading('Criando sala...'); destroyPeer();
-
-  // PeerJS com ID baseado no código da sala: 'blt26XXXX'
-  peer=new Peer('blt26'+roomCode,{
-    debug:0,
-    config:{iceServers:[
-      {urls:'stun:stun.l.google.com:19302'},
-      {urls:'stun:stun1.l.google.com:19302'},
-      {urls:'stun:stun2.l.google.com:19302'}
-    ]}
   });
 
-  let peerSettled=false;
-  try{
-    await new Promise((resolve,reject)=>{
-      peer.on('open',()=>{if(!peerSettled){peerSettled=true;resolve();}});
-      peer.on('error',err=>{if(!peerSettled){peerSettled=true;reject(err);}});
-      setTimeout(()=>{if(!peerSettled){peerSettled=true;reject(new Error('timeout'));}},14000);
-    });
-  }catch(err){
-    destroyPeer(); hideLoading();
-    if(err&&err.type==='unavailable-id'){
-      showLobbyMsg('Código de sala já em uso. Clique em "Criar Sala" novamente para gerar um novo código.','error');
-    } else {
-      showLobbyMsg('Erro ao criar sala. Verifique sua conexão com a internet.','error');
+  peer.on('error', (err) => {
+    if (!settled) {
+      settled = true;
+      destroyPeer();
+      hideLoading();
+      showLobbyMsg('Erro ao criar sala: ' + (err.type || 'desconhecido'), 'error');
+      setStatus('err', '⚠️ erro');
     }
-    return;
-  }
+  });
 
-  // Sucesso! Configura listeners para guests
-  peer.on('connection',conn=>{
-    const entry={conn,playerId:null};
+  setTimeout(() => {
+    if (!settled) {
+      settled = true;
+      destroyPeer();
+      hideLoading();
+      showLobbyMsg('Timeout ao criar sala.', 'error');
+      setStatus('ok', '✅ pronto');
+    }
+  }, 15000);
+}
+
+function setupHostListeners() {
+  peer.on('connection', (conn) => {
+    const entry = { conn, playerId: null };
     peerConns.push(entry);
 
-    conn.on('open',()=>{
-      // Envia estado atual imediatamente ao guest que acabou de conectar
-      if(sharedGameState){
-        try{conn.send({type:'state',room:sharedGameState});}catch(e){}
+    conn.on('data', (msg) => {
+      if (msg.type === 'join') {
+        entry.playerId = msg.playerId;
+        handlePlayerJoin(msg);
       }
-      setStatus('ok',`✅ ${peerConns.length+1} jogador${peerConns.length>0?'es':''}`);
     });
 
-    conn.on('data',msg=>{
-      if(msg.type==='join') entry.playerId=msg.player.id;
-      onPeerMessage(msg,entry.playerId);
+    conn.on('close', () => {
+      peerConns = peerConns.filter(e => e !== entry);
+      updateWaitingRoomUI();
     });
-
-    conn.on('close',()=>{
-      peerConns=peerConns.filter(e=>e!==entry);
-      // Remove jogador da sala se ainda estiver na espera
-      if(sharedGameState&&entry.playerId&&sharedGameState.phase==='waiting'){
-        sharedGameState.players=sharedGameState.players.filter(p=>p.id!==entry.playerId);
-        broadcastToGuests({type:'state',room:sharedGameState});
-        onRoomUpdate(sharedGameState);
-      }
-      const n=peerConns.length;
-      setStatus('ok',`✅ ${n+1} jogador${n>0?'es':''}`);
-    });
-
-    conn.on('error',()=>{peerConns=peerConns.filter(e=>e!==entry);});
   });
-
-  peer.on('error',err=>{
-    setStatus('err','⚠️ erro P2P: '+err.type);
-  });
-
-  // Estado inicial da sala
-  const room={
-    code:roomCode,host:myId,phase:'waiting',round:1,winningScore:chosenScore,handsPerRound:chosenHands,
-    players:[{id:myId,name:myName,score:0,roundScore:0,jokers,ready:false,done:false,handsLeft:chosenHands,discardsLeft:3}],
-    deck:makeDeck(),hands:{},results:[]
-  };
-  sharedGameState=room; lsSet(roomCode,room); myScreenShown=true;
-  document.getElementById('displayRoomCode').textContent=roomCode;
-  hideLoading(); showScreen('waiting-screen'); renderWaitingRoom();
-  setStatus('ok','✅ sala criada');
 }
 
-// ── Entra na sala (GUEST) ────────────────────────────
-async function joinRoom(){
-  const name=document.getElementById('nameInput').value.trim();
-  const code=document.getElementById('roomCodeInput').value.trim().toUpperCase();
-  if(!name){showLobbyMsg('Digite seu nome!','error');return;}
-  if(code.length!==4){showLobbyMsg('Digite um código de 4 letras!','error');return;}
-  myName=name; myId=genId(); roomCode=code; isHost=false; jokers=pickJokers(1);
-  myScreenShown=false; showLoading('Conectando à sala...'); destroyPeer();
+function handlePlayerJoin(msg) {
+  // Aqui você pode validar e adicionar o jogador
+  console.log('Jogador entrou:', msg);
+  updateWaitingRoomUI();
+}
 
-  // Guest cria peer com ID aleatório
-  peer=new Peer({
-    debug:0,
-    config:{iceServers:[
-      {urls:'stun:stun.l.google.com:19302'},
-      {urls:'stun:stun1.l.google.com:19302'},
-      {urls:'stun:stun2.l.google.com:19302'}
-    ]}
-  });
+function joinRoom() {
+  const name = document.getElementById('nameInput').value.trim();
+  const code = document.getElementById('roomCodeInput').value.trim().toUpperCase();
 
-  let peerSettled=false;
-  try{
-    await new Promise((resolve,reject)=>{
-      peer.on('open',()=>{if(!peerSettled){peerSettled=true;resolve();}});
-      peer.on('error',err=>{if(!peerSettled){peerSettled=true;reject(err);}});
-      setTimeout(()=>{if(!peerSettled){peerSettled=true;reject(new Error('timeout'));}},14000);
-    });
-  }catch(err){
-    destroyPeer(); hideLoading();
-    showLobbyMsg('Erro ao conectar. Verifique sua conexão com a internet.','error');
+  if (!name) {
+    showLobbyMsg('Digite seu nome!', 'error');
+    return;
+  }
+  if (code.length !== 4) {
+    showLobbyMsg('Digite um código de 4 letras!', 'error');
     return;
   }
 
-  // Conecta ao host
-  const conn=peer.connect('blt26'+code,{reliable:true,serialization:'json'});
-  peerConns=[{conn,playerId:'host'}];
+  myName = name;
+  myId = genId();
+  roomCode = code;
+  isHost = false;
 
-  conn.on('open',()=>{
-    setStatus('wait','⏳ entrando...');
-    // Envia pedido de entrada
-    conn.send({
-      type:'join',
-      player:{id:myId,name:myName,score:0,roundScore:0,jokers,ready:false,done:false,handsLeft:4,discardsLeft:3}
-    });
-  });
-
-  conn.on('data',msg=>{
-    onPeerMessage(msg,'host');
-    if(msg.type==='state'){
-      setStatus('ok','✅ conectado');
-    }
-  });
-
-  conn.on('close',()=>{
-    if(gamePhase!=='lobby'){
-      setStatus('err','⚠️ desconectado');
-      showWaitMsg('Conexão perdida com a sala.','error');
-    }
-  });
-
-  conn.on('error',err=>{
-    hideLoading();
-    showLobbyMsg('Erro de conexão com a sala.','error');
-    setStatus('err','⚠️ erro');
-  });
-
-  // Timeout: se não recebeu estado em 15s, sala não existe
-  setTimeout(()=>{
-    if(!myScreenShown){
-      hideLoading();
-      showLobbyMsg('Sala não encontrada! Verifique o código e certifique-se que o host criou a sala.','error');
-      destroyPeer();
-      setStatus('ok','✅ pronto');
-    }
-  },15000);
-}
-
-// ── Sair da sala ──────────────────────────────────────
-function leaveRoom(){
-  gamePhase='lobby'; myScreenShown=false; sharedGameState=null;
-  if(botInterval){clearInterval(botInterval);botInterval=null;}
-  isBotMode=false;
-  destroyPeer(); showScreen('lobby');
-  setStatus('ok','✅ pronto');
-}
-
-// startListening / stopListening: no-op — PeerJS usa eventos
-function startListening(){}
-function stopListening(){}
-
-// ═══════════════════════════════════════════════════════
-//  LÓGICA DO JOGO
-// ═══════════════════════════════════════════════════════
-
-function makeDeck(){const d=[];for(const s of SUITS)for(const r of RANKS)d.push({suit:s,rank:r});return shuffle(d);}
-function shuffle(a){for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;}
-function dealHand(deck,n=8){return deck.splice(0,n);}
-
-const JOKER_POOL=[
-  // ── Bônus Gerais ──────────────────────────────────────
-  {id:'j01',name:'Coringa Clássico',   effect:'mult+3',          desc:'+3 Mult em qualquer jogada'},
-  {id:'j02',name:'Pilha de Fichas',    effect:'chips+20',         desc:'+20 Chips em qualquer jogada'},
-  {id:'j03',name:'Duplicador',         effect:'mult_x2',          desc:'Mult ×2 (exceto Carta Alta)'},
-  {id:'j06',name:'Ás Selvagem',        effect:'chips+50',         desc:'+50 Chips em qualquer jogada'},
-  {id:'j07',name:'Multiplicador Louco',effect:'mult+6',           desc:'+6 Mult em qualquer jogada'},
-  {id:'j14',name:'Ouro Puro',          effect:'chips_x15',        desc:'Chips ×1.5 em qualquer jogada'},
-  // ── Por Tipo de Mão ───────────────────────────────────
-  {id:'j05',name:'Amante dos Pares',   effect:'pair_chips+30',    desc:'+30 Chips em Par'},
-  {id:'j21',name:'Par Explosivo',      effect:'two_pair_mult+5',  desc:'+5 Mult em Dois Pares ou melhor'},
-  {id:'j09',name:'Trincador',          effect:'three_chips+25',   desc:'+25 Chips em Trinca ou melhor'},
-  {id:'j08',name:'Sequenciador',       effect:'straight_mult+5',  desc:'+5 Mult em Sequência ou melhor'},
-  {id:'j04',name:'Rei do Flush',       effect:'flush_mult+4',     desc:'+4 Mult em Flush ou melhor'},
-  {id:'j10',name:'Full Coringa',       effect:'full_mult+8',      desc:'+8 Mult em Full House ou melhor'},
-  {id:'j11',name:'Quadruplista',       effect:'four_mult+10',     desc:'+10 Mult em Quadra ou melhor'},
-  {id:'j20',name:'Loucura Total',      effect:'sf_mult_x3',       desc:'Mult ×3 em Straight Flush'},
-  // ── Por Naipe ─────────────────────────────────────────
-  {id:'j15',name:'Espadista',          effect:'spade_chips+10',   desc:'+10 Chips por ♠ jogada'},
-  {id:'j16',name:'Coração Quente',     effect:'heart_chips+10',   desc:'+10 Chips por ♥ jogada'},
-  {id:'j17',name:'Diamanteiro',        effect:'diamond_chips+10', desc:'+10 Chips por ♦ jogada'},
-  {id:'j18',name:'Trevoso',            effect:'club_chips+10',    desc:'+10 Chips por ♣ jogada'},
-  // ── Por Valor/Rank ────────────────────────────────────
-  {id:'j12',name:'Ninja das Cartas',   effect:'cards_chips+15',   desc:'+15 Chips por carta jogada'},
-  {id:'j13',name:'Vampiro',            effect:'ace_mult+2',        desc:'+2 Mult por Ás na jogada'},
-  {id:'j22',name:'Caçador de Ases',    effect:'ace_chips+20',      desc:'+20 Chips por Ás jogado'},
-  {id:'j19',name:'Rei das Figuras',    effect:'face_chips+5',      desc:'+5 Chips por J, Q ou K jogado'},
-];
-
-function getEnabledJokers(){
-  const disabled=JSON.parse(localStorage.getItem('blt_disabled_jokers')||'[]');
-  const pool=JOKER_POOL.filter(j=>!disabled.includes(j.id));
-  return pool.length>=3?pool:[...JOKER_POOL];
-}
-function pickJokersFrom(pool,n=1){const p=[...(pool||JOKER_POOL)];shuffle(p);return p.slice(0,n);}
-function pickJokers(n=1){return pickJokersFrom(getEnabledJokers(),n);}
-
-// ── Joker Config UI ───────────────────────────────────
-function toggleJokerConfig(){
-  const grid=document.getElementById('jokerConfigGrid');
-  const arrow=document.getElementById('jokerConfigArrow');
-  const cnt=document.getElementById('jokerConfigCount');
-  if(!grid)return;
-  const open=grid.style.display==='none';
-  grid.style.display=open?'grid':'none';
-  if(cnt)cnt.style.display=open?'block':'none';
-  if(arrow)arrow.textContent=open?'▲ fechar':'▼ configurar';
-  if(open)renderJokerConfigGrid();
-}
-function renderJokerConfigGrid(){
-  const grid=document.getElementById('jokerConfigGrid');if(!grid)return;
-  const disabled=JSON.parse(localStorage.getItem('blt_disabled_jokers')||'[]');
-  grid.innerHTML=JOKER_POOL.map(j=>{
-    const on=!disabled.includes(j.id);
-    return `<div class="joker-toggle ${on?'on':''}" onclick="toggleJoker('${j.id}')" id="jtog_${j.id}"><div class="jt-name">🃏 ${j.name}</div><div class="jt-desc">${j.desc}</div></div>`;
-  }).join('');
-  updateJokerCount();
-}
-function toggleJoker(id){
-  const el=document.getElementById('jtog_'+id);if(!el)return;
-  const disabled=JSON.parse(localStorage.getItem('blt_disabled_jokers')||'[]');
-  const idx=disabled.indexOf(id);
-  if(idx>=0){disabled.splice(idx,1);el.classList.add('on');}
-  else{disabled.push(id);el.classList.remove('on');}
-  localStorage.setItem('blt_disabled_jokers',JSON.stringify(disabled));
-  updateJokerCount();
-}
-function updateJokerCount(){
-  const cnt=document.getElementById('jokerConfigCount');if(!cnt)return;
-  const n=getEnabledJokers().length;
-  cnt.textContent=`${n} de ${JOKER_POOL.length} coringas ativos`;
-}
-
-// ── Bot Difficulty ────────────────────────────────────
-function selectDiff(d){
-  botDifficulty=d;
-  ['facil','medio','dificil'].forEach(x=>{
-    const el=document.getElementById('diff_'+x);
-    if(el)el.classList.toggle('active',x===d);
-  });
-}
-
-// ── Bot AI ────────────────────────────────────────────
-function getCombinations(arr,size){
-  if(size===0)return[[]];
-  if(arr.length<size)return[];
-  const[first,...rest]=arr;
-  return[
-    ...getCombinations(rest,size-1).map(c=>[first,...c]),
-    ...getCombinations(rest,size)
-  ];
-}
-function botBestPlay(hand,jkrs,difficulty){
-  // Fácil: joga aleatório 1-3 cartas; Médio: melhor 1-5; Difícil: melhor 1-5 com preferência por pontuação alta
-  if(difficulty==='facil'){
-    const sz=Math.min(hand.length,Math.ceil(Math.random()*3));
-    return shuffle([...hand]).slice(0,sz||1);
-  }
-  let best={score:-1,cards:[]};
-  const maxSz=Math.min(5,hand.length);
-  for(let sz=1;sz<=maxSz;sz++){
-    for(const combo of getCombinations(hand,sz)){
-      const ev=evaluateHandCards(combo,jkrs);
-      if(ev.score>best.score)best={score:ev.score,cards:combo};
-    }
-  }
-  return best.cards.length?best.cards:[hand[0]];
-}
-
-function tickBots(){
-  if(!isBotMode||gamePhase!=='playing')return;
-  const room=sharedGameState;
-  if(!room||room.phase!=='playing')return;
-  const hp=room.handsPerRound||4;
-  let changed=false;
-  for(const p of room.players){
-    if(!p.isBot||p.done||p.handsLeft<=0)continue;
-    const hand=room.hands[p.id]||[];
-    if(!hand.length)continue;
-    const diff=room.botDifficulty||'facil';
-    const playCards=botBestPlay(hand,p.jokers||[],diff);
-    const ev=evaluateHandCards(playCards,p.jokers||[]);
-    p.roundScore=(p.roundScore||0)+ev.score;
-    p.handsLeft--;
-    const playedKeys=new Set(playCards.map(c=>c.suit+c.rank));
-    let newHand=hand.filter(c=>!playedKeys.has(c.suit+c.rank));
-    const needed=8-newHand.length;
-    for(let i=0;i<needed;i++){if(room.deck.length)newHand.push(room.deck.pop());}
-    room.hands[p.id]=newHand;
-    if(p.handsLeft<=0)p.done=true;
-    if(Math.random()<0.3&&(p.jokers||[]).length<3){
-      const nj=pickJokersFrom(getEnabledJokers(),1)[0];
-      if(nj)p.jokers=[...(p.jokers||[]),nj].slice(-3);
-    }
-    changed=true;
-  }
-  if(changed){
-    const ws=room.winningScore||WINNING_SCORE;
-    const winner=room.players.find(p=>(p.score||0)+(p.roundScore||0)>=ws);
-    if(winner&&room.phase==='playing'){
-      room.players.forEach(p=>{p.score=(p.score||0)+(p.roundScore||0);});
-      room.phase='game_over';room.winner=winner.id;
-    } else {
-      const allDone=room.players.every(p=>p.done);
-      if(allDone&&room.phase==='playing'){
-        room.players.forEach(p=>{p.score=(p.score||0)+(p.roundScore||0);});
-        room.phase=room.round>=maxRounds?'game_over':'round_over';
-      }
-    }
-    sharedGameState=room;
-    onRoomUpdate(room);
-  }
-}
-
-function startBotGame(){
-  const name=document.getElementById('nameInput').value.trim();
-  if(!name){showLobbyMsg('Digite seu nome!','error');return;}
-  const wsEl=document.getElementById('winningScoreInput');const chosenScore=wsEl?parseInt(wsEl.value)||5000:5000;
-  const hpEl=document.getElementById('handsPerRoundInput');const chosenHands=hpEl?Math.max(1,parseInt(hpEl.value)||4):4;
-  const bcEl=document.getElementById('botCount');const botCount=bcEl?Math.min(3,Math.max(1,parseInt(bcEl.value)||1)):1;
-  const diff=botDifficulty||'facil';
-  const enabledJokers=getEnabledJokers();
-  myName=name;myId=genId();roomCode='LOCAL';isHost=true;isBotMode=true;
-  jokers=pickJokersFrom(enabledJokers,1);
-  const botNames=['🤖 HAL-9000','🎰 Deep Blue','👾 AlphaCard'];
-  const bots=[];
-  for(let i=0;i<botCount;i++){
-    bots.push({id:'bot_'+i,name:botNames[i],score:0,roundScore:0,jokers:pickJokersFrom(enabledJokers,1),ready:true,done:false,handsLeft:chosenHands,discardsLeft:3,isBot:true});
-  }
-  const allPlayers=[{id:myId,name:myName,score:0,roundScore:0,jokers,ready:true,done:false,handsLeft:chosenHands,discardsLeft:3},...bots];
-  const deck=makeDeck();const hands={};
-  for(const p of allPlayers)hands[p.id]=dealHand(deck);
-  const room={code:roomCode,host:myId,phase:'playing',round:1,blindGoal:300,winningScore:chosenScore,handsPerRound:chosenHands,botDifficulty:diff,enabledJokers,players:allPlayers,deck,hands,results:[]};
-  sharedGameState=room;myScreenShown=true;
-  gamePhase='playing';
-  enterGameScreen(room);
-  setStatus('ok',`✅ solo · ${botCount} bot${botCount>1?'s':''}`);
-}
-
-// Baralho local por jogador — cartas jogadas/descartadas vão para myDiscard.
-// Quando o deck esvazia, cada carta do descarte tem chance aleatória (50–90%) de voltar.
-// O resto espera no descarte até o próximo reembaralho.
-function drawCard(){
-  if(!myDeck.length){
-    const newDeck=[], staying=[];
-    for(const card of myDiscard){
-      // Chance aleatória entre 50% e 90% de cada carta retornar ao deck
-      const returnChance=0.5+Math.random()*0.4;
-      if(Math.random()<returnChance) newDeck.push(card);
-      else staying.push(card);
-    }
-    // Garante pelo menos 1 carta se nenhuma retornou
-    if(!newDeck.length && staying.length){
-      newDeck.push(...staying.splice(0,Math.ceil(staying.length/2)));
-    }
-    myDeck=shuffle(newDeck);
-    myDiscard=staying;
-    log(`🔀 <span class="log-hi">Deck reembaralhado!</span> ${myDeck.length} carta${myDeck.length!==1?'s':''} voltaram · ${myDiscard.length} no descarte`);
-  }
-  return myDeck.pop();
-}
-
-function evaluateHandCards(cards,jkrs){
-  if(!cards.length)return{type:'Nenhuma',chips:0,mult:1,score:0};
-  const ranks=cards.map(c=>c.rank),suits=cards.map(c=>c.suit),vals=ranks.map(r=>RANK_VALS[r]);
-  const rc={};for(const r of ranks)rc[r]=(rc[r]||0)+1;
-  const counts=Object.values(rc).sort((a,b)=>b-a);
-  const isFlush=new Set(suits).size===1&&cards.length>=5;
-  const sv=[...new Set(vals)].sort((a,b)=>a-b);
-  const isStraight=cards.length>=5&&sv.length===cards.length&&sv[sv.length-1]-sv[0]===sv.length-1;
-  const baseChips=vals.reduce((a,b)=>a+b,0);
-  let type,chips,mult;
-  if(isFlush&&isStraight){type='Straight Flush';chips=baseChips+100;mult=8;}
-  else if(counts[0]===4){type='Quadra';chips=baseChips+60;mult=7;}
-  else if(counts[0]===3&&counts[1]===2){type='Full House';chips=baseChips+40;mult=4;}
-  else if(isFlush){type='Flush';chips=baseChips+35;mult=4;}
-  else if(isStraight){type='Sequência';chips=baseChips+30;mult=4;}
-  else if(counts[0]===3){type='Trinca';chips=baseChips+20;mult=3;}
-  else if(counts[0]===2&&counts[1]===2){type='Dois Pares';chips=baseChips+20;mult=2;}
-  else if(counts[0]===2){type='Par';chips=baseChips+10;mult=2;}
-  else{type='Carta Alta';chips=baseChips+5;mult=1;}
-  const hier=['Carta Alta','Par','Dois Pares','Trinca','Sequência','Flush','Full House','Quadra','Straight Flush'];
-  const ti=hier.indexOf(type);
-  for(const j of (jkrs||[])){
-    const e=j.effect;
-    if(e==='mult+3')mult+=3;
-    else if(e==='mult+6')mult+=6;
-    else if(e==='chips+20')chips+=20;
-    else if(e==='chips+50')chips+=50;
-    else if(e==='mult_x2'&&type!=='Carta Alta')mult=Math.floor(mult*2);
-    else if(e==='flush_mult+4'&&ti>=5)mult+=4;
-    else if(e==='pair_chips+30'&&type==='Par')chips+=30;
-    else if(e==='straight_mult+5'&&ti>=4)mult+=5;
-    else if(e==='three_chips+25'&&ti>=3)chips+=25;
-    else if(e==='full_mult+8'&&ti>=6)mult+=8;
-    else if(e==='four_mult+10'&&ti>=7)mult+=10;
-    else if(e==='cards_chips+15')chips+=cards.length*15;
-    else if(e==='ace_mult+2'){const aces=ranks.filter(r=>r==='A').length;mult+=aces*2;}
-    else if(e==='chips_x15')chips=Math.round(chips*1.5);
-    else if(e==='spade_chips+10')chips+=suits.filter(s=>s==='♠').length*10;
-    else if(e==='heart_chips+10')chips+=suits.filter(s=>s==='♥').length*10;
-    else if(e==='diamond_chips+10')chips+=suits.filter(s=>s==='♦').length*10;
-    else if(e==='club_chips+10')chips+=suits.filter(s=>s==='♣').length*10;
-    else if(e==='face_chips+5'){const f=ranks.filter(r=>['J','Q','K'].includes(r)).length;chips+=f*5;}
-    else if(e==='sf_mult_x3'&&type==='Straight Flush')mult=Math.floor(mult*3);
-    else if(e==='two_pair_mult+5'&&ti>=2)mult+=5;
-    else if(e==='ace_chips+20'){const aces=ranks.filter(r=>r==='A').length;chips+=aces*20;}
-  }
-  return{type,chips,mult,score:chips*mult};
-}
-function evaluateHand(cards){return evaluateHandCards(cards,jokers);}
-
-// ── Multiplayer callbacks ─────────────────────────────
-function onRoomUpdate(room){
-  if(!room||room.code!==roomCode)return;
-  sharedGameState=room;
-  if(room.phase==='waiting') renderWaitingRoom();
-  else if(room.phase==='playing'){
-    if(gamePhase!=='playing'){gamePhase='playing';enterGameScreen(room);}
-    else syncGameState(room);
-  }
-  else if(room.phase==='round_over'){if(gamePhase!=='round_over'){gamePhase='round_over';showRoundResult(room);}}
-  else if(room.phase==='game_over'){if(gamePhase!=='game_over'){gamePhase='game_over';showGameOver(room);}}
-}
-
-function renderWaitingRoom(){
-  if(!sharedGameState)return;
-  const room=sharedGameState;let html='';
-  for(let i=0;i<4;i++){
-    const p=room.players[i];
-    if(p) html+=`<div class="player-slot"><div class="dot"></div><span class="${p.id===myId?'player-you':''}">${p.name}${p.id===myId?' (você)':''}</span></div>`;
-    else html+=`<div class="player-slot empty"><div class="dot"></div><span>Aguardando...</span></div>`;
-  }
-  document.getElementById('waitingPlayers').innerHTML=html;
-  // Mostra meta de pontuação e mãos por rodada
-  const ws=room.winningScore||5000;
-  const hp=room.handsPerRound||4;
-  const wsDisp=document.getElementById('waitingScoreDisplay');
-  if(wsDisp)wsDisp.textContent=ws.toLocaleString('pt-BR')+' pts';
-  const hpDisp=document.getElementById('waitingHandsDisplay');
-  if(hpDisp)hpDisp.textContent=hp;
-  // Config do host
-  const hostCfg=document.getElementById('hostScoreConfig');
-  if(hostCfg)hostCfg.style.display=isHost?'block':'none';
-  if(isHost){
-    const sel=document.getElementById('waitingWinningScore');if(sel)sel.value=String(ws);
-    const selH=document.getElementById('waitingHandsPerRound');if(selH)selH.value=String(hp);
-  }
-  const msg=document.getElementById('waitingMsg'),btn=document.getElementById('startBtn');
-  if(isHost&&room.players.length>=2){msg.textContent='Pronto para começar!';btn.style.display='block';}
-  else if(room.players.length<2){msg.textContent='Aguardando pelo menos 2 jogadores...';btn.style.display='none';}
-  else{msg.textContent=`${room.players.length} jogadores na sala. Aguardando o host...`;btn.style.display='none';}
-  // Botão de travar sala (só host, só multiplayer)
-  const lockWaitBtn=document.getElementById('lockToggleWaitBtn');
-  if(lockWaitBtn){
-    lockWaitBtn.style.display=isHost&&!isBotMode?'flex':'none';
-    updateLockBtnUI(lockWaitBtn,room.locked);
-  }
-}
-
-async function updateWinningScore(){
-  if(!isHost||!sharedGameState)return;
-  const sel=document.getElementById('waitingWinningScore');if(!sel)return;
-  const val=parseInt(sel.value)||5000;
-  sharedGameState.winningScore=val; WINNING_SCORE=val;
-  broadcastToGuests({type:'state',room:sharedGameState});
-  renderWaitingRoom();
-}
-
-async function updateHandsPerRound(){
-  if(!isHost||!sharedGameState)return;
-  const sel=document.getElementById('waitingHandsPerRound');if(!sel)return;
-  const val=Math.max(1,parseInt(sel.value)||4);
-  sharedGameState.handsPerRound=val;
-  broadcastToGuests({type:'state',room:sharedGameState});
-  renderWaitingRoom();
-}
-
-async function startGame(){
-  if(!isHost)return;
-  const room=await stGet(roomCode);
-  if(room.players.length<2){showWaitMsg('Precisa de pelo menos 2 jogadores!','error');return;}
-  const hp=room.handsPerRound||4;
-  room.phase='playing'; room.round=1; room.blindGoal=300; room.locked=false;
-  // Dá cartas e reseta stats de todos os jogadores
-  for(const p of room.players){
-    p.roundScore=0; p.done=false; p.handsLeft=hp; p.discardsLeft=3;
-    room.hands[p.id]=dealHand(room.deck);
-  }
-  await stSet(roomCode,room);
-}
-
-function enterGameScreen(room){
-  gamePhase='playing'; currentRound=room.round; blindGoal=room.blindGoal||300;
-  WINNING_SCORE=room.winningScore||5000;
-  const me=room.players.find(p=>p.id===myId);if(me)jokers=me.jokers||[];
-  myHand=room.hands[myId]||[];
-  // Inicializa baralho local excluindo as cartas já na mão; descarte vazio
-  const inHand=new Set(myHand.map(c=>c.suit+c.rank));
-  myDeck=shuffle(makeDeck().filter(c=>!inHand.has(c.suit+c.rank)));
-  myDiscard=[];
-  const hp=room.handsPerRound||4;
-  handsLeft=me?(me.handsLeft??hp):hp; discardsLeft=me?(me.discardsLeft??3):3; myRoundScore=me?(me.roundScore||0):0;
-  selected.clear(); document.getElementById('result-overlay').classList.remove('show');
-  showScreen('game'); updateGameUI(room);
-  // Botão de travar sala no header (só host, só multiplayer)
-  const lockBtn=document.getElementById('lockToggleBtn');
-  if(lockBtn){
-    lockBtn.style.display=isHost&&!isBotMode?'flex':'none';
-    updateLockBtnUI(lockBtn,room.locked);
-  }
-  // Inicia/reinicia ticker de bots se em modo solo
-  if(isBotMode){
-    if(botInterval)clearInterval(botInterval);
-    const diff=room.botDifficulty||'facil';
-    const tickMs=diff==='dificil'?1100:diff==='medio'?1900:2800;
-    botInterval=setInterval(tickBots,tickMs);
-  }
-}
-
-function syncGameState(room){
-  const me=room.players.find(p=>p.id===myId);if(!me)return;
-  // Só sincroniza do host se o host tiver dado menos mãos (evita reverter ações locais)
-  handsLeft=me.handsLeft??handsLeft;
-  discardsLeft=me.discardsLeft??discardsLeft;
-  myRoundScore=me.roundScore||0;
-  document.getElementById('myRoundScore').textContent=myRoundScore;
-  updateOppPanel(room); updateHeaderScores(room); updateBlind();
-}
-
-function updateGameUI(room){
-  const safeSet=(id,val)=>{const el=document.getElementById(id);if(el)el.textContent=val;};
-  safeSet('roundNum',currentRound);
-  safeSet('blindGoal',WINNING_SCORE);
-  safeSet('handsLeft',handsLeft);
-  safeSet('discardsLeft',discardsLeft);
-  safeSet('myRoundScore',myRoundScore);
-  updateBlind(); renderJokers(); renderHand(); updateOppPanel(room); updateHeaderScores(room);
-}
-
-function updateBlind(){/* Removido - não usamos mais sistema de blind */}
-
-function renderJokers(){
-  const c=document.getElementById('jokersRow');
-  if(!jokers.length){c.innerHTML='<span style="font-size:12px;color:var(--text-dim);font-style:italic;">Sem Coringas ainda</span>';return;}
-  c.innerHTML=jokers.map(j=>`<div class="joker-card"><div class="jname">🃏 ${j.name}</div><div class="jdesc">${j.desc}</div></div>`).join('');
-}
-
-function renderHand(){
-  const c=document.getElementById('cardsContainer');
-  if(handsLeft<=0){
-    c.innerHTML='<div class="done-banner"><span class="done-icon">🏁</span>Você usou todas as mãos!<br><span style="font-size:13px;opacity:.8;">Aguardando os outros jogadores...</span></div>';
-    const htb=document.getElementById('handTypeBadge');if(htb)htb.textContent='Rodada encerrada';
-    return;
-  }
-  if(!myHand.length){c.innerHTML='<span style="color:var(--text-dim);font-style:italic;">Sem cartas</span>';return;}
-  c.innerHTML=myHand.map((card,i)=>{
-    const isRed=card.suit==='♥'||card.suit==='♦';
-    return `<div class="card ${isRed?'red':''} ${selected.has(i)?'selected':''}" onclick="toggleCard(${i})"><div class="card-suit">${card.suit}</div><div class="card-rank">${card.rank}</div></div>`;
-  }).join(''); updateHandPreview();
-}
-
-function toggleCard(i){if(selected.has(i))selected.delete(i);else selected.add(i);renderHand();}
-function sortHand(){myHand.sort((a,b)=>RANKS.indexOf(a.rank)-RANKS.indexOf(b.rank));selected.clear();renderHand();}
-
-function updateHandPreview(){
-  const sel=[...selected].map(i=>myHand[i]);const ev=evaluateHand(sel);
-  document.getElementById('handTypeBadge').textContent=sel.length?ev.type:'Selecione cartas';
-  document.getElementById('handChips').textContent=sel.length?ev.chips:'0';
-  document.getElementById('handMult').textContent=sel.length?ev.mult:'1';
-}
-
-function updateOppPanel(room){
-  const others=room.players.filter(p=>p.id!==myId);
-  const panel=document.getElementById('oppPanel');
-  if(!others.length){panel.innerHTML='';return;}
-  panel.innerHTML=others.map(p=>`<div class="opp-box"><div class="oname">${p.name}</div><div class="oscore">⭐ ${p.roundScore||0}</div><div class="ostatus">${p.done?'✓ Terminou':`${p.handsLeft??4} mãos restantes`}</div></div>`).join('');
-}
-
-function updateHeaderScores(room){
-  document.getElementById('headerScores').innerHTML=room.players.map(p=>`<div class="score-chip ${p.id===myId?'mine':''}"><span class="sname">${p.name}</span><span class="sval">${p.score||0}</span></div>`).join('');
-}
-
-async function playHand(){
-  if(selected.size===0){log('⚠️ Selecione pelo menos 1 carta!');return;}
-  if(handsLeft<=0){log('⚠️ Sem mãos restantes!');return;}
-  const selCards=[...selected].map(i=>myHand[i]);
-  const ev=evaluateHand(selCards);
-  myRoundScore+=ev.score; handsLeft--;
-  const numPlayed=selected.size;
-  // Cartas jogadas vão para o descarte (não voltam imediatamente ao deck)
-  const playedCards=myHand.filter((_,i)=>selected.has(i));
-  myDiscard.push(...playedCards);
-  myHand=myHand.filter((_,i)=>!selected.has(i)); selected.clear();
-  log(`🃏 <span class="log-hi">${ev.type}</span> · ${ev.chips} × ${ev.mult} = <span class="log-hi">+${ev.score} pts</span>`);
-  document.getElementById('myRoundScore').textContent=myRoundScore;
-  document.getElementById('handsLeft').textContent=handsLeft;
-  try{
-    const room=await stGet(roomCode);
-    // Reabastecer mão até 8 cartas — usa baralho local por jogador (infinito, reembaralha sozinho)
-    const needed=8-myHand.length;
-    for(let i=0;i<needed;i++) myHand.push(drawCard());
-    if(needed>0)log(`📥 Recebeu ${needed} nova(s) carta(s)`);
-
-    const me=room.players.find(p=>p.id===myId);
-    if(me){
-      me.roundScore=myRoundScore;  // score da rodada (não acumula em me.score aqui)
-      me.handsLeft=handsLeft;
-      me.discardsLeft=discardsLeft;
-      // "done" quando esgotou todas as mãos
-      if(handsLeft<=0){
-        me.done=true;
-        log(`🏁 Você usou todas as mãos! <span class="log-hi">Aguardando os outros...</span>`);
-      }
-    }
-    room.hands[myId]=myHand;
-
-    // Chance de 30% de ganhar um coringa aleatório após cada jogada
-    if(Math.random()<0.3 && jokers.length<3){
-      const newJoker=pickJokers(1)[0];
-      jokers.push(newJoker);
-      if(me)me.jokers=jokers;
-      log(`🎲 <span class="log-hi">Novo Coringa!</span> ${newJoker.name} - ${newJoker.desc}`);
-      renderJokers();
-    }
-
-    // Verificar vitória e fim de rodada — apenas o host decide
-    if(isHost){
-      const ws=room.winningScore||WINNING_SCORE;
-      // Vitória: score total (rounds anteriores) + score desta rodada >= meta
-      const winnerByScore=room.players.find(p=>(p.score||0)+(p.roundScore||0)>=ws);
-      if(winnerByScore&&room.phase==='playing'){
-        room.players.forEach(p=>{p.score=(p.score||0)+(p.roundScore||0);});
-        room.phase='game_over';
-        room.winner=winnerByScore.id;
-      } else {
-        const allDone=room.players.every(p=>p.done);
-        if(allDone&&room.phase==='playing'){
-          // Soma roundScore ao score total UMA só vez ao fim da rodada
-          room.players.forEach(p=>{p.score=(p.score||0)+(p.roundScore||0);});
-          room.phase=room.round>=maxRounds?'game_over':'round_over';
-        }
-      }
-    }
-
-    await stSet(roomCode,room);
-  }catch(e){console.error('playHand stSet error',e);}
-  renderHand();
-}
-
-async function discardSelected(){
-  if(selected.size===0){log('⚠️ Selecione cartas para descartar!');return;}
-  if(discardsLeft<=0){log('⚠️ Sem descartes restantes!');return;}
-  const numDiscarded=selected.size;
-  // Cartas descartadas vão para o descarte (não voltam imediatamente ao deck)
-  const discardedCards=myHand.filter((_,i)=>selected.has(i));
-  myDiscard.push(...discardedCards);
-  myHand=myHand.filter((_,i)=>!selected.has(i)); discardsLeft--; selected.clear();
-  log(`🗑 Cartas descartadas · ${discardsLeft} descartes restantes`);
-  document.getElementById('discardsLeft').textContent=discardsLeft;
-  try{
-    const room=await stGet(roomCode);
-    // Pegar novas cartas — baralho local por jogador, reembaralha sozinho se esvaziar
-    for(let i=0;i<numDiscarded;i++) myHand.push(drawCard());
-    const me=room.players.find(p=>p.id===myId);if(me)me.discardsLeft=discardsLeft;
-    room.hands[myId]=myHand; await stSet(roomCode,room);
-    if(numDiscarded>0)log(`📥 Recebeu ${numDiscarded} nova(s) carta(s)`);
-  }catch(e){}
-  renderHand();
-}
-
-function showRoundResult(room){
-  const sorted=[...room.players].sort((a,b)=>(b.roundScore||0)-(a.roundScore||0));
-  document.getElementById('resultTitle').textContent=`Rodada ${room.round-1||1} Finalizada!`;
-  document.getElementById('resultScores').innerHTML=sorted.map((p,i)=>`<div class="result-row ${i===0?'winner':''}"><span>${['🥇','🥈','🥉','🃏'][i]||i+1} ${p.name}${p.id===myId?' (você)':''}</span><span style="color:var(--gold)">${p.roundScore||0} pts</span></div>`).join('');
-  const btn=document.getElementById('resultBtn');
-  btn.textContent=isHost?'Próxima Rodada':'Aguardando host...';
-  btn.onclick=isHost?nextRound:null;
-  btn.style.display='';
-  document.getElementById('gameOverActions').style.display='none';
-  document.getElementById('result-overlay').classList.add('show');
-}
-
-async function nextRound(){
-  if(!isHost)return;
-  try{
-    const room=await stGet(roomCode);
-    const hp=room.handsPerRound||4;
-    room.round=(room.round||1)+1; room.phase='playing'; room.blindGoal=300*room.round; room.deck=makeDeck(); room.winningScore=room.winningScore||WINNING_SCORE;
-    for(const p of room.players){
-      p.roundScore=0; p.done=false; p.handsLeft=hp; p.discardsLeft=3;
-      const nj=pickJokers(1)[0]; p.jokers=[...(p.jokers||[]),nj].slice(-3);
-      room.hands[p.id]=dealHand(room.deck);
-    }
-    await stSet(roomCode,room);
-  }catch(e){}
-}
-
-function showGameOver(room){
-  const sorted=[...room.players].sort((a,b)=>(b.score||0)-(a.score||0));
-  const winner=room.players.find(p=>p.id===room.winner)||sorted[0];
-  const winnerText=winner.id===myId?' (VOCÊ VENCEU! 🎉)':` venceu com ${winner.score} pontos! 🏆`;
-  document.getElementById('resultTitle').textContent=`🎰 ${winner.name}${winnerText}`;
-  document.getElementById('resultScores').innerHTML=sorted.map((p,i)=>`<div class="result-row ${p.id===winner.id?'winner':''}"><span>${['🥇','🥈','🥉','🃏'][i]||i+1} ${p.name}${p.id===myId?' (você)':''}</span><span style="color:var(--gold)">${p.score||0} pts</span></div>`).join('');
-  const btn=document.getElementById('resultBtn');
-  btn.textContent=isHost?'🔄 Revanche':'Aguardando revanche...';
-  btn.disabled=!isHost;
-  btn.onclick=isHost?startRematch:null;
-  document.getElementById('gameOverActions').style.display='flex';
-  if(isBotMode){
-    // Modo bot: só mostra botão de voltar ao lobby (menu principal)
-    document.getElementById('goLobbyBtn').style.display='none';
-    document.getElementById('goMenuBtn').textContent='🏠 Voltar ao Lobby';
-  } else {
-    // Multiplayer: mostra os dois botões normalmente
-    document.getElementById('goLobbyBtn').style.display='';
-    document.getElementById('goMenuBtn').textContent='🏠 Menu Principal';
-  }
-  document.getElementById('result-overlay').classList.add('show');
-}
-
-function goToLobby(){
-  document.getElementById('result-overlay').classList.remove('show');
-  if(botInterval){clearInterval(botInterval);botInterval=null;}
-  isBotMode=false;
-  // Volta à sala de espera sem destruir a conexão P2P
-  // Marca a sala como travada: apenas os jogadores já presentes podem continuar
-  if(sharedGameState){
-    sharedGameState.phase='waiting';
-    sharedGameState.locked=true;
-    lsSet(roomCode,sharedGameState);
-    broadcastToGuests({type:'state',room:sharedGameState});
-    onRoomUpdate(sharedGameState);
-  }
-  showScreen('waiting-screen');
-  renderWaitingRoom();
-}
-
-function goToMenu(){
-  document.getElementById('result-overlay').classList.remove('show');
+  showLoading('Conectando à sala...');
   destroyPeer();
-  if(botInterval){clearInterval(botInterval);botInterval=null;}
-  isBotMode=false;
-  myName='';myId='';roomCode='';isHost=false;sharedGameState=null;
-  myHand=[];selected=new Set();jokers=[];myDeck=[];myDiscard=[];
-  handsLeft=4;discardsLeft=3;myRoundScore=0;currentRound=1;maxRounds=3;blindGoal=300;
-  gamePhase='lobby';myScreenShown=false;peerConns=[];
-  showScreen('lobby');
-}
 
-async function startRematch(){
-  if(!isHost)return;
-  try{
-    const room=await stGet(roomCode);
-    const hp=room.handsPerRound||4;
-    room.round=1; room.phase='playing'; room.blindGoal=300; room.deck=makeDeck(); room.winner=null; room.winningScore=room.winningScore||WINNING_SCORE;
-    for(const p of room.players){
-      p.score=0; p.roundScore=0; p.done=false; p.handsLeft=hp; p.discardsLeft=3;
-      p.jokers=pickJokers(1);
-      room.hands[p.id]=dealHand(room.deck);
+  peer = new Peer({
+    debug: 0,
+    config: {
+      iceServers: [
+        { urls: 'stun:stun.l.google.com:19302' },
+        { urls: 'stun:stun1.l.google.com:19302' }
+      ]
     }
-    await stSet(roomCode,room);
-  }catch(e){}
+  });
+
+  let settled = false;
+  peer.on('open', () => {
+    if (!settled) {
+      settled = true;
+      const conn = peer.connect('game' + currentGame + code, {
+        reliable: true,
+        serialization: 'json'
+      });
+      peerConns = [{ conn, playerId: 'host' }];
+
+      conn.on('open', () => {
+        conn.send({
+          type: 'join',
+          playerId: myId,
+          playerName: myName
+        });
+        hideLoading();
+        showScreen('waiting-screen');
+        updateWaitingRoomUI();
+        setStatus('ok', '✅ conectado');
+      });
+
+      conn.on('close', () => {
+        hideLoading();
+        showLobbyMsg('Desconectado da sala.', 'error');
+        showScreen('lobby');
+        setStatus('ok', '✅ pronto');
+      });
+
+      conn.on('error', () => {
+        hideLoading();
+        showLobbyMsg('Erro de conexão.', 'error');
+        setStatus('err', '⚠️ erro');
+      });
+    }
+  });
+
+  peer.on('error', (err) => {
+    if (!settled) {
+      settled = true;
+      hideLoading();
+      showLobbyMsg('Erro ao conectar: ' + (err.type || 'desconhecido'), 'error');
+      setStatus('ok', '✅ pronto');
+    }
+  });
+
+  setTimeout(() => {
+    if (!settled) {
+      settled = true;
+      hideLoading();
+      showLobbyMsg('Sala não encontrada ou timeout.', 'error');
+      destroyPeer();
+      setStatus('ok', '✅ pronto');
+    }
+  }, 15000);
 }
 
-function updateLockBtnUI(btn,locked){
-  if(!btn)return;
-  if(locked){
-    btn.textContent='🔒 Sala Fechada';
-    btn.className=btn.className.replace(/\b(locked|unlocked)\b/g,'').trim()+' locked';
+function leaveRoom() {
+  gamePhase = 'menu';
+  destroyPeer();
+  showScreen('main-menu');
+  setStatus('ok', '✅ pronto');
+}
+
+function renderWaitingRoom() {
+  updateWaitingRoomUI();
+}
+
+function updateWaitingRoomUI() {
+  // Atualizar lista de jogadores
+  let html = `<div class="player-slot"><div class="dot"></div><span class="player-you">${myName} (você)</span></div>`;
+  
+  // Simulando jogadores (você pode expandir isso)
+  peerConns.forEach((entry) => {
+    if (entry.playerId) {
+      html += `<div class="player-slot"><div class="dot"></div><span>Jogador ${entry.playerId.substr(0, 5)}</span></div>`;
+    }
+  });
+
+  document.getElementById('waitingPlayers').innerHTML = html;
+
+  const msg = document.getElementById('waitingMsg');
+  const btn = document.getElementById('startBtn');
+
+  if (isHost && peerConns.length >= 1) {
+    msg.textContent = 'Pronto para começar!';
+    btn.style.display = 'block';
+  } else if (peerConns.length < 1) {
+    msg.textContent = 'Aguardando jogadores...';
+    btn.style.display = 'none';
   } else {
-    btn.textContent='🔓 Sala Aberta';
-    btn.className=btn.className.replace(/\b(locked|unlocked)\b/g,'').trim()+' unlocked';
+    msg.textContent = `${peerConns.length + 1} jogadores. Aguardando o host...`;
+    btn.style.display = 'none';
   }
 }
 
-async function toggleRoomLock(){
-  if(!isHost||!sharedGameState)return;
-  sharedGameState.locked=!sharedGameState.locked;
-  const locked=sharedGameState.locked;
-  lsSet(roomCode,sharedGameState);
-  broadcastToGuests({type:'state',room:sharedGameState});
-  // Atualiza ambos os botões
-  updateLockBtnUI(document.getElementById('lockToggleBtn'),locked);
-  updateLockBtnUI(document.getElementById('lockToggleWaitBtn'),locked);
-  log(locked?'🔒 <span class="log-hi">Sala fechada</span> — novos jogadores não podem entrar':'🔓 <span class="log-hi">Sala aberta</span> — novos jogadores podem entrar');
+function startGame() {
+  if (!isHost) return;
+
+  // Broadcast para iniciar o jogo
+  peerConns.forEach(({ conn }) => {
+    if (conn && conn.open) {
+      try {
+        conn.send({ type: 'game_start', game: currentGame });
+      } catch (e) { }
+    }
+  });
+
+  // Iniciar jogo do host também
+  launchGame();
 }
 
-// ── Init ──────────────────────────────────────────────
-window.addEventListener('load',()=>{
-  setStatus('ok','✅ pronto');
-});
+function launchGame() {
+  hideLoading();
+  
+  switch (currentGame) {
+    case 'balatro':
+      showScreen('game');
+      break;
+    case 'poker':
+      showScreen('poker');
+      initPokerGame();
+      break;
+    case 'truco':
+      showScreen('truco');
+      initTrucoGame();
+      break;
+    case 'blackjack':
+      showScreen('blackjack');
+      initBlackjackGame();
+      break;
+  }
+
+  gamePhase = 'playing';
+}
+
+// ═══════════════════════════════════════════════════════
+//  POKER
+// ═══════════════════════════════════════════════════════
+
+function initPokerGame() {
+  const content = document.getElementById('pokerContent');
+  content.innerHTML = `
+    <div style="text-align:center; color:var(--text-dim); font-size:18px;">
+      🎴 Poker Texas Hold'em<br>
+      <span style="font-size:14px; margin-top:10px; display:block;">
+        Suas Cartas: [?] [?]<br>
+        Pote: 1,000 fichas
+      </span>
+    </div>
+    <div style="display:flex; gap:10px; margin-top:20px;">
+      <button class="btn btn-gold" style="max-width:120px;">Check</button>
+      <button class="btn btn-outline" style="max-width:120px;">Fold</button>
+      <button class="btn btn-outline" style="max-width:120px;">Raise</button>
+    </div>
+  `;
+  console.log('Poker iniciado!');
+}
+
+// ═══════════════════════════════════════════════════════
+//  TRUCO
+// ═══════════════════════════════════════════════════════
+
+function initTrucoGame() {
+  const content = document.getElementById('trucoContent');
+  content.innerHTML = `
+    <div style="text-align:center; color:var(--text-dim); font-size:18px;">
+      🎯 Truco<br>
+      <span style="font-size:14px; margin-top:10px; display:block;">
+        Manilhas: A e 2<br>
+        Suas Cartas: 4♠ 6♥ Q♦
+      </span>
+    </div>
+    <div style="display:flex; gap:10px; margin-top:20px;">
+      <button class="btn btn-gold" style="max-width:120px;">Truco!</button>
+      <button class="btn btn-outline" style="max-width:120px;">Corro</button>
+      <button class="btn btn-outline" style="max-width:120px;">Deço</button>
+    </div>
+  `;
+  console.log('Truco iniciado!');
+}
+
+// ═══════════════════════════════════════════════════════
+//  BLACKJACK / 21
+// ═══════════════════════════════════════════════════════
+
+function initBlackjackGame() {
+  const content = document.getElementById('blackjackContent');
+  content.innerHTML = `
+    <div style="text-align:center; color:var(--text-dim); font-size:18px;">
+      🖤 Blackjack (21)<br>
+      <span style="font-size:14px; margin-top:10px; display:block;">
+        Dealer: [?] [5] = 15<br>
+        Você: [K] [6] = 16
+      </span>
+    </div>
+    <div style="display:flex; gap:10px; margin-top:20px;">
+      <button class="btn btn-gold" style="max-width:120px;">Hit (Pedir)</button>
+      <button class="btn btn-outline" style="max-width:120px;">Stand (Parar)</button>
+      <button class="btn btn-outline" style="max-width:120px;">Double</button>
+    </div>
+  `;
+  console.log('Blackjack iniciado!');
+}
+
+// Inicialização
+setStatus('ok', '✅ pronto');
 </script>
+
 </body>
 </html>
