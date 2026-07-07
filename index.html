@@ -7,7 +7,7 @@
 <style>
   @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@700;900&family=Crimson+Pro:ital,wght@0,400;0,600;1,400&display=swap');
   *{margin:0;padding:0;box-sizing:border-box}
-  :root{--felt:#1a3d1a;--felt-light:#1e4a1e;--gold:#d4a843;--gold-light:#f0c96e;--card-bg:#fef9f0;--card-red:#c0392b;--card-border:#d4b896;--dark:#0d1f0d;--panel:rgba(0,0,0,0.35);--text:#f5e6c8;--text-dim:rgba(245,230,200,0.6)}
+  :root{--felt:#1a3d1a;--felt-light:#1e4a1e;--gold:#d4a843;--gold-light:#f0c96e;--card-bg:#fef9f0;--card-red:#c0392b;--card-border:#d4b896;--dark:#0d1f0d;--panel:rgba(0,0,0,0.35);--text:#f5e6c8;--text-dim:#a89968}
   body{font-family:'Crimson Pro',serif;background:var(--dark);color:var(--text);min-height:100vh;overflow-x:hidden}
   #app{min-height:100vh;display:flex;flex-direction:column}
   .screen{display:none;flex-direction:column;flex:1}
@@ -17,47 +17,78 @@
   .logo h1{font-family:'Cinzel',serif;font-size:52px;font-weight:900;color:var(--gold);text-shadow:0 0 30px rgba(212,168,67,0.5),2px 2px 0 #000;letter-spacing:4px}
   .logo p{font-style:italic;color:var(--text-dim);font-size:16px;margin-top:4px}
   .games-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;width:100%;max-width:500px;margin:20px 0}
-  .game-card{background:var(--panel);border:2px solid rgba(212,168,67,0.3);border-radius:12px;padding:24px;cursor:pointer;transition:all .3s;text-align:center;display:flex;flex-direction:column;align-items:center;gap:12px}
+  .game-card{background:var(--panel);border:2px solid rgba(212,168,67,0.3);border-radius:12px;padding:24px;cursor:pointer;transition:all .3s;text-align:center;display:flex;flex-direction:column;align-items:center}
   .game-card:hover{border-color:var(--gold);background:rgba(212,168,67,0.1);transform:translateY(-4px)}
   .game-card-icon{font-size:48px}
   .game-card-name{font-family:'Cinzel',serif;color:var(--gold);font-size:20px;font-weight:700}
   .game-card-desc{font-size:12px;color:var(--text-dim)}
-  #lobby,#waiting-screen{align-items:center;justify-content:center;background:radial-gradient(ellipse at 50% 40%,#1e4a1e 0%,#0d1f0d 70%);padding:20px}
-  .lobby-box{background:var(--panel);border:1px solid rgba(212,168,67,0.3);border-radius:12px;padding:28px;width:100%;max-width:400px}
-  .lobby-box h2{font-family:'Cinzel',serif;color:var(--gold);font-size:18px;margin-bottom:16px;text-align:center}
-  .btn-back{background:rgba(212,168,67,0.1);border:1px solid rgba(212,168,67,0.35);border-radius:8px;color:var(--gold);font-family:'Crimson Pro',serif;font-size:12px;padding:8px 12px;cursor:pointer;margin-bottom:12px;width:100%}
+  
+  /* NOVO LOBBY ESTILO BALATRO */
+  #lobby{align-items:center;justify-content:center;background:radial-gradient(ellipse at 50% 40%,#1e4a1e 0%,#0d1f0d 70%);padding:20px;overflow-y:auto}
+  .lobby-container{width:100%;max-width:900px;display:grid;grid-template-columns:1fr 1fr;gap:20px}
+  .lobby-section{background:var(--panel);border:1px solid rgba(212,168,67,0.3);border-radius:12px;padding:24px;display:flex;flex-direction:column;gap:16px}
+  .lobby-section h3{font-family:'Cinzel',serif;color:var(--gold);font-size:16px;text-transform:uppercase;letter-spacing:2px;margin-bottom:8px}
+  .lobby-back{position:absolute;top:20px;left:20px}
+  .btn-back{background:rgba(212,168,67,0.1);border:1px solid rgba(212,168,67,0.35);border-radius:8px;color:var(--gold);font-family:'Crimson Pro',serif;font-size:12px;padding:8px 12px;cursor:pointer;transition:all .2s}
   .btn-back:hover{background:rgba(212,168,67,0.2)}
-  .field-group{display:flex;flex-direction:column;gap:10px;margin-bottom:16px}
-  .field-label{font-size:13px;color:var(--text-dim);text-transform:uppercase;letter-spacing:1px;margin-bottom:4px}
-  input[type=text],input[type=number]{background:rgba(0,0,0,0.4);border:1px solid rgba(212,168,67,0.4);border-radius:8px;color:var(--text);font-family:'Crimson Pro',serif;font-size:16px;padding:10px 14px;width:100%;outline:none}
-  input[type=text]:focus,input[type=number]:focus{border-color:var(--gold)}
-  .btn{border:none;border-radius:8px;cursor:pointer;font-family:'Cinzel',serif;font-weight:700;font-size:14px;letter-spacing:1px;padding:12px 20px;transition:all .2s;width:100%}
-  .btn:hover{transform:translateY(-1px)}
+  
+  .field-group{display:flex;flex-direction:column;gap:8px}
+  .field-label{font-size:12px;color:var(--text-dim);text-transform:uppercase;letter-spacing:1px}
+  input[type=text],input[type=number],select{background:rgba(0,0,0,0.4);border:1px solid rgba(212,168,67,0.4);border-radius:8px;color:var(--text);font-family:'Crimson Pro',serif;font-size:14px;padding:10px;transition:all .2s}
+  input[type=text]:focus,input[type=number]:focus,select:focus{border-color:var(--gold);outline:none;box-shadow:0 0 10px rgba(212,168,67,0.2)}
+  
+  .player-count-selector{display:flex;gap:8px}
+  .player-count-btn{flex:1;padding:10px;background:rgba(212,168,67,0.1);border:1px solid rgba(212,168,67,0.3);border-radius:8px;color:var(--gold);cursor:pointer;font-weight:600;transition:all .2s;font-family:'Cinzel',serif}
+  .player-count-btn.active{background:rgba(212,168,67,0.3);border-color:var(--gold)}
+  .player-count-btn:hover{background:rgba(212,168,67,0.2)}
+  
+  .quick-btns{display:flex;gap:6px}
+  .quick-btn{flex:1;background:rgba(212,168,67,0.1);border:1px solid rgba(212,168,67,0.3);border-radius:6px;color:var(--gold);font-size:11px;padding:6px;cursor:pointer;transition:all .2s;font-family:'Crimson Pro',serif}
+  .quick-btn:hover{background:rgba(212,168,67,0.25)}
+  
+  .mode-selector{display:flex;gap:10px;margin-bottom:10px}
+  .mode-btn{flex:1;padding:12px;background:rgba(212,168,67,0.1);border:1px solid rgba(212,168,67,0.3);border-radius:8px;color:var(--gold);cursor:pointer;font-weight:600;transition:all .2s;font-family:'Cinzel',serif;font-size:13px}
+  .mode-btn.active{background:rgba(212,168,67,0.35);border-color:var(--gold);box-shadow:0 0 15px rgba(212,168,67,0.3)}
+  .mode-btn:hover{background:rgba(212,168,67,0.2)}
+  
+  .room-display{background:rgba(0,0,0,0.5);border:2px solid var(--gold);border-radius:8px;padding:16px;text-align:center;margin:12px 0}
+  .room-code{font-family:'Cinzel',serif;font-size:36px;color:var(--gold);letter-spacing:8px;margin:8px 0}
+  .room-label{font-size:11px;color:var(--text-dim);text-transform:uppercase}
+  
+  .divider{border:none;border-top:1px solid rgba(212,168,67,0.2);margin:12px 0}
+  
+  .btn{border:none;border-radius:8px;cursor:pointer;font-family:'Cinzel',serif;font-weight:700;font-size:13px;letter-spacing:1px;padding:12px 20px;transition:all .2s;width:100%;text-transform:uppercase}
+  .btn:hover{transform:translateY(-2px)}
   .btn-gold{background:linear-gradient(135deg,#d4a843,#b8892a);color:#0d1f0d}
-  .btn-gold:hover{background:linear-gradient(135deg,#f0c96e,#d4a843)}
+  .btn-gold:hover{background:linear-gradient(135deg,#f0c96e,#d4a843);box-shadow:0 0 15px rgba(212,168,67,0.4)}
   .btn-outline{background:transparent;border:1px solid rgba(212,168,67,0.5);color:var(--gold)}
   .btn-outline:hover{background:rgba(212,168,67,0.1)}
   .btn-red{background:linear-gradient(135deg,#c0392b,#922b21);color:white}
-  .btn-sm{padding:8px 12px;font-size:12px}
-  .divider{border:none;border-top:1px solid rgba(212,168,67,0.2);margin:16px 0}
-  .quick-btns{display:flex;gap:6px;margin-top:7px}
-  .quick-btn{flex:1;background:rgba(212,168,67,0.1);border:1px solid rgba(212,168,67,0.35);border-radius:6px;color:var(--gold);font-family:'Crimson Pro',serif;font-size:12px;padding:5px 4px;cursor:pointer}
-  .quick-btn:hover{background:rgba(212,168,67,0.25)}
-  .room-code-display{background:rgba(0,0,0,0.5);border:1px solid var(--gold);border-radius:8px;padding:16px;text-align:center;margin-bottom:16px}
-  .room-code-val{font-family:'Cinzel',serif;font-size:32px;color:var(--gold);letter-spacing:8px;margin-top:4px}
-  .players-waiting{display:flex;flex-direction:column;gap:8px;margin-bottom:16px}
-  .player-slot{background:rgba(0,0,0,0.3);border:1px solid rgba(212,168,67,0.2);border-radius:8px;padding:12px 16px;display:flex;align-items:center;gap:10px;font-size:15px}
-  .player-slot .dot{width:8px;height:8px;border-radius:50%;background:#27ae60;flex-shrink:0}
-  .player-you{color:var(--gold);font-weight:600}
-  .msg-box{background:rgba(0,0,0,0.4);border:1px solid rgba(212,168,67,0.3);border-radius:8px;padding:12px 16px;font-size:14px;text-align:center;color:var(--text-dim);margin-top:8px}
+  
+  .info-box{background:rgba(212,168,67,0.08);border:1px solid rgba(212,168,67,0.25);border-radius:8px;padding:12px;font-size:12px;color:var(--text-dim);text-align:center}
+  .info-box strong{color:var(--gold)}
+  
+  .msg-box{background:rgba(0,0,0,0.4);border:1px solid rgba(212,168,67,0.3);border-radius:8px;padding:12px;font-size:13px;text-align:center;color:var(--text-dim);margin-top:8px;display:none}
+  .msg-box.show{display:block}
   .msg-box.error{border-color:#e74c3c;color:#e74c3c}
   .msg-box.success{border-color:#27ae60;color:#27ae60}
-  .small{font-size:12px;color:var(--text-dim);text-align:center}
+  
   .conn-status{position:fixed;top:8px;right:10px;font-size:11px;padding:3px 8px;border-radius:10px;z-index:300;background:rgba(0,0,0,0.6);color:#27ae60}
+  
+  /* WAITING SCREEN */
+  #waiting-screen{align-items:center;justify-content:center;background:radial-gradient(ellipse at 50% 40%,#1e4a1e 0%,#0d1f0d 70%);padding:20px}
+  .waiting-box{background:var(--panel);border:1px solid rgba(212,168,67,0.3);border-radius:12px;padding:28px;width:100%;max-width:500px}
+  .waiting-box h2{font-family:'Cinzel',serif;color:var(--gold);font-size:18px;margin-bottom:16px;text-align:center;text-transform:uppercase}
+  .players-list{display:flex;flex-direction:column;gap:10px;margin:16px 0}
+  .player-item{background:rgba(0,0,0,0.3);border:1px solid rgba(212,168,67,0.2);border-radius:8px;padding:12px 16px;display:flex;align-items:center;gap:10px;font-size:14px}
+  .player-item .dot{width:8px;height:8px;border-radius:50%;background:#27ae60;flex-shrink:0}
+  .player-item.you{color:var(--gold);font-weight:600;border-color:var(--gold);background:rgba(212,168,67,0.1)}
+  
+  /* GAME SCREENS */
   .game-screen{background:radial-gradient(ellipse at 50% 50%,var(--felt-light) 0%,var(--felt) 40%,var(--dark) 100%);display:grid;grid-template-columns:1fr 220px;gap:10px;padding:10px}
-  .game-header{grid-column:1/-1;display:flex;justify-content:space-between;align-items:center;padding:10px 16px;background:rgba(0,0,0,0.5);border:1px solid rgba(212,168,67,0.2);border-radius:8px;flex-shrink:0}
+  .game-header{grid-column:1/-1;display:flex;justify-content:space-between;align-items:center;padding:10px 16px;background:rgba(0,0,0,0.5);border:1px solid rgba(212,168,67,0.2);border-radius:8px;font-size:13px}
   .badge{font-family:'Cinzel',serif;color:var(--gold);font-size:13px}
-  .game-content{background:rgba(0,0,0,0.2);border:1px solid rgba(212,168,67,0.2);border-radius:8px;padding:20px;display:flex;flex-direction:column;justify-content:center;align-items:center;gap:20px;overflow-y:auto}
+  .game-content{background:rgba(0,0,0,0.2);border:1px solid rgba(212,168,67,0.2);border-radius:8px;padding:20px;display:flex;flex-direction:column;justify-content:center;align-items:center;gap:20px}
   .game-info{text-align:center;color:var(--text-dim);font-size:16px}
   .game-info strong{color:var(--gold)}
   .game-actions{display:flex;gap:8px;justify-content:center;flex-wrap:wrap}
@@ -79,11 +110,13 @@
   .chat-input{display:flex;gap:4px;margin-top:6px}
   .chat-input input{flex:1;background:rgba(0,0,0,0.4);border:1px solid rgba(212,168,67,0.3);border-radius:4px;color:var(--text);font-size:11px;padding:4px 6px;outline:none}
   .chat-input button{background:rgba(212,168,67,0.2);border:1px solid rgba(212,168,67,0.3);border-radius:4px;color:var(--gold);font-size:10px;cursor:pointer;padding:4px 6px}
+  
   .loading-overlay{position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(13,31,13,0.92);z-index:200;display:none;align-items:center;justify-content:center;flex-direction:column;gap:14px}
   .loading-overlay.show{display:flex}
   .spinner{width:38px;height:38px;border:3px solid rgba(212,168,67,0.2);border-top-color:var(--gold);border-radius:50%;animation:spin .8s linear infinite}
   @keyframes spin{to{transform:rotate(360deg)}}
-  @media(max-width:768px){.games-grid{grid-template-columns:1fr}.game-screen{grid-template-columns:1fr}.sidebar{grid-column:auto}}
+  
+  @media(max-width:768px){.games-grid{grid-template-columns:1fr}.game-screen{grid-template-columns:1fr}.sidebar{grid-column:auto}.lobby-container{grid-template-columns:1fr}}
 </style>
 </head>
 <body>
@@ -113,62 +146,147 @@
       <div class="game-card-desc">Blackjack</div>
     </div>
   </div>
-  <div class="small">Até 4 jogadores · Sem instalação · Funciona entre dispositivos</div>
+  <div style="font-size:12px;color:var(--text-dim);text-align:center;">Até 4 jogadores · Sem instalação · Funciona entre dispositivos</div>
 </div>
 
-<!-- LOBBY -->
+<!-- NOVO LOBBY ESTILO BALATRO -->
 <div id="lobby" class="screen">
-  <div style="flex:1;display:flex;align-items:center;justify-content:center;">
-    <div class="lobby-box">
-      <button class="btn-back" onclick="backToMenu()">← Voltar</button>
-      <h2 id="lobbyTitle">ENTRAR NO JOGO</h2>
+  <div class="lobby-back">
+    <button class="btn-back" onclick="backToMenu()">← Voltar</button>
+  </div>
+  
+  <div class="lobby-container">
+    <!-- SEÇÃO ESQUERDA: CRIAR/ENTRAR SALA -->
+    <div class="lobby-section">
+      <h3 id="gameTitle">Poker</h3>
+      
+      <!-- Seu Nome -->
       <div class="field-group">
-        <div>
-          <div class="field-label">Seu Nome</div>
-          <input type="text" id="nameInput" placeholder="Como quer ser chamado?" maxlength="15"/>
+        <label class="field-label">👤 Seu Nome</label>
+        <input type="text" id="nameInput" placeholder="Digite seu nome..." maxlength="15"/>
+      </div>
+      
+      <!-- Seletor de Modo: Online/Local -->
+      <div class="field-group">
+        <label class="field-label">🎮 Modo de Jogo</label>
+        <div class="mode-selector">
+          <button class="mode-btn active" onclick="setGameMode('online')" data-mode="online">🌐 Online</button>
+          <button class="mode-btn" onclick="setGameMode('local')" data-mode="local">💻 Local</button>
         </div>
       </div>
+      
+      <!-- Quantidade de Jogadores -->
       <div class="field-group">
-        <div>
-          <div class="field-label">Fichas Iniciais</div>
-          <input type="number" id="chipInput" value="1000" min="100" max="100000" step="100"/>
-          <div class="quick-btns">
-            <button class="quick-btn" onclick="setVal('chipInput',500)">500</button>
-            <button class="quick-btn" onclick="setVal('chipInput',1000)">1K</button>
-            <button class="quick-btn" onclick="setVal('chipInput',5000)">5K</button>
-            <button class="quick-btn" onclick="setVal('chipInput',10000)">10K</button>
-          </div>
+        <label class="field-label">👥 Quantidade de Jogadores</label>
+        <div class="player-count-selector">
+          <button class="player-count-btn active" onclick="setPlayerCount(1)" data-count="1">1</button>
+          <button class="player-count-btn" onclick="setPlayerCount(2)" data-count="2">2</button>
+          <button class="player-count-btn" onclick="setPlayerCount(3)" data-count="3">3</button>
+          <button class="player-count-btn" onclick="setPlayerCount(4)" data-count="4">4</button>
         </div>
       </div>
-      <button class="btn btn-gold" onclick="createRoom()">Criar Sala</button>
-      <hr class="divider">
+      
+      <!-- Fichas Iniciais -->
       <div class="field-group">
-        <div>
-          <div class="field-label">Código da Sala</div>
-          <input type="text" id="roomCodeInput" placeholder="Ex: ABCD" maxlength="4" style="text-transform:uppercase;letter-spacing:4px;text-align:center;" oninput="this.value=this.value.toUpperCase()"/>
+        <label class="field-label">💰 Fichas Iniciais</label>
+        <input type="number" id="chipInput" value="1000" min="100" max="100000" step="100"/>
+        <div class="quick-btns">
+          <button class="quick-btn" onclick="setVal('chipInput',500)">500</button>
+          <button class="quick-btn" onclick="setVal('chipInput',1000)">1K</button>
+          <button class="quick-btn" onclick="setVal('chipInput',5000)">5K</button>
+          <button class="quick-btn" onclick="setVal('chipInput',10000)">10K</button>
         </div>
       </div>
-      <button class="btn btn-outline" onclick="joinRoom()">Entrar na Sala</button>
-      <div id="lobbyMsg" class="msg-box" style="display:none;"></div>
+      
+      <!-- Incluir BOT (se Local) -->
+      <div class="field-group" id="botOption" style="display:none;">
+        <label class="field-label">
+          <input type="checkbox" id="includeBotCheckbox" checked style="margin-right:6px;"/>
+          🤖 Incluir BOT
+        </label>
+      </div>
+      
+      <div class="info-box" id="modeInfo">Crie uma sala e convide seus amigos!<br/>Máximo de <strong>4 jogadores</strong></div>
+      
+      <button class="btn btn-gold" onclick="createRoom()">🚀 Criar Sala</button>
+      
+      <div class="divider"></div>
+      
+      <!-- Entrar em Sala Existente -->
+      <div class="field-group">
+        <label class="field-label">🔑 Código da Sala</label>
+        <input type="text" id="roomCodeInput" placeholder="Ex: ABCD" maxlength="4" style="text-transform:uppercase;letter-spacing:4px;text-align:center;" oninput="this.value=this.value.toUpperCase();"/>
+      </div>
+      
+      <button class="btn btn-outline" onclick="joinRoom()">🔗 Entrar na Sala</button>
+      
+      <div id="lobbyMsg" class="msg-box"></div>
+    </div>
+    
+    <!-- SEÇÃO DIREITA: INFORMAÇÕES -->
+    <div class="lobby-section">
+      <h3>📋 Informações</h3>
+      
+      <div style="flex:1;display:flex;flex-direction:column;gap:12px;color:var(--text-dim);font-size:13px;">
+        <div>
+          <strong style="color:var(--gold);">🎯 Como Jogar:</strong>
+          <p style="margin-top:4px;line-height:1.4;">1. Digite seu nome<br/>2. Escolha quantos jogadores<br/>3. Crie uma sala ou entre em uma<br/>4. Aguarde os amigos chegarem<br/>5. Comece!</p>
+        </div>
+        
+        <div class="divider"></div>
+        
+        <div>
+          <strong style="color:var(--gold);">🌐 Modo Online:</strong>
+          <p style="margin-top:4px;line-height:1.4;">Jogue com amigos em qualquer lugar. Compartilhe o código da sala com eles!</p>
+        </div>
+        
+        <div class="divider"></div>
+        
+        <div>
+          <strong style="color:var(--gold);">💻 Modo Local:</strong>
+          <p style="margin-top:4px;line-height:1.4;">Jogue na mesma máquina. Opção de adicionar BOTs para completar os jogadores!</p>
+        </div>
+        
+        <div class="divider"></div>
+        
+        <div>
+          <strong style="color:var(--gold);">⚙️ Dicas:</strong>
+          <p style="margin-top:4px;line-height:1.4;">• Máximo 4 jogadores por sala<br/>• Conexão P2P sem servidor<br/>• Chat integrado durante o jogo</p>
+        </div>
+      </div>
+      
+      <div class="room-display" id="roomDisplaySection" style="display:none;">
+        <div class="room-label">Sua Sala foi Criada!</div>
+        <div class="room-code" id="displayRoomCode">----</div>
+        <div class="room-label">Compartilhe este código com seus amigos 👇</div>
+      </div>
     </div>
   </div>
 </div>
 
 <!-- WAITING SCREEN -->
 <div id="waiting-screen" class="screen">
-  <div style="flex:1;display:flex;align-items:center;justify-content:center;">
-    <div class="lobby-box">
-      <button class="btn-back" onclick="leaveRoom()">← Voltar</button>
-      <h2>SALA DE ESPERA</h2>
-      <div class="room-code-display">
-        <div style="font-size:12px;color:var(--text-dim);text-transform:uppercase;">Código da Sala</div>
-        <div class="room-code-val" id="displayRoomCode">----</div>
+  <div style="flex:1;display:flex;align-items:center;justify-content:center;width:100%;">
+    <div class="waiting-box">
+      <button class="btn-back" onclick="leaveRoom()" style="position:relative;margin-bottom:16px;">← Voltar</button>
+      <h2>⏳ Sala de Espera</h2>
+      
+      <div class="room-display">
+        <div class="room-label">Código da Sala</div>
+        <div class="room-code" id="waitingRoomCode">----</div>
       </div>
-      <div id="waitingPlayers" class="players-waiting"></div>
-      <div style="background:rgba(212,168,67,0.08);border:1px solid rgba(212,168,67,0.25);border-radius:8px;padding:10px 14px;font-size:13px;color:var(--text-dim);text-align:center;margin-bottom:12px">Fichas: <strong id="chipDisplay">1.000</strong></div>
-      <div id="waitingMsg" style="text-align:center;font-style:italic;color:var(--text-dim);font-size:14px;margin-bottom:12px">Aguardando jogadores...</div>
-      <button class="btn btn-gold" id="startBtn" onclick="startGame()" style="display:none;">Iniciar Jogo ▶</button>
-      <button class="btn btn-outline" onclick="leaveRoom()" style="margin-top:8px;">Sair</button>
+      
+      <div class="field-label" style="margin-top:16px;">Jogadores Conectados:</div>
+      <div class="players-list" id="waitingPlayersList"></div>
+      
+      <div class="info-box" style="margin-top:16px;">
+        Compartilhe o código <strong id="shareCode">----</strong> com seus amigos!
+      </div>
+      
+      <div id="waitingMsg" style="text-align:center;font-style:italic;color:var(--text-dim);font-size:14px;margin:16px 0;">Aguardando jogadores...</div>
+      
+      <button class="btn btn-gold" id="startBtn" onclick="startGame()" style="display:none;margin-top:12px;">▶️ Iniciar Jogo</button>
+      <button class="btn btn-outline" onclick="leaveRoom()" style="margin-top:8px;">❌ Sair</button>
     </div>
   </div>
 </div>
@@ -192,10 +310,10 @@
       </div>
     </div>
     <div class="game-actions" id="pokerActions">
-      <button class="btn btn-gold btn-sm" onclick="pokerCheck()">Check</button>
-      <button class="btn btn-outline btn-sm" onclick="pokerFold()">Fold</button>
-      <button class="btn btn-gold btn-sm" onclick="pokerRaise()">Raise 50</button>
-      <button class="btn btn-red btn-sm" onclick="pokerAllIn()">All In</button>
+      <button class="btn btn-gold" onclick="pokerCheck()">Check</button>
+      <button class="btn btn-outline" onclick="pokerFold()">Fold</button>
+      <button class="btn btn-gold" onclick="pokerRaise()">Raise 50</button>
+      <button class="btn btn-red" onclick="pokerAllIn()">All In</button>
     </div>
   </div>
   <div class="sidebar">
@@ -230,10 +348,10 @@
       </div>
     </div>
     <div class="game-actions" id="trucoActions">
-      <button class="btn btn-gold btn-sm" onclick="trucoPlay()">Jogar</button>
-      <button class="btn btn-outline btn-sm" onclick="trucoTruco()">Truco!</button>
-      <button class="btn btn-outline btn-sm" onclick="trucoCorro()">Corro</button>
-      <button class="btn btn-red btn-sm" onclick="trucoDeço()">Deço</button>
+      <button class="btn btn-gold" onclick="trucoPlay()">Jogar</button>
+      <button class="btn btn-outline" onclick="trucoTruco()">Truco!</button>
+      <button class="btn btn-outline" onclick="trucoCorro()">Corro</button>
+      <button class="btn btn-red" onclick="trucoDeço()">Deço</button>
     </div>
   </div>
   <div class="sidebar">
@@ -270,10 +388,10 @@
       <div>Fichas: <strong id="blackjackChips">1000</strong> 💰</div>
     </div>
     <div class="game-actions" id="blackjackActions">
-      <button class="btn btn-gold btn-sm" onclick="blackjackHit()">Hit</button>
-      <button class="btn btn-outline btn-sm" onclick="blackjackStand()">Stand</button>
-      <button class="btn btn-gold btn-sm" onclick="blackjackDouble()">Double</button>
-      <button class="btn btn-red btn-sm" onclick="blackjackSurrender()">Surrender</button>
+      <button class="btn btn-gold" onclick="blackjackHit()">Hit</button>
+      <button class="btn btn-outline" onclick="blackjackStand()">Stand</button>
+      <button class="btn btn-gold" onclick="blackjackDouble()">Double</button>
+      <button class="btn btn-red" onclick="blackjackSurrender()">Surrender</button>
     </div>
   </div>
   <div class="sidebar">
@@ -303,18 +421,43 @@
 // ═══════════════════════════════════════════════════════
 
 let currentGame = 'poker', myName = '', myId = '', roomCode = '', isHost = false;
+let gameMode = 'online', selectedPlayerCount = 1, includeBot = true;
 let gamePhase = 'menu', peer = null, peerConns = [];
 let myChips = 1000;
 
 // UI HELPERS
 function setStatus(txt) { document.getElementById('connStatus').textContent = txt; }
 function showScreen(id) { document.querySelectorAll('.screen').forEach(s => s.classList.remove('active')); document.getElementById(id).classList.add('active'); }
-function showLobbyMsg(msg, type = '') { const el = document.getElementById('lobbyMsg'); el.textContent = msg; el.className = 'msg-box' + (type ? ' ' + type : ''); el.style.display = 'block'; }
+function showLobbyMsg(msg, type = '') { const el = document.getElementById('lobbyMsg'); el.textContent = msg; el.className = 'msg-box show' + (type ? ' ' + type : ''); }
 function setVal(id, val) { document.getElementById(id).value = val; }
 function genId() { return Math.random().toString(36).substr(2, 9); }
 function genCode() { const c = 'ABCDEFGHJKLMNPQRSTUVWXYZ'; return Array.from({length:4}, () => c[Math.floor(Math.random()*c.length)]).join(''); }
 function showLoading(txt) { document.getElementById('loadingOverlay').classList.add('show'); document.getElementById('loadingText').textContent = txt || 'Carregando...'; }
 function hideLoading() { document.getElementById('loadingOverlay').classList.remove('show'); }
+
+// NOVA: Funções do Lobby
+function setGameMode(mode) {
+  gameMode = mode;
+  document.querySelectorAll('.mode-btn').forEach(btn => btn.classList.remove('active'));
+  document.querySelector(`[data-mode="${mode}"]`).classList.add('active');
+  
+  const botOption = document.getElementById('botOption');
+  const modeInfo = document.getElementById('modeInfo');
+  
+  if (mode === 'local') {
+    botOption.style.display = 'block';
+    modeInfo.innerHTML = 'Jogue na mesma máquina com amigos ou contra BOTs!';
+  } else {
+    botOption.style.display = 'none';
+    modeInfo.innerHTML = 'Crie uma sala e convide seus amigos!<br/>Máximo de <strong>4 jogadores</strong>';
+  }
+}
+
+function setPlayerCount(count) {
+  selectedPlayerCount = count;
+  document.querySelectorAll('.player-count-btn').forEach(btn => btn.classList.remove('active'));
+  document.querySelector(`[data-count="${count}"]`).classList.add('active');
+}
 
 // LOG & CHAT
 function addLog(game, msg, type = '') {
@@ -363,8 +506,8 @@ function destroyPeer() {
 // MENU
 function selectGame(game) {
   currentGame = game;
-  const names = {'poker': 'POKER', 'truco': 'TRUCO', 'blackjack': 'BLACKJACK'};
-  document.getElementById('lobbyTitle').textContent = names[game];
+  const names = {'poker': '♠️ POKER', 'truco': '🎯 TRUCO', 'blackjack': '🖤 BLACKJACK'};
+  document.getElementById('gameTitle').textContent = names[game];
   showScreen('lobby');
   gamePhase = 'lobby';
 }
@@ -380,60 +523,98 @@ function backToMenu() {
 function createRoom() {
   const name = document.getElementById('nameInput').value.trim();
   if (!name) { showLobbyMsg('Digite seu nome!', 'error'); return; }
+  if (gameMode === 'online' && selectedPlayerCount < 1) { showLobbyMsg('Escolha a quantidade de jogadores!', 'error'); return; }
+  
   myChips = parseInt(document.getElementById('chipInput').value) || 1000;
   myName = name; myId = genId(); roomCode = genCode(); isHost = true;
-  showLoading('Criando sala...');
-  destroyPeer();
-
-  peer = new Peer('game'+currentGame+roomCode, {
-    debug: 0,
-    config: {
-      iceServers: [
-        {urls: 'stun:stun.l.google.com:19302'},
-        {urls: 'stun:stun1.l.google.com:19302'}
-      ]
-    }
-  });
-
-  peer.on('open', () => {
-    peer.on('connection', (conn) => {
-      const entry = {conn, playerId: null, playerName: '', playerChips: 0};
-      peerConns.push(entry);
-      conn.on('data', (msg) => {
-        if (msg.type === 'join') {
-          entry.playerId = msg.playerId;
-          entry.playerName = msg.playerName;
-          entry.playerChips = msg.chips;
-          updateWaitingRoom();
-        } else if (msg.type === 'chat') {
-          addChatMsg(msg.game, msg.player, msg.message);
-        }
-      });
-      conn.on('close', () => {
-        peerConns = peerConns.filter(e => e !== entry);
-        updateWaitingRoom();
-      });
+  
+  if (gameMode === 'local') {
+    // Modo Local: Simular até 4 jogadores
+    showLocalGameSetup();
+  } else {
+    // Modo Online: P2P
+    showLoading('Criando sala online...');
+    destroyPeer();
+    
+    peer = new Peer('game'+currentGame+roomCode, {
+      debug: 0,
+      config: {
+        iceServers: [
+          {urls: 'stun:stun.l.google.com:19302'},
+          {urls: 'stun:stun1.l.google.com:19302'}
+        ]
+      }
     });
-    hideLoading();
-    showScreen('waiting-screen');
-    document.getElementById('displayRoomCode').textContent = roomCode;
-    document.getElementById('chipDisplay').textContent = myChips.toLocaleString('pt-BR');
-    updateWaitingRoom();
-    setStatus('✅ sala criada');
-  });
-
-  peer.on('error', (err) => {
-    destroyPeer(); hideLoading();
-    showLobbyMsg('Erro ao criar sala: '+(err.type||'desconhecido'), 'error');
-    setStatus('❌ erro');
-  });
-
-  setTimeout(() => {
-    if (gamePhase === 'lobby') {
+    
+    peer.on('open', () => {
+      peer.on('connection', (conn) => {
+        const entry = {conn, playerId: null, playerName: '', playerChips: 0};
+        peerConns.push(entry);
+        conn.on('data', (msg) => {
+          if (msg.type === 'join') {
+            entry.playerId = msg.playerId;
+            entry.playerName = msg.playerName;
+            entry.playerChips = msg.chips;
+            updateWaitingRoom();
+          } else if (msg.type === 'chat') {
+            addChatMsg(msg.game, msg.player, msg.message);
+          }
+        });
+        conn.on('close', () => {
+          peerConns = peerConns.filter(e => e !== entry);
+          updateWaitingRoom();
+        });
+      });
+      hideLoading();
+      showScreen('waiting-screen');
+      document.getElementById('waitingRoomCode').textContent = roomCode;
+      document.getElementById('shareCode').textContent = roomCode;
+      document.getElementById('roomDisplaySection').style.display = 'block';
+      document.getElementById('displayRoomCode').textContent = roomCode;
+      updateWaitingRoom();
+      setStatus('✅ sala criada');
+    });
+    
+    peer.on('error', (err) => {
       destroyPeer(); hideLoading();
-      showLobbyMsg('Timeout ao criar sala.', 'error');
-    }
-  }, 15000);
+      showLobbyMsg('Erro ao criar sala: '+(err.type||'desconhecido'), 'error');
+      setStatus('❌ erro');
+    });
+    
+    setTimeout(() => {
+      if (gamePhase === 'lobby') {
+        destroyPeer(); hideLoading();
+        showLobbyMsg('Timeout ao criar sala.', 'error');
+      }
+    }, 15000);
+  }
+}
+
+function showLocalGameSetup() {
+  // Simulação: Ir direto para a tela de espera
+  hideLoading();
+  showScreen('waiting-screen');
+  roomCode = 'LOCAL';
+  document.getElementById('waitingRoomCode').textContent = 'LOCAL';
+  document.getElementById('shareCode').textContent = 'Local';
+  
+  // Simular outros jogadores + BOT se necessário
+  peerConns = [];
+  for (let i = 0; i < selectedPlayerCount - 1; i++) {
+    const botNames = ['Bot Alpha', 'Bot Beta', 'Bot Gamma', 'Bot Delta'];
+    peerConns.push({
+      conn: null,
+      playerId: 'bot_' + i,
+      playerName: botNames[i] || 'Bot ' + (i+1),
+      playerChips: myChips
+    });
+  }
+  
+  updateWaitingRoom();
+  setStatus('✅ sala local criada');
+  setTimeout(() => {
+    document.getElementById('startBtn').style.display = 'block';
+  }, 500);
 }
 
 function joinRoom() {
@@ -457,12 +638,14 @@ function joinRoom() {
       conn.send({type: 'join', playerId: myId, playerName: myName, chips: myChips});
       hideLoading();
       showScreen('waiting-screen');
-      document.getElementById('chipDisplay').textContent = myChips.toLocaleString('pt-BR');
+      document.getElementById('waitingRoomCode').textContent = code;
+      document.getElementById('shareCode').textContent = code;
       setStatus('✅ conectado');
     });
 
     conn.on('data', (msg) => {
       if (msg.type === 'chat') addChatMsg(msg.game, msg.player, msg.message);
+      if (msg.type === 'game_start') launchGame();
     });
 
     conn.on('close', () => { hideLoading(); showLobbyMsg('Desconectado.', 'error'); showScreen('lobby'); setStatus('✅ pronto'); });
@@ -481,28 +664,41 @@ function leaveRoom() {
 }
 
 function updateWaitingRoom() {
-  let html = `<div class="player-slot"><div class="dot"></div><span class="player-you">${myName} (você)</span></div>`;
-  peerConns.forEach(e => { if (e.playerName) html += `<div class="player-slot"><div class="dot"></div><span>${e.playerName}</span></div>`; });
-  document.getElementById('waitingPlayers').innerHTML = html;
+  let html = `<div class="player-item you"><div class="dot"></div><span>${myName} (você)</span></div>`;
+  peerConns.forEach(e => { 
+    if (e.playerName) {
+      const isBOT = e.playerId && e.playerId.startsWith('bot_');
+      html += `<div class="player-item"><div class="dot"></div><span>${e.playerName}${isBOT ? ' 🤖' : ''}</span></div>`;
+    }
+  });
+  document.getElementById('waitingPlayersList').innerHTML = html;
 
   const msg = document.getElementById('waitingMsg');
   const btn = document.getElementById('startBtn');
-  if (isHost && peerConns.length >= 1) {
-    msg.textContent = 'Pronto para começar!';
-    btn.style.display = 'block';
-  } else if (peerConns.length < 1 && isHost) {
-    msg.textContent = 'Aguardando jogadores...';
-    btn.style.display = 'none';
+  const totalPlayers = peerConns.length + 1;
+  
+  if (isHost) {
+    if (totalPlayers >= 2 || gameMode === 'local') {
+      msg.textContent = `${totalPlayers} jogadores conectados. Pronto para começar!`;
+      btn.style.display = 'block';
+    } else {
+      msg.textContent = `${totalPlayers} jogador conectado. Aguardando mais...`;
+      btn.style.display = 'none';
+    }
   } else {
-    msg.textContent = `${peerConns.length + 1} jogadores. Aguardando...`;
+    msg.textContent = `${totalPlayers} jogadores. Aguardando host iniciar...`;
     btn.style.display = 'none';
   }
 }
 
 function startGame() {
   if (!isHost) return;
-  broadcastToAll({type: 'game_start', game: currentGame});
-  launchGame();
+  if (gameMode === 'local') {
+    launchGame();
+  } else {
+    broadcastToAll({type: 'game_start', game: currentGame});
+    launchGame();
+  }
 }
 
 function launchGame() {
@@ -529,7 +725,7 @@ function createDeck() {
 }
 
 function initPokerGame() {
-  addLog('poker', 'Bem-vindo ao Poker! 🎰', 'hi');
+  addLog('poker', 'Bem-vindo ao Poker! ♠️', 'hi');
   pokerState = { round: 1, phase: 'preflop', players: [{id: myId, name: myName, chips: myChips, hand: [], bet: 0, folded: false, active: true}], pot: 0, board: [], currentBet: 0, deck: createDeck() };
   peerConns.forEach(e => {
     if (e.playerName) pokerState.players.push({id: e.playerId, name: e.playerName, chips: e.playerChips, hand: [], bet: 0, folded: false, active: true});
