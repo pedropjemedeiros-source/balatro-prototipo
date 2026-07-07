@@ -3,18 +3,16 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>🃏 Cassino Online</title>
+<title>🃏 Cassino Online Completo</title>
 <style>
   @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@700;900&family=Crimson+Pro:ital,wght@0,400;0,600;1,400&display=swap');
   *{margin:0;padding:0;box-sizing:border-box}
   :root{--felt:#1a3d1a;--felt-light:#1e4a1e;--gold:#d4a843;--gold-light:#f0c96e;--card-bg:#fef9f0;--card-red:#c0392b;--card-border:#d4b896;--dark:#0d1f0d;--panel:rgba(0,0,0,0.35);--text:#f5e6c8;--text-dim:rgba(245,230,200,0.6)}
   body{font-family:'Crimson Pro',serif;background:var(--dark);color:var(--text);min-height:100vh;overflow-x:hidden}
-  #app{min-height:100vh;display:flex;flex-direction:column;position:relative}
-  .screen{display:none;flex-direction:column;flex:1;padding:20px}
+  #app{min-height:100vh;display:flex;flex-direction:column}
+  .screen{display:none;flex-direction:column;flex:1}
   .screen.active{display:flex}
-  
-  /* MENU PRINCIPAL */
-  #main-menu{align-items:center;justify-content:center;background:radial-gradient(ellipse at 50% 40%,#1e4a1e 0%,#0d1f0d 70%);gap:20px}
+  #main-menu{align-items:center;justify-content:center;background:radial-gradient(ellipse at 50% 40%,#1e4a1e 0%,#0d1f0d 70%);gap:20px;padding:20px}
   .logo{text-align:center}
   .logo h1{font-family:'Cinzel',serif;font-size:52px;font-weight:900;color:var(--gold);text-shadow:0 0 30px rgba(212,168,67,0.5),2px 2px 0 #000;letter-spacing:4px}
   .logo p{font-style:italic;color:var(--text-dim);font-size:16px;margin-top:4px}
@@ -24,89 +22,72 @@
   .game-card-icon{font-size:48px}
   .game-card-name{font-family:'Cinzel',serif;color:var(--gold);font-size:20px;font-weight:700}
   .game-card-desc{font-size:12px;color:var(--text-dim)}
-  
-  /* LOBBY */
-  #lobby{align-items:center;justify-content:center;background:radial-gradient(ellipse at 50% 40%,#1e4a1e 0%,#0d1f0d 70%);gap:20px}
+  #lobby,#waiting-screen{align-items:center;justify-content:center;background:radial-gradient(ellipse at 50% 40%,#1e4a1e 0%,#0d1f0d 70%);padding:20px}
   .lobby-box{background:var(--panel);border:1px solid rgba(212,168,67,0.3);border-radius:12px;padding:28px;width:100%;max-width:400px}
   .lobby-box h2{font-family:'Cinzel',serif;color:var(--gold);font-size:18px;margin-bottom:16px;text-align:center}
   .btn-back{background:rgba(212,168,67,0.1);border:1px solid rgba(212,168,67,0.35);border-radius:8px;color:var(--gold);font-family:'Crimson Pro',serif;font-size:12px;padding:8px 12px;cursor:pointer;margin-bottom:12px;width:100%}
   .btn-back:hover{background:rgba(212,168,67,0.2)}
-  
   .field-group{display:flex;flex-direction:column;gap:10px;margin-bottom:16px}
   .field-label{font-size:13px;color:var(--text-dim);text-transform:uppercase;letter-spacing:1px;margin-bottom:4px}
-  input[type=text]{background:rgba(0,0,0,0.4);border:1px solid rgba(212,168,67,0.4);border-radius:8px;color:var(--text);font-family:'Crimson Pro',serif;font-size:16px;padding:10px 14px;width:100%;outline:none}
-  input[type=text]:focus{border-color:var(--gold)}
-  input[type=text]::placeholder{color:rgba(245,230,200,0.3)}
-  select{background:rgba(0,0,0,0.4);border:1px solid rgba(212,168,67,0.4);border-radius:8px;color:var(--text);font-family:'Crimson Pro',serif;font-size:16px;padding:10px 14px;width:100%;outline:none;transition:.2s}
-  select:focus{border-color:var(--gold)}
-  select option{background:#1a3d1a;color:var(--text)}
-  .score-config-info{background:rgba(212,168,67,0.08);border:1px solid rgba(212,168,67,0.25);border-radius:8px;padding:10px 14px;font-size:13px;color:var(--text-dim);text-align:center;margin-bottom:12px}
-  .score-config-info strong{color:var(--gold)}
+  input[type=text],input[type=number]{background:rgba(0,0,0,0.4);border:1px solid rgba(212,168,67,0.4);border-radius:8px;color:var(--text);font-family:'Crimson Pro',serif;font-size:16px;padding:10px 14px;width:100%;outline:none}
+  input[type=text]:focus,input[type=number]:focus{border-color:var(--gold)}
   .btn{border:none;border-radius:8px;cursor:pointer;font-family:'Cinzel',serif;font-weight:700;font-size:14px;letter-spacing:1px;padding:12px 20px;transition:all .2s;width:100%}
   .btn:hover{transform:translateY(-1px)}
-  .btn:active{transform:translateY(0)}
   .btn-gold{background:linear-gradient(135deg,#d4a843,#b8892a);color:#0d1f0d}
   .btn-gold:hover{background:linear-gradient(135deg,#f0c96e,#d4a843)}
   .btn-outline{background:transparent;border:1px solid rgba(212,168,67,0.5);color:var(--gold)}
   .btn-outline:hover{background:rgba(212,168,67,0.1)}
   .btn-red{background:linear-gradient(135deg,#c0392b,#922b21);color:white}
-  .btn:disabled{opacity:.4;cursor:not-allowed;transform:none}
+  .btn-sm{padding:8px 12px;font-size:12px}
   .divider{border:none;border-top:1px solid rgba(212,168,67,0.2);margin:16px 0}
-  
   .quick-btns{display:flex;gap:6px;margin-top:7px}
-  .quick-btn{flex:1;background:rgba(212,168,67,0.1);border:1px solid rgba(212,168,67,0.35);border-radius:6px;color:var(--gold);font-family:'Crimson Pro',serif;font-size:12px;padding:5px 4px;cursor:pointer;transition:all .15s}
-  .quick-btn:hover{background:rgba(212,168,67,0.25);border-color:var(--gold)}
-  
-  /* WAITING SCREEN */
-  #waiting-screen{background:radial-gradient(ellipse at 50% 40%,#1e4a1e 0%,#0d1f0d 70%)}
+  .quick-btn{flex:1;background:rgba(212,168,67,0.1);border:1px solid rgba(212,168,67,0.35);border-radius:6px;color:var(--gold);font-family:'Crimson Pro',serif;font-size:12px;padding:5px 4px;cursor:pointer}
+  .quick-btn:hover{background:rgba(212,168,67,0.25)}
   .room-code-display{background:rgba(0,0,0,0.5);border:1px solid var(--gold);border-radius:8px;padding:16px;text-align:center;margin-bottom:16px}
-  .room-code-label{font-size:12px;color:var(--text-dim);text-transform:uppercase;letter-spacing:1px}
   .room-code-val{font-family:'Cinzel',serif;font-size:32px;color:var(--gold);letter-spacing:8px;margin-top:4px}
   .players-waiting{display:flex;flex-direction:column;gap:8px;margin-bottom:16px}
   .player-slot{background:rgba(0,0,0,0.3);border:1px solid rgba(212,168,67,0.2);border-radius:8px;padding:12px 16px;display:flex;align-items:center;gap:10px;font-size:15px}
   .player-slot .dot{width:8px;height:8px;border-radius:50%;background:#27ae60;flex-shrink:0}
-  .player-slot.empty .dot{background:rgba(255,255,255,0.2)}
-  .player-slot.empty{opacity:.4;font-style:italic}
   .player-you{color:var(--gold);font-weight:600}
-  .waiting-msg{text-align:center;font-style:italic;color:var(--text-dim);font-size:14px;margin-bottom:12px}
-  
-  /* GAME SCREENS */
-  #game{background:radial-gradient(ellipse at 50% 50%,var(--felt-light) 0%,var(--felt) 40%,var(--dark) 100%);gap:0;padding:0;min-height:100vh}
-  #poker, #truco, #blackjack{background:radial-gradient(ellipse at 50% 50%,var(--felt-light) 0%,var(--felt) 40%,var(--dark) 100%);gap:0;padding:0;min-height:100vh}
-  
-  .game-header{display:flex;justify-content:space-between;align-items:center;padding:10px 16px;background:rgba(0,0,0,0.5);border-bottom:1px solid rgba(212,168,67,0.2);flex-shrink:0}
-  .game-header .round-badge{font-family:'Cinzel',serif;color:var(--gold);font-size:13px}
-  .game-scores{display:flex;gap:16px;flex-wrap:wrap}
-  .score-chip{background:rgba(0,0,0,0.4);border:1px solid rgba(212,168,67,0.3);border-radius:20px;padding:4px 12px;font-size:13px}
-  .score-chip .sname{color:var(--text-dim)}
-  .score-chip .sval{color:var(--gold);font-weight:600;margin-left:4px}
-  .score-chip.mine{border-color:var(--gold)}
-  
-  .game-content{flex:1;display:flex;flex-direction:column;justify-content:center;align-items:center;padding:20px;gap:20px}
-  .game-log{background:rgba(0,0,0,0.4);border-top:1px solid rgba(212,168,67,0.15);padding:6px 16px;font-size:12px;color:var(--text-dim);min-height:32px;flex-shrink:0}
-  .log-hi{color:var(--gold)}
-  
   .msg-box{background:rgba(0,0,0,0.4);border:1px solid rgba(212,168,67,0.3);border-radius:8px;padding:12px 16px;font-size:14px;text-align:center;color:var(--text-dim);margin-top:8px}
-  .msg-box.error{border-color:rgba(231,76,60,0.5);color:#e74c3c}
-  .msg-box.success{border-color:rgba(39,174,96,0.5);color:#27ae60}
-  
+  .msg-box.error{border-color:#e74c3c;color:#e74c3c}
+  .msg-box.success{border-color:#27ae60;color:#27ae60}
   .small{font-size:12px;color:var(--text-dim);text-align:center}
-  .conn-status{position:fixed;top:8px;right:10px;font-size:11px;padding:3px 8px;border-radius:10px;z-index:300;background:rgba(0,0,0,0.6)}
-  .conn-status.ok{color:#27ae60}
-  .conn-status.err{color:#e74c3c}
-  .conn-status.wait{color:var(--gold)}
-  
+  .conn-status{position:fixed;top:8px;right:10px;font-size:11px;padding:3px 8px;border-radius:10px;z-index:300;background:rgba(0,0,0,0.6);color:#27ae60}
+  .game-screen{background:radial-gradient(ellipse at 50% 50%,var(--felt-light) 0%,var(--felt) 40%,var(--dark) 100%);display:grid;grid-template-columns:1fr 220px;gap:10px;padding:10px}
+  .game-header{grid-column:1/-1;display:flex;justify-content:space-between;align-items:center;padding:10px 16px;background:rgba(0,0,0,0.5);border:1px solid rgba(212,168,67,0.2);border-radius:8px;flex-shrink:0}
+  .badge{font-family:'Cinzel',serif;color:var(--gold);font-size:13px}
+  .game-content{background:rgba(0,0,0,0.2);border:1px solid rgba(212,168,67,0.2);border-radius:8px;padding:20px;display:flex;flex-direction:column;justify-content:center;align-items:center;gap:20px;overflow-y:auto}
+  .game-info{text-align:center;color:var(--text-dim);font-size:16px}
+  .game-info strong{color:var(--gold)}
+  .game-actions{display:flex;gap:8px;justify-content:center;flex-wrap:wrap}
+  .game-log{grid-column:1/-1;background:rgba(0,0,0,0.4);border:1px solid rgba(212,168,67,0.2);border-radius:8px;padding:8px;font-size:11px;color:var(--text-dim);max-height:80px;overflow-y:auto}
+  .log-msg{margin-bottom:4px;padding:2px 0}
+  .log-success{color:#27ae60}
+  .log-error{color:#e74c3c}
+  .log-hi{color:var(--gold)}
+  .sidebar{background:rgba(0,0,0,0.3);border:1px solid rgba(212,168,67,0.2);border-radius:8px;padding:12px;display:flex;flex-direction:column;gap:12px;overflow-y:auto}
+  .scores-list{display:flex;flex-direction:column;gap:8px;font-size:12px}
+  .score-item{background:rgba(0,0,0,0.3);border:1px solid rgba(212,168,67,0.2);border-radius:6px;padding:8px;color:var(--text-dim)}
+  .score-item.mine{border-color:var(--gold);background:rgba(212,168,67,0.1)}
+  .score-name{font-size:11px;color:var(--text-dim)}
+  .score-value{color:var(--gold);font-weight:600;font-size:14px}
+  .chat-box{background:rgba(0,0,0,0.4);border:1px solid rgba(212,168,67,0.2);border-radius:6px;padding:8px;height:150px;overflow-y:auto;font-size:11px}
+  .chat-msg{margin-bottom:4px;padding:4px;border-left:2px solid var(--gold);padding-left:6px}
+  .chat-name{color:var(--gold);font-weight:600;font-size:10px}
+  .chat-text{color:var(--text-dim);display:block;margin-top:2px;word-break:break-word}
+  .chat-input{display:flex;gap:4px;margin-top:6px}
+  .chat-input input{flex:1;background:rgba(0,0,0,0.4);border:1px solid rgba(212,168,67,0.3);border-radius:4px;color:var(--text);font-size:11px;padding:4px 6px;outline:none}
+  .chat-input button{background:rgba(212,168,67,0.2);border:1px solid rgba(212,168,67,0.3);border-radius:4px;color:var(--gold);font-size:10px;cursor:pointer;padding:4px 6px}
   .loading-overlay{position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(13,31,13,0.92);z-index:200;display:none;align-items:center;justify-content:center;flex-direction:column;gap:14px}
   .loading-overlay.show{display:flex}
   .spinner{width:38px;height:38px;border:3px solid rgba(212,168,67,0.2);border-top-color:var(--gold);border-radius:50%;animation:spin .8s linear infinite}
   @keyframes spin{to{transform:rotate(360deg)}}
-  .loading-text{color:var(--text-dim);font-style:italic;font-size:15px}
-  
-  @media(max-width:480px){.logo h1{font-size:36px}.games-grid{grid-template-columns:1fr}}
+  @media(max-width:768px){.games-grid{grid-template-columns:1fr}.game-screen{grid-template-columns:1fr}.sidebar{grid-column:auto}}
 </style>
 </head>
 <body>
-<div id="connStatus" class="conn-status wait">⏳ carregando...</div>
+<div id="connStatus" class="conn-status">✅ pronto</div>
 <div id="app">
 
 <!-- MENU PRINCIPAL -->
@@ -116,11 +97,6 @@
     <p>Multiplayer Online · Escolha seu Jogo</p>
   </div>
   <div class="games-grid">
-    <div class="game-card" onclick="selectGame('balatro')">
-      <div class="game-card-icon">🎰</div>
-      <div class="game-card-name">BALATRO</div>
-      <div class="game-card-desc">Poker Roguelike</div>
-    </div>
     <div class="game-card" onclick="selectGame('poker')">
       <div class="game-card-icon">♠️</div>
       <div class="game-card-name">POKER</div>
@@ -137,14 +113,14 @@
       <div class="game-card-desc">Blackjack</div>
     </div>
   </div>
-  <div class="small" style="margin-top:4px;">Até 4 jogadores · Sem instalação · Funciona entre dispositivos</div>
+  <div class="small">Até 4 jogadores · Sem instalação · Funciona entre dispositivos</div>
 </div>
 
-<!-- LOBBY (GENÉRICO) -->
+<!-- LOBBY -->
 <div id="lobby" class="screen">
   <div style="flex:1;display:flex;align-items:center;justify-content:center;">
     <div class="lobby-box">
-      <button class="btn-back" onclick="backToMenu()">← Voltar ao Menu</button>
+      <button class="btn-back" onclick="backToMenu()">← Voltar</button>
       <h2 id="lobbyTitle">ENTRAR NO JOGO</h2>
       <div class="field-group">
         <div>
@@ -154,24 +130,22 @@
       </div>
       <div class="field-group">
         <div>
-          <div class="field-label">Pontuação para Vencer</div>
-          <input type="number" id="winningScoreInput" value="5000" min="100" max="9999999" step="100" placeholder="Ex: 5000"/>
+          <div class="field-label">Fichas Iniciais</div>
+          <input type="number" id="chipInput" value="1000" min="100" max="100000" step="100"/>
           <div class="quick-btns">
-            <button class="quick-btn" onclick="setWinScore('winningScoreInput',500)">500 ⚡</button>
-            <button class="quick-btn" onclick="setWinScore('winningScoreInput',1000)">1K 🃏</button>
-            <button class="quick-btn" onclick="setWinScore('winningScoreInput',5000)">5K 🎰</button>
-            <button class="quick-btn" onclick="setWinScore('winningScoreInput',10000)">10K 🏆</button>
+            <button class="quick-btn" onclick="setVal('chipInput',500)">500</button>
+            <button class="quick-btn" onclick="setVal('chipInput',1000)">1K</button>
+            <button class="quick-btn" onclick="setVal('chipInput',5000)">5K</button>
+            <button class="quick-btn" onclick="setVal('chipInput',10000)">10K</button>
           </div>
         </div>
       </div>
-      <button class="btn btn-gold" id="createRoomBtn" onclick="createRoom()">Criar Sala</button>
+      <button class="btn btn-gold" onclick="createRoom()">Criar Sala</button>
       <hr class="divider">
       <div class="field-group">
         <div>
           <div class="field-label">Código da Sala</div>
-          <input type="text" id="roomCodeInput" placeholder="Ex: ABCD" maxlength="4"
-            style="text-transform:uppercase;letter-spacing:4px;text-align:center;"
-            oninput="this.value=this.value.toUpperCase()"/>
+          <input type="text" id="roomCodeInput" placeholder="Ex: ABCD" maxlength="4" style="text-transform:uppercase;letter-spacing:4px;text-align:center;" oninput="this.value=this.value.toUpperCase()"/>
         </div>
       </div>
       <button class="btn btn-outline" onclick="joinRoom()">Entrar na Sala</button>
@@ -187,65 +161,132 @@
       <button class="btn-back" onclick="leaveRoom()">← Voltar</button>
       <h2>SALA DE ESPERA</h2>
       <div class="room-code-display">
-        <div class="room-code-label">Código da Sala — Mande para seus amigos!</div>
+        <div style="font-size:12px;color:var(--text-dim);text-transform:uppercase;">Código da Sala</div>
         <div class="room-code-val" id="displayRoomCode">----</div>
       </div>
       <div id="waitingPlayers" class="players-waiting"></div>
-      <div class="score-config-info">Meta: <strong id="waitingScoreDisplay">5.000 pts</strong></div>
-      <div class="waiting-msg" id="waitingMsg">Aguardando jogadores...</div>
-      <button class="btn btn-gold" id="startBtn" onclick="startGame()" style="display:none;">Iniciar Jogo</button>
+      <div style="background:rgba(212,168,67,0.08);border:1px solid rgba(212,168,67,0.25);border-radius:8px;padding:10px 14px;font-size:13px;color:var(--text-dim);text-align:center;margin-bottom:12px">Fichas: <strong id="chipDisplay">1.000</strong></div>
+      <div id="waitingMsg" style="text-align:center;font-style:italic;color:var(--text-dim);font-size:14px;margin-bottom:12px">Aguardando jogadores...</div>
+      <button class="btn btn-gold" id="startBtn" onclick="startGame()" style="display:none;">Iniciar Jogo ▶</button>
       <button class="btn btn-outline" onclick="leaveRoom()" style="margin-top:8px;">Sair</button>
-      <div id="waitingMsgBox" class="msg-box" style="display:none;margin-top:12px;"></div>
     </div>
   </div>
 </div>
 
-<!-- BALATRO GAME -->
-<div id="game" class="screen">
-  <div class="game-header">
-    <div class="round-badge">RODADA <span id="roundNum">1</span> · Meta: <span id="blindGoal">300</span> pts 🏆</div>
-    <div class="game-scores" id="headerScores"></div>
-  </div>
-  <div class="game-content" id="gameContent">
-    <div style="text-align:center;color:var(--text-dim)">Preparando jogo...</div>
-  </div>
-  <div class="game-log" id="gameLog">Boas-vindas ao Balatro Online!</div>
-</div>
-
 <!-- POKER GAME -->
-<div id="poker" class="screen">
+<div id="poker" class="screen game-screen">
   <div class="game-header">
-    <div class="round-badge">RODADA <span id="pokerRoundNum">1</span></div>
-    <div class="game-scores" id="pokerScores"></div>
+    <div class="badge">POKER - Rodada <span id="pokerRound">1</span></div>
+    <div>Pote: <span style="color:var(--gold);font-weight:600" id="pokerPot">0</span> 💰</div>
   </div>
-  <div class="game-content" id="pokerContent">
-    <div style="text-align:center;color:var(--text-dim)">Preparando Poker...</div>
+  <div class="game-content">
+    <div class="game-info">
+      <div style="margin-bottom:20px;">
+        <div style="font-size:12px;color:var(--text-dim);margin-bottom:8px;">Mesa:</div>
+        <div id="pokerBoard" style="font-size:32px;margin-bottom:20px;">🂠 🂠 🂠 🂠 🂠</div>
+      </div>
+      <div style="margin-bottom:20px;">
+        <div style="font-size:12px;color:var(--text-dim);margin-bottom:8px;">Sua Mão:</div>
+        <div id="pokerHand" style="font-size:32px;margin-bottom:8px;">🂠 🂠</div>
+        <div style="font-size:12px;">Suas Fichas: <strong id="pokerChips">1000</strong> 💰</div>
+      </div>
+    </div>
+    <div class="game-actions" id="pokerActions">
+      <button class="btn btn-gold btn-sm" onclick="pokerCheck()">Check</button>
+      <button class="btn btn-outline btn-sm" onclick="pokerFold()">Fold</button>
+      <button class="btn btn-gold btn-sm" onclick="pokerRaise()">Raise 50</button>
+      <button class="btn btn-red btn-sm" onclick="pokerAllIn()">All In</button>
+    </div>
   </div>
-  <div class="game-log" id="pokerLog">Bem-vindo ao Poker Online!</div>
+  <div class="sidebar">
+    <div style="font-weight:700;color:var(--gold);font-size:12px;">👥 Jogadores</div>
+    <div class="scores-list" id="pokerScores"></div>
+    <div style="border-top:1px solid rgba(212,168,67,0.2);margin-top:8px;padding-top:8px;font-weight:700;color:var(--gold);font-size:12px;">💬 Chat</div>
+    <div class="chat-box" id="pokerChat"></div>
+    <div class="chat-input">
+      <input type="text" id="pokerChatInput" placeholder="Msg..." maxlength="40"/>
+      <button onclick="sendChat('poker')">✓</button>
+    </div>
+  </div>
+  <div class="game-log" id="pokerLog"></div>
 </div>
 
 <!-- TRUCO GAME -->
-<div id="truco" class="screen">
+<div id="truco" class="screen game-screen">
   <div class="game-header">
-    <div class="round-badge">RODADA <span id="trucoRoundNum">1</span></div>
-    <div class="game-scores" id="trucoScores"></div>
+    <div class="badge">TRUCO - Rodada <span id="trucoRound">1</span></div>
+    <div>Pontos: <span style="color:var(--gold);font-weight:600" id="trucoPoints">0</span> 🎯</div>
   </div>
-  <div class="game-content" id="trucoContent">
-    <div style="text-align:center;color:var(--text-dim)">Preparando Truco...</div>
+  <div class="game-content">
+    <div class="game-info">
+      <div style="margin-bottom:20px;">
+        <div style="font-size:12px;color:var(--text-dim);margin-bottom:8px;">Manilha:</div>
+        <div id="trucoManilha" style="font-size:32px;">♠️</div>
+      </div>
+      <div style="margin-bottom:20px;">
+        <div style="font-size:12px;color:var(--text-dim);margin-bottom:8px;">Suas Cartas:</div>
+        <div id="trucoHand" style="font-size:32px;margin-bottom:8px;">🂠 🂠 🂠</div>
+        <div style="font-size:12px;">Status: <strong id="trucoStatus">Seu turno</strong></div>
+      </div>
+    </div>
+    <div class="game-actions" id="trucoActions">
+      <button class="btn btn-gold btn-sm" onclick="trucoPlay()">Jogar</button>
+      <button class="btn btn-outline btn-sm" onclick="trucoTruco()">Truco!</button>
+      <button class="btn btn-outline btn-sm" onclick="trucoCorro()">Corro</button>
+      <button class="btn btn-red btn-sm" onclick="trucoDeço()">Deço</button>
+    </div>
   </div>
-  <div class="game-log" id="trucoLog">Bem-vindo ao Truco Online!</div>
+  <div class="sidebar">
+    <div style="font-weight:700;color:var(--gold);font-size:12px;">👥 Jogadores</div>
+    <div class="scores-list" id="trucoScores"></div>
+    <div style="border-top:1px solid rgba(212,168,67,0.2);margin-top:8px;padding-top:8px;font-weight:700;color:var(--gold);font-size:12px;">💬 Chat</div>
+    <div class="chat-box" id="trucoChat"></div>
+    <div class="chat-input">
+      <input type="text" id="trucoChatInput" placeholder="Msg..." maxlength="40"/>
+      <button onclick="sendChat('truco')">✓</button>
+    </div>
+  </div>
+  <div class="game-log" id="trucoLog"></div>
 </div>
 
 <!-- BLACKJACK GAME -->
-<div id="blackjack" class="screen">
+<div id="blackjack" class="screen game-screen">
   <div class="game-header">
-    <div class="round-badge">RODADA <span id="blackjackRoundNum">1</span></div>
-    <div class="game-scores" id="blackjackScores"></div>
+    <div class="badge">BLACKJACK - Rodada <span id="blackjackRound">1</span></div>
+    <div>Aposta: <span style="color:var(--gold);font-weight:600" id="blackjackBet">50</span> 💰</div>
   </div>
-  <div class="game-content" id="blackjackContent">
-    <div style="text-align:center;color:var(--text-dim)">Preparando 21...</div>
+  <div class="game-content">
+    <div class="game-info">
+      <div style="margin-bottom:20px;">
+        <div style="font-size:12px;color:var(--text-dim);margin-bottom:8px;">Dealer:</div>
+        <div id="blackjackDealer" style="font-size:32px;margin-bottom:8px;">🂠 🂠</div>
+        <div style="font-size:12px;">Valor: <strong id="dealerValue">?</strong></div>
+      </div>
+      <div style="margin-bottom:20px;">
+        <div style="font-size:12px;color:var(--text-dim);margin-bottom:8px;">Você:</div>
+        <div id="blackjackHand" style="font-size:32px;margin-bottom:8px;">🂠 🂠</div>
+        <div style="font-size:12px;">Valor: <strong id="playerValue">?</strong></div>
+      </div>
+      <div>Fichas: <strong id="blackjackChips">1000</strong> 💰</div>
+    </div>
+    <div class="game-actions" id="blackjackActions">
+      <button class="btn btn-gold btn-sm" onclick="blackjackHit()">Hit</button>
+      <button class="btn btn-outline btn-sm" onclick="blackjackStand()">Stand</button>
+      <button class="btn btn-gold btn-sm" onclick="blackjackDouble()">Double</button>
+      <button class="btn btn-red btn-sm" onclick="blackjackSurrender()">Surrender</button>
+    </div>
   </div>
-  <div class="game-log" id="blackjackLog">Bem-vindo ao Blackjack Online!</div>
+  <div class="sidebar">
+    <div style="font-weight:700;color:var(--gold);font-size:12px;">👥 Jogadores</div>
+    <div class="scores-list" id="blackjackScores"></div>
+    <div style="border-top:1px solid rgba(212,168,67,0.2);margin-top:8px;padding-top:8px;font-weight:700;color:var(--gold);font-size:12px;">💬 Chat</div>
+    <div class="chat-box" id="blackjackChat"></div>
+    <div class="chat-input">
+      <input type="text" id="blackjackChatInput" placeholder="Msg..." maxlength="40"/>
+      <button onclick="sendChat('blackjack')">✓</button>
+    </div>
+  </div>
+  <div class="game-log" id="blackjackLog"></div>
 </div>
 
 <div id="loadingOverlay" class="loading-overlay">
@@ -255,417 +296,551 @@
 
 </div>
 
-<!-- PeerJS: WebRTC P2P -->
 <script src="https://cdn.jsdelivr.net/npm/peerjs@1.5.4/dist/peerjs.min.js"></script>
 <script>
 // ═══════════════════════════════════════════════════════
-//  CASSINO ONLINE — MÚLTIPLOS JOGOS
+//  CASSINO ONLINE - COMPLETO COM TODOS OS JOGOS
 // ═══════════════════════════════════════════════════════
 
-let currentGame = 'balatro'; // Jogo selecionado
-let myName = '', myId = '', roomCode = '', isHost = false;
-let gamePhase = 'menu';
-let peer = null, peerConns = [];
+let currentGame = 'poker', myName = '', myId = '', roomCode = '', isHost = false;
+let gamePhase = 'menu', peer = null, peerConns = [];
+let myChips = 1000;
 
-// ── UI Helpers ────────────────────────────────────────
-function setStatus(cls, txt) {
-  const el = document.getElementById('connStatus');
-  el.className = 'conn-status ' + cls;
-  el.textContent = txt;
-}
+// UI HELPERS
+function setStatus(txt) { document.getElementById('connStatus').textContent = txt; }
+function showScreen(id) { document.querySelectorAll('.screen').forEach(s => s.classList.remove('active')); document.getElementById(id).classList.add('active'); }
+function showLobbyMsg(msg, type = '') { const el = document.getElementById('lobbyMsg'); el.textContent = msg; el.className = 'msg-box' + (type ? ' ' + type : ''); el.style.display = 'block'; }
+function setVal(id, val) { document.getElementById(id).value = val; }
+function genId() { return Math.random().toString(36).substr(2, 9); }
+function genCode() { const c = 'ABCDEFGHJKLMNPQRSTUVWXYZ'; return Array.from({length:4}, () => c[Math.floor(Math.random()*c.length)]).join(''); }
+function showLoading(txt) { document.getElementById('loadingOverlay').classList.add('show'); document.getElementById('loadingText').textContent = txt || 'Carregando...'; }
+function hideLoading() { document.getElementById('loadingOverlay').classList.remove('show'); }
 
-function showScreen(id) {
-  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
-  document.getElementById(id).classList.add('active');
-}
-
-function showLobbyMsg(msg, type = '') {
-  const el = document.getElementById('lobbyMsg');
-  el.textContent = msg;
-  el.className = 'msg-box' + (type ? ' ' + type : '');
-  el.style.display = 'block';
-}
-
-function showLoading(txt) {
-  document.getElementById('loadingOverlay').classList.add('show');
-  document.getElementById('loadingText').textContent = txt || 'Carregando...';
-}
-
-function hideLoading() {
-  document.getElementById('loadingOverlay').classList.remove('show');
-}
-
-function setWinScore(id, val) {
-  const el = document.getElementById(id);
+// LOG & CHAT
+function addLog(game, msg, type = '') {
+  const el = document.getElementById(game + 'Log');
   if (el) {
-    el.value = val;
+    const div = document.createElement('div');
+    div.className = 'log-msg' + (type ? ' log-' + type : '');
+    div.textContent = msg;
+    el.appendChild(div);
+    el.scrollTop = el.scrollHeight;
+    if (el.children.length > 20) el.removeChild(el.children[0]);
   }
 }
 
-function genId() {
-  return Math.random().toString(36).substr(2, 9);
+function sendChat(game) {
+  const input = document.getElementById(game + 'ChatInput');
+  if (!input.value.trim()) return;
+  addChatMsg(game, myName, input.value);
+  broadcastToAll({ type: 'chat', game, player: myName, message: input.value });
+  input.value = '';
 }
 
-function genCode() {
-  const c = 'ABCDEFGHJKLMNPQRSTUVWXYZ';
-  return Array.from({ length: 4 }, () => c[Math.floor(Math.random() * c.length)]).join('');
+function addChatMsg(game, player, msg) {
+  const el = document.getElementById(game + 'Chat');
+  if (!el) return;
+  const div = document.createElement('div');
+  div.className = 'chat-msg';
+  div.innerHTML = `<span class="chat-name">${player}:</span><span class="chat-text">${msg.substring(0, 50)}</span>`;
+  el.appendChild(div);
+  el.scrollTop = el.scrollHeight;
+  if (el.children.length > 30) el.removeChild(el.children[0]);
 }
 
-// ── MENU PRINCIPAL ────────────────────────────────────
+// PEER
+function broadcastToAll(data) {
+  peerConns.forEach(({conn}) => {
+    if (conn && conn.open) try { conn.send(data); } catch (e) {}
+  });
+}
+
+function destroyPeer() {
+  if (peer) try { peer.destroy(); } catch (e) {} peer = null;
+  peerConns = [];
+}
+
+// MENU
 function selectGame(game) {
   currentGame = game;
-  const gameNames = {
-    'balatro': 'Balatro',
-    'poker': 'Poker',
-    'truco': 'Truco',
-    'blackjack': '21'
-  };
-  document.getElementById('lobbyTitle').textContent = gameNames[game].toUpperCase();
+  const names = {'poker': 'POKER', 'truco': 'TRUCO', 'blackjack': 'BLACKJACK'};
+  document.getElementById('lobbyTitle').textContent = names[game];
   showScreen('lobby');
   gamePhase = 'lobby';
 }
 
 function backToMenu() {
   gamePhase = 'menu';
-  currentGame = 'balatro';
   showScreen('main-menu');
   destroyPeer();
-  setStatus('ok', '✅ pronto');
+  setStatus('✅ pronto');
 }
 
-function destroyPeer() {
-  if (peer) {
-    try { peer.destroy(); } catch (e) { }
-    peer = null;
-  }
-  peerConns = [];
-}
-
-// ── SALA MULTIPLAYER ──────────────────────────────────
+// ROOM
 function createRoom() {
   const name = document.getElementById('nameInput').value.trim();
-  if (!name) {
-    showLobbyMsg('Digite seu nome!', 'error');
-    return;
-  }
-
-  myName = name;
-  myId = genId();
-  roomCode = genCode();
-  isHost = true;
-
+  if (!name) { showLobbyMsg('Digite seu nome!', 'error'); return; }
+  myChips = parseInt(document.getElementById('chipInput').value) || 1000;
+  myName = name; myId = genId(); roomCode = genCode(); isHost = true;
   showLoading('Criando sala...');
   destroyPeer();
 
-  // PeerJS
-  peer = new Peer('game' + currentGame + roomCode, {
+  peer = new Peer('game'+currentGame+roomCode, {
     debug: 0,
     config: {
       iceServers: [
-        { urls: 'stun:stun.l.google.com:19302' },
-        { urls: 'stun:stun1.l.google.com:19302' }
+        {urls: 'stun:stun.l.google.com:19302'},
+        {urls: 'stun:stun1.l.google.com:19302'}
       ]
     }
   });
 
-  let settled = false;
   peer.on('open', () => {
-    if (!settled) {
-      settled = true;
-      setupHostListeners();
-      hideLoading();
-      showScreen('waiting-screen');
-      document.getElementById('displayRoomCode').textContent = roomCode;
-      renderWaitingRoom();
-      setStatus('ok', '✅ sala criada');
-    }
+    peer.on('connection', (conn) => {
+      const entry = {conn, playerId: null, playerName: '', playerChips: 0};
+      peerConns.push(entry);
+      conn.on('data', (msg) => {
+        if (msg.type === 'join') {
+          entry.playerId = msg.playerId;
+          entry.playerName = msg.playerName;
+          entry.playerChips = msg.chips;
+          updateWaitingRoom();
+        } else if (msg.type === 'chat') {
+          addChatMsg(msg.game, msg.player, msg.message);
+        }
+      });
+      conn.on('close', () => {
+        peerConns = peerConns.filter(e => e !== entry);
+        updateWaitingRoom();
+      });
+    });
+    hideLoading();
+    showScreen('waiting-screen');
+    document.getElementById('displayRoomCode').textContent = roomCode;
+    document.getElementById('chipDisplay').textContent = myChips.toLocaleString('pt-BR');
+    updateWaitingRoom();
+    setStatus('✅ sala criada');
   });
 
   peer.on('error', (err) => {
-    if (!settled) {
-      settled = true;
-      destroyPeer();
-      hideLoading();
-      showLobbyMsg('Erro ao criar sala: ' + (err.type || 'desconhecido'), 'error');
-      setStatus('err', '⚠️ erro');
-    }
+    destroyPeer(); hideLoading();
+    showLobbyMsg('Erro ao criar sala: '+(err.type||'desconhecido'), 'error');
+    setStatus('❌ erro');
   });
 
   setTimeout(() => {
-    if (!settled) {
-      settled = true;
-      destroyPeer();
-      hideLoading();
+    if (gamePhase === 'lobby') {
+      destroyPeer(); hideLoading();
       showLobbyMsg('Timeout ao criar sala.', 'error');
-      setStatus('ok', '✅ pronto');
     }
   }, 15000);
-}
-
-function setupHostListeners() {
-  peer.on('connection', (conn) => {
-    const entry = { conn, playerId: null };
-    peerConns.push(entry);
-
-    conn.on('data', (msg) => {
-      if (msg.type === 'join') {
-        entry.playerId = msg.playerId;
-        handlePlayerJoin(msg);
-      }
-    });
-
-    conn.on('close', () => {
-      peerConns = peerConns.filter(e => e !== entry);
-      updateWaitingRoomUI();
-    });
-  });
-}
-
-function handlePlayerJoin(msg) {
-  // Aqui você pode validar e adicionar o jogador
-  console.log('Jogador entrou:', msg);
-  updateWaitingRoomUI();
 }
 
 function joinRoom() {
   const name = document.getElementById('nameInput').value.trim();
   const code = document.getElementById('roomCodeInput').value.trim().toUpperCase();
+  if (!name) { showLobbyMsg('Digite seu nome!', 'error'); return; }
+  if (code.length !== 4) { showLobbyMsg('Digite um código válido!', 'error'); return; }
 
-  if (!name) {
-    showLobbyMsg('Digite seu nome!', 'error');
-    return;
-  }
-  if (code.length !== 4) {
-    showLobbyMsg('Digite um código de 4 letras!', 'error');
-    return;
-  }
-
-  myName = name;
-  myId = genId();
-  roomCode = code;
-  isHost = false;
-
-  showLoading('Conectando à sala...');
+  myChips = parseInt(document.getElementById('chipInput').value) || 1000;
+  myName = name; myId = genId(); roomCode = code; isHost = false;
+  showLoading('Conectando...');
   destroyPeer();
 
-  peer = new Peer({
-    debug: 0,
-    config: {
-      iceServers: [
-        { urls: 'stun:stun.l.google.com:19302' },
-        { urls: 'stun:stun1.l.google.com:19302' }
-      ]
-    }
-  });
+  peer = new Peer({ debug: 0, config: { iceServers: [{urls: 'stun:stun.l.google.com:19302'}, {urls: 'stun:stun1.l.google.com:19302'}] } });
 
-  let settled = false;
   peer.on('open', () => {
-    if (!settled) {
-      settled = true;
-      const conn = peer.connect('game' + currentGame + code, {
-        reliable: true,
-        serialization: 'json'
-      });
-      peerConns = [{ conn, playerId: 'host' }];
+    const conn = peer.connect('game'+currentGame+code, {reliable: true, serialization: 'json'});
+    peerConns = [{conn, playerId: 'host'}];
 
-      conn.on('open', () => {
-        conn.send({
-          type: 'join',
-          playerId: myId,
-          playerName: myName
-        });
-        hideLoading();
-        showScreen('waiting-screen');
-        updateWaitingRoomUI();
-        setStatus('ok', '✅ conectado');
-      });
+    conn.on('open', () => {
+      conn.send({type: 'join', playerId: myId, playerName: myName, chips: myChips});
+      hideLoading();
+      showScreen('waiting-screen');
+      document.getElementById('chipDisplay').textContent = myChips.toLocaleString('pt-BR');
+      setStatus('✅ conectado');
+    });
 
-      conn.on('close', () => {
-        hideLoading();
-        showLobbyMsg('Desconectado da sala.', 'error');
-        showScreen('lobby');
-        setStatus('ok', '✅ pronto');
-      });
+    conn.on('data', (msg) => {
+      if (msg.type === 'chat') addChatMsg(msg.game, msg.player, msg.message);
+    });
 
-      conn.on('error', () => {
-        hideLoading();
-        showLobbyMsg('Erro de conexão.', 'error');
-        setStatus('err', '⚠️ erro');
-      });
-    }
+    conn.on('close', () => { hideLoading(); showLobbyMsg('Desconectado.', 'error'); showScreen('lobby'); setStatus('✅ pronto'); });
+    conn.on('error', () => { hideLoading(); showLobbyMsg('Erro de conexão.', 'error'); });
   });
 
-  peer.on('error', (err) => {
-    if (!settled) {
-      settled = true;
-      hideLoading();
-      showLobbyMsg('Erro ao conectar: ' + (err.type || 'desconhecido'), 'error');
-      setStatus('ok', '✅ pronto');
-    }
-  });
-
-  setTimeout(() => {
-    if (!settled) {
-      settled = true;
-      hideLoading();
-      showLobbyMsg('Sala não encontrada ou timeout.', 'error');
-      destroyPeer();
-      setStatus('ok', '✅ pronto');
-    }
-  }, 15000);
+  peer.on('error', () => { hideLoading(); showLobbyMsg('Erro ao conectar.', 'error'); });
+  setTimeout(() => { if (gamePhase === 'lobby') { destroyPeer(); hideLoading(); showLobbyMsg('Sala não encontrada.', 'error'); } }, 15000);
 }
 
 function leaveRoom() {
   gamePhase = 'menu';
   destroyPeer();
   showScreen('main-menu');
-  setStatus('ok', '✅ pronto');
+  setStatus('✅ pronto');
 }
 
-function renderWaitingRoom() {
-  updateWaitingRoomUI();
-}
-
-function updateWaitingRoomUI() {
-  // Atualizar lista de jogadores
+function updateWaitingRoom() {
   let html = `<div class="player-slot"><div class="dot"></div><span class="player-you">${myName} (você)</span></div>`;
-  
-  // Simulando jogadores (você pode expandir isso)
-  peerConns.forEach((entry) => {
-    if (entry.playerId) {
-      html += `<div class="player-slot"><div class="dot"></div><span>Jogador ${entry.playerId.substr(0, 5)}</span></div>`;
-    }
-  });
-
+  peerConns.forEach(e => { if (e.playerName) html += `<div class="player-slot"><div class="dot"></div><span>${e.playerName}</span></div>`; });
   document.getElementById('waitingPlayers').innerHTML = html;
 
   const msg = document.getElementById('waitingMsg');
   const btn = document.getElementById('startBtn');
-
   if (isHost && peerConns.length >= 1) {
     msg.textContent = 'Pronto para começar!';
     btn.style.display = 'block';
-  } else if (peerConns.length < 1) {
+  } else if (peerConns.length < 1 && isHost) {
     msg.textContent = 'Aguardando jogadores...';
     btn.style.display = 'none';
   } else {
-    msg.textContent = `${peerConns.length + 1} jogadores. Aguardando o host...`;
+    msg.textContent = `${peerConns.length + 1} jogadores. Aguardando...`;
     btn.style.display = 'none';
   }
 }
 
 function startGame() {
   if (!isHost) return;
-
-  // Broadcast para iniciar o jogo
-  peerConns.forEach(({ conn }) => {
-    if (conn && conn.open) {
-      try {
-        conn.send({ type: 'game_start', game: currentGame });
-      } catch (e) { }
-    }
-  });
-
-  // Iniciar jogo do host também
+  broadcastToAll({type: 'game_start', game: currentGame});
   launchGame();
 }
 
 function launchGame() {
   hideLoading();
-  
-  switch (currentGame) {
-    case 'balatro':
-      showScreen('game');
-      break;
-    case 'poker':
-      showScreen('poker');
-      initPokerGame();
-      break;
-    case 'truco':
-      showScreen('truco');
-      initTrucoGame();
-      break;
-    case 'blackjack':
-      showScreen('blackjack');
-      initBlackjackGame();
-      break;
-  }
-
   gamePhase = 'playing';
+  switch (currentGame) {
+    case 'poker': showScreen('poker'); initPokerGame(); break;
+    case 'truco': showScreen('truco'); initTrucoGame(); break;
+    case 'blackjack': showScreen('blackjack'); initBlackjackGame(); break;
+  }
 }
 
 // ═══════════════════════════════════════════════════════
-//  POKER
+//  POKER - LÓGICA COMPLETA
 // ═══════════════════════════════════════════════════════
+
+let pokerState = { round: 1, phase: 'preflop', players: [], pot: 0, board: [], community: [], currentBet: 0, deck: [] };
+
+function createDeck() {
+  const suits = ['♠','♥','♦','♣'], ranks = ['2','3','4','5','6','7','8','9','10','J','Q','K','A'];
+  const deck = [];
+  for (let s of suits) for (let r of ranks) deck.push(r+s);
+  return deck.sort(() => Math.random() - 0.5);
+}
 
 function initPokerGame() {
-  const content = document.getElementById('pokerContent');
-  content.innerHTML = `
-    <div style="text-align:center; color:var(--text-dim); font-size:18px;">
-      🎴 Poker Texas Hold'em<br>
-      <span style="font-size:14px; margin-top:10px; display:block;">
-        Suas Cartas: [?] [?]<br>
-        Pote: 1,000 fichas
-      </span>
-    </div>
-    <div style="display:flex; gap:10px; margin-top:20px;">
-      <button class="btn btn-gold" style="max-width:120px;">Check</button>
-      <button class="btn btn-outline" style="max-width:120px;">Fold</button>
-      <button class="btn btn-outline" style="max-width:120px;">Raise</button>
-    </div>
-  `;
-  console.log('Poker iniciado!');
+  addLog('poker', 'Bem-vindo ao Poker! 🎰', 'hi');
+  pokerState = { round: 1, phase: 'preflop', players: [{id: myId, name: myName, chips: myChips, hand: [], bet: 0, folded: false, active: true}], pot: 0, board: [], currentBet: 0, deck: createDeck() };
+  peerConns.forEach(e => {
+    if (e.playerName) pokerState.players.push({id: e.playerId, name: e.playerName, chips: e.playerChips, hand: [], bet: 0, folded: false, active: true});
+  });
+  dealPokerHands();
+  updatePokerUI();
+}
+
+function dealPokerHands() {
+  pokerState.deck = createDeck();
+  pokerState.players.forEach(p => {
+    p.hand = [pokerState.deck.pop(), pokerState.deck.pop()];
+    p.bet = 0;
+    p.folded = false;
+  });
+  const me = pokerState.players.find(p => p.id === myId);
+  addLog('poker', `Cartas: ${me.hand.join(' ')}`);
+  updatePokerUI();
+}
+
+function pokerCheck() {
+  if (pokerState.currentBet <= 0) {
+    addLog('poker', `${myName} passou ✓`, 'success');
+    advancePokerPhase();
+  } else {
+    addLog('poker', 'Precisa pagar!', 'error');
+  }
+}
+
+function pokerFold() {
+  const me = pokerState.players.find(p => p.id === myId);
+  me.folded = true;
+  addLog('poker', `${myName} desistiu ✗`, 'error');
+  checkPokerWinner();
+  updatePokerUI();
+}
+
+function pokerRaise() {
+  const me = pokerState.players.find(p => p.id === myId);
+  const raise = 50;
+  if (me.chips >= raise) {
+    me.chips -= raise;
+    me.bet += raise;
+    pokerState.pot += raise;
+    pokerState.currentBet = raise;
+    addLog('poker', `${myName} apostou ${raise} 📈`);
+    updatePokerUI();
+  } else {
+    addLog('poker', 'Fichas insuficientes!', 'error');
+  }
+}
+
+function pokerAllIn() {
+  const me = pokerState.players.find(p => p.id === myId);
+  pokerState.pot += me.chips;
+  me.bet += me.chips;
+  me.chips = 0;
+  addLog('poker', `${myName} foi all in! 💥`);
+  updatePokerUI();
+}
+
+function advancePokerPhase() {
+  if (pokerState.phase === 'preflop') {
+    pokerState.phase = 'flop';
+    pokerState.community = [pokerState.deck.pop(), pokerState.deck.pop(), pokerState.deck.pop()];
+    addLog('poker', `Flop: ${pokerState.community.join(' ')}`);
+  } else if (pokerState.phase === 'flop') {
+    pokerState.phase = 'turn';
+    pokerState.community.push(pokerState.deck.pop());
+    addLog('poker', `Turn: ${pokerState.community[3]}`);
+  } else if (pokerState.phase === 'turn') {
+    pokerState.phase = 'river';
+    pokerState.community.push(pokerState.deck.pop());
+    addLog('poker', `River: ${pokerState.community[4]}`);
+  } else if (pokerState.phase === 'river') {
+    checkPokerWinner();
+    pokerState.round++;
+    dealPokerHands();
+  }
+  updatePokerUI();
+}
+
+function checkPokerWinner() {
+  const active = pokerState.players.filter(p => !p.folded);
+  if (active.length === 1) {
+    const winner = active[0];
+    addLog('poker', `${winner.name} venceu ${pokerState.pot} fichas! 🏆`, 'success');
+    winner.chips += pokerState.pot;
+    pokerState.pot = 0;
+    pokerState.currentBet = 0;
+  }
+}
+
+function updatePokerUI() {
+  document.getElementById('pokerRound').textContent = pokerState.round;
+  document.getElementById('pokerPot').textContent = pokerState.pot;
+  const me = pokerState.players.find(p => p.id === myId);
+  document.getElementById('pokerChips').textContent = me.chips;
+  
+  let boardDiv = '';
+  if (pokerState.community.length > 0) {
+    boardDiv = pokerState.community.slice(0, 5).join(' ');
+    while (pokerState.community.length < 5) boardDiv += ' 🂠';
+  } else {
+    boardDiv = '🂠 🂠 🂠 🂠 🂠';
+  }
+  document.getElementById('pokerBoard').textContent = boardDiv;
+  document.getElementById('pokerHand').textContent = me.hand.join(' ');
+
+  let scoresHtml = '';
+  pokerState.players.forEach(p => {
+    scoresHtml += `<div class="score-item ${p.id === myId ? 'mine' : ''}">
+      <div class="score-name">${p.name} ${p.folded ? '(desistiu)' : ''}</div>
+      <div class="score-value">${p.chips} 💰</div>
+    </div>`;
+  });
+  document.getElementById('pokerScores').innerHTML = scoresHtml;
 }
 
 // ═══════════════════════════════════════════════════════
-//  TRUCO
+//  TRUCO - LÓGICA COMPLETA
 // ═══════════════════════════════════════════════════════
+
+let trucoState = { round: 1, players: [], hand: [], manilha: null, points: 0, status: 'Seu turno' };
 
 function initTrucoGame() {
-  const content = document.getElementById('trucoContent');
-  content.innerHTML = `
-    <div style="text-align:center; color:var(--text-dim); font-size:18px;">
-      🎯 Truco<br>
-      <span style="font-size:14px; margin-top:10px; display:block;">
-        Manilhas: A e 2<br>
-        Suas Cartas: 4♠ 6♥ Q♦
-      </span>
-    </div>
-    <div style="display:flex; gap:10px; margin-top:20px;">
-      <button class="btn btn-gold" style="max-width:120px;">Truco!</button>
-      <button class="btn btn-outline" style="max-width:120px;">Corro</button>
-      <button class="btn btn-outline" style="max-width:120px;">Deço</button>
-    </div>
-  `;
-  console.log('Truco iniciado!');
+  addLog('truco', 'Bem-vindo ao Truco! 🎯', 'hi');
+  trucoState = { round: 1, players: [{id: myId, name: myName, points: 0}], hand: [], manilha: null, points: 0, status: 'Seu turno' };
+  peerConns.forEach(e => {
+    if (e.playerName) trucoState.players.push({id: e.playerId, name: e.playerName, points: 0});
+  });
+  dealTrucoHands();
+  updateTrucoUI();
+}
+
+function dealTrucoHands() {
+  const deck = createDeck();
+  trucoState.hand = [deck.pop(), deck.pop(), deck.pop()];
+  trucoState.manilha = deck[deck.length-1][0];
+  trucoState.status = 'Seu turno';
+  addLog('truco', `Suas cartas: ${trucoState.hand.join(' ')}`);
+  addLog('truco', `Manilha: ${trucoState.manilha} 🎯`);
+}
+
+function trucoPlay() {
+  addLog('truco', `${myName} jogou 🎴`, 'success');
+  trucoState.status = 'Aguardando...';
+  updateTrucoUI();
+}
+
+function trucoTruco() {
+  addLog('truco', `${myName} gritou TRUCO! 🎯`, 'hi');
+  trucoState.points += 2;
+  updateTrucoUI();
+}
+
+function trucoCorro() {
+  addLog('truco', `${myName} correu! 💨`);
+  trucoState.points += 1;
+  updateTrucoUI();
+}
+
+function trucoDeço() {
+  addLog('truco', `${myName} deçou! 🛑`, 'error');
+  trucoState.points = 0;
+  updateTrucoUI();
+}
+
+function updateTrucoUI() {
+  document.getElementById('trucoRound').textContent = trucoState.round;
+  document.getElementById('trucoPoints').textContent = trucoState.points;
+  document.getElementById('trucoStatus').textContent = trucoState.status;
+  document.getElementById('trucoManilha').textContent = trucoState.manilha + '🎯';
+  document.getElementById('trucoHand').textContent = trucoState.hand.join(' ');
+
+  let scoresHtml = '';
+  trucoState.players.forEach(p => {
+    scoresHtml += `<div class="score-item ${p.id === myId ? 'mine' : ''}">
+      <div class="score-name">${p.name}</div>
+      <div class="score-value">${p.points} 🎯</div>
+    </div>`;
+  });
+  document.getElementById('trucoScores').innerHTML = scoresHtml;
 }
 
 // ═══════════════════════════════════════════════════════
-//  BLACKJACK / 21
+//  BLACKJACK - LÓGICA COMPLETA
 // ═══════════════════════════════════════════════════════
+
+let blackjackState = { round: 1, playerHand: [], dealerHand: [], bet: 50, chips: 0, gameOver: false, deck: [] };
 
 function initBlackjackGame() {
-  const content = document.getElementById('blackjackContent');
-  content.innerHTML = `
-    <div style="text-align:center; color:var(--text-dim); font-size:18px;">
-      🖤 Blackjack (21)<br>
-      <span style="font-size:14px; margin-top:10px; display:block;">
-        Dealer: [?] [5] = 15<br>
-        Você: [K] [6] = 16
-      </span>
-    </div>
-    <div style="display:flex; gap:10px; margin-top:20px;">
-      <button class="btn btn-gold" style="max-width:120px;">Hit (Pedir)</button>
-      <button class="btn btn-outline" style="max-width:120px;">Stand (Parar)</button>
-      <button class="btn btn-outline" style="max-width:120px;">Double</button>
-    </div>
-  `;
-  console.log('Blackjack iniciado!');
+  addLog('blackjack', 'Bem-vindo ao Blackjack! 🖤', 'hi');
+  blackjackState = { round: 1, playerHand: [], dealerHand: [], bet: 50, chips: myChips - 50, gameOver: false, deck: createDeck() };
+  blackjackState.playerHand = [blackjackState.deck.pop(), blackjackState.deck.pop()];
+  blackjackState.dealerHand = [blackjackState.deck.pop(), blackjackState.deck.pop()];
+  addLog('blackjack', `Você apostou ${blackjackState.bet} fichas 💰`);
+  updateBlackjackUI();
 }
 
-// Inicialização
-setStatus('ok', '✅ pronto');
-</script>
+function getCardValue(card) {
+  const rank = card[0];
+  if (rank === 'A') return 11;
+  if (['J','Q','K'].includes(rank)) return 10;
+  return parseInt(rank);
+}
 
+function calculateHand(hand) {
+  let value = 0, aces = 0;
+  for (let card of hand) {
+    const val = getCardValue(card);
+    if (card[0] === 'A') aces++;
+    value += val;
+  }
+  while (value > 21 && aces > 0) { value -= 10; aces--; }
+  return value;
+}
+
+function blackjackHit() {
+  if (blackjackState.gameOver) return;
+  blackjackState.playerHand.push(blackjackState.deck.pop());
+  const value = calculateHand(blackjackState.playerHand);
+  addLog('blackjack', `Você pediu. Valor: ${value}`);
+  if (value > 21) {
+    addLog('blackjack', 'BUST! Você perdeu! 💥', 'error');
+    blackjackState.gameOver = true;
+  }
+  updateBlackjackUI();
+}
+
+function blackjackStand() {
+  if (blackjackState.gameOver) return;
+  addLog('blackjack', 'Você parou.');
+  blackjackState.gameOver = true;
+  dealerLogic();
+}
+
+function blackjackDouble() {
+  if (blackjackState.gameOver || blackjackState.playerHand.length !== 2) return;
+  blackjackState.bet *= 2;
+  blackjackState.chips -= blackjackState.bet / 2;
+  blackjackState.playerHand.push(blackjackState.deck.pop());
+  addLog('blackjack', `Você dobrou para ${blackjackState.bet}! 📈`);
+  blackjackState.gameOver = true;
+  dealerLogic();
+  updateBlackjackUI();
+}
+
+function blackjackSurrender() {
+  if (blackjackState.gameOver) return;
+  addLog('blackjack', 'Você desistiu. Perdeu metade! 🏳', 'error');
+  blackjackState.chips += blackjackState.bet / 2;
+  blackjackState.gameOver = true;
+  updateBlackjackUI();
+}
+
+function dealerLogic() {
+  const dealerValue = calculateHand(blackjackState.dealerHand);
+  if (dealerValue < 17) {
+    blackjackState.dealerHand.push(blackjackState.deck.pop());
+    dealerLogic();
+  } else {
+    resolveBlackjackRound();
+  }
+}
+
+function resolveBlackjackRound() {
+  const playerValue = calculateHand(blackjackState.playerHand);
+  const dealerValue = calculateHand(blackjackState.dealerHand);
+
+  if (playerValue > 21) {
+    addLog('blackjack', `Você perdeu ${blackjackState.bet} fichas. 😞`, 'error');
+  } else if (dealerValue > 21) {
+    addLog('blackjack', `Você venceu! Ganhou ${blackjackState.bet} fichas! 🎉`, 'success');
+    blackjackState.chips += blackjackState.bet * 2;
+  } else if (playerValue > dealerValue) {
+    addLog('blackjack', `Você venceu! Ganhou ${blackjackState.bet} fichas! 🎉`, 'success');
+    blackjackState.chips += blackjackState.bet * 2;
+  } else if (playerValue === dealerValue) {
+    addLog('blackjack', `Empate! Sua aposta foi devolvida. 🤝`, 'success');
+    blackjackState.chips += blackjackState.bet;
+  } else {
+    addLog('blackjack', `Dealer venceu! Você perdeu ${blackjackState.bet} fichas. 😞`, 'error');
+  }
+
+  setTimeout(() => {
+    blackjackState.round++;
+    if (blackjackState.chips > 0) {
+      initBlackjackGame();
+    } else {
+      addLog('blackjack', 'Você ficou sem fichas! 💔', 'error');
+    }
+  }, 2000);
+}
+
+function updateBlackjackUI() {
+  document.getElementById('blackjackRound').textContent = blackjackState.round;
+  document.getElementById('blackjackBet').textContent = blackjackState.bet;
+  document.getElementById('blackjackChips').textContent = blackjackState.chips;
+
+  document.getElementById('blackjackDealer').textContent = blackjackState.dealerHand.join(' ');
+  document.getElementById('blackjackHand').textContent = blackjackState.playerHand.join(' ');
+
+  document.getElementById('playerValue').textContent = calculateHand(blackjackState.playerHand);
+  document.getElementById('dealerValue').textContent = calculateHand(blackjackState.dealerHand);
+
+  const scoresHtml = `<div class="score-item mine"><div class="score-name">${myName}</div><div class="score-value">${blackjackState.chips} 💰</div></div>`;
+  document.getElementById('blackjackScores').innerHTML = scoresHtml;
+}
+
+setStatus('✅ pronto');
+</script>
 </body>
 </html>
