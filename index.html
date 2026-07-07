@@ -23,7 +23,6 @@
   .game-card-name{font-family:'Cinzel',serif;color:var(--gold);font-size:20px;font-weight:700}
   .game-card-desc{font-size:12px;color:var(--text-dim)}
   
-  /* NOVO LOBBY ESTILO BALATRO */
   #lobby{align-items:center;justify-content:center;background:radial-gradient(ellipse at 50% 40%,#1e4a1e 0%,#0d1f0d 70%);padding:20px;overflow-y:auto}
   .lobby-container{width:100%;max-width:900px;display:grid;grid-template-columns:1fr 1fr;gap:20px}
   .lobby-section{background:var(--panel);border:1px solid rgba(212,168,67,0.3);border-radius:12px;padding:24px;display:flex;flex-direction:column;gap:16px}
@@ -51,6 +50,11 @@
   .mode-btn.active{background:rgba(212,168,67,0.35);border-color:var(--gold);box-shadow:0 0 15px rgba(212,168,67,0.3)}
   .mode-btn:hover{background:rgba(212,168,67,0.2)}
   
+  .difficulty-selector{display:flex;gap:8px}
+  .difficulty-btn{flex:1;padding:8px;background:rgba(212,168,67,0.1);border:1px solid rgba(212,168,67,0.3);border-radius:6px;color:var(--gold);cursor:pointer;font-weight:600;transition:all .2s;font-family:'Cinzel',serif;font-size:11px}
+  .difficulty-btn.active{background:rgba(212,168,67,0.3);border-color:var(--gold)}
+  .difficulty-btn:hover{background:rgba(212,168,67,0.2)}
+  
   .room-display{background:rgba(0,0,0,0.5);border:2px solid var(--gold);border-radius:8px;padding:16px;text-align:center;margin:12px 0}
   .room-code{font-family:'Cinzel',serif;font-size:36px;color:var(--gold);letter-spacing:8px;margin:8px 0}
   .room-label{font-size:11px;color:var(--text-dim);text-transform:uppercase}
@@ -75,7 +79,6 @@
   
   .conn-status{position:fixed;top:8px;right:10px;font-size:11px;padding:3px 8px;border-radius:10px;z-index:300;background:rgba(0,0,0,0.6);color:#27ae60}
   
-  /* WAITING SCREEN */
   #waiting-screen{align-items:center;justify-content:center;background:radial-gradient(ellipse at 50% 40%,#1e4a1e 0%,#0d1f0d 70%);padding:20px}
   .waiting-box{background:var(--panel);border:1px solid rgba(212,168,67,0.3);border-radius:12px;padding:28px;width:100%;max-width:500px}
   .waiting-box h2{font-family:'Cinzel',serif;color:var(--gold);font-size:18px;margin-bottom:16px;text-align:center;text-transform:uppercase}
@@ -84,7 +87,6 @@
   .player-item .dot{width:8px;height:8px;border-radius:50%;background:#27ae60;flex-shrink:0}
   .player-item.you{color:var(--gold);font-weight:600;border-color:var(--gold);background:rgba(212,168,67,0.1)}
   
-  /* GAME SCREENS */
   .game-screen{background:radial-gradient(ellipse at 50% 50%,var(--felt-light) 0%,var(--felt) 40%,var(--dark) 100%);display:grid;grid-template-columns:1fr 220px;gap:10px;padding:10px}
   .game-header{grid-column:1/-1;display:flex;justify-content:space-between;align-items:center;padding:10px 16px;background:rgba(0,0,0,0.5);border:1px solid rgba(212,168,67,0.2);border-radius:8px;font-size:13px}
   .badge{font-family:'Cinzel',serif;color:var(--gold);font-size:13px}
@@ -97,15 +99,19 @@
   .log-success{color:#27ae60}
   .log-error{color:#e74c3c}
   .log-hi{color:var(--gold)}
+  .log-bot{color:#d4a843;font-style:italic}
   .sidebar{background:rgba(0,0,0,0.3);border:1px solid rgba(212,168,67,0.2);border-radius:8px;padding:12px;display:flex;flex-direction:column;gap:12px;overflow-y:auto}
   .scores-list{display:flex;flex-direction:column;gap:8px;font-size:12px}
   .score-item{background:rgba(0,0,0,0.3);border:1px solid rgba(212,168,67,0.2);border-radius:6px;padding:8px;color:var(--text-dim)}
   .score-item.mine{border-color:var(--gold);background:rgba(212,168,67,0.1)}
+  .score-item.bot{border-color:#d4a843;opacity:0.8}
   .score-name{font-size:11px;color:var(--text-dim)}
   .score-value{color:var(--gold);font-weight:600;font-size:14px}
   .chat-box{background:rgba(0,0,0,0.4);border:1px solid rgba(212,168,67,0.2);border-radius:6px;padding:8px;height:150px;overflow-y:auto;font-size:11px}
   .chat-msg{margin-bottom:4px;padding:4px;border-left:2px solid var(--gold);padding-left:6px}
+  .chat-msg.bot{border-left-color:#d4a843}
   .chat-name{color:var(--gold);font-weight:600;font-size:10px}
+  .chat-name.bot{color:#d4a843}
   .chat-text{color:var(--text-dim);display:block;margin-top:2px;word-break:break-word}
   .chat-input{display:flex;gap:4px;margin-top:6px}
   .chat-input input{flex:1;background:rgba(0,0,0,0.4);border:1px solid rgba(212,168,67,0.3);border-radius:4px;color:var(--text);font-size:11px;padding:4px 6px;outline:none}
@@ -146,7 +152,7 @@
       <div class="game-card-desc">Blackjack</div>
     </div>
   </div>
-  <div style="font-size:12px;color:var(--text-dim);text-align:center;">Até 4 jogadores · Sem instalação · Funciona entre dispositivos</div>
+  <div style="font-size:12px;color:var(--text-dim);text-align:center;">Até 4 jogadores · Sem instalação · Com BOTs Inteligentes</div>
 </div>
 
 <!-- NOVO LOBBY ESTILO BALATRO -->
@@ -200,10 +206,12 @@
       
       <!-- Incluir BOT (se Local) -->
       <div class="field-group" id="botOption" style="display:none;">
-        <label class="field-label">
-          <input type="checkbox" id="includeBotCheckbox" checked style="margin-right:6px;"/>
-          🤖 Incluir BOT
-        </label>
+        <label class="field-label">🤖 Dificuldade dos BOTs</label>
+        <div class="difficulty-selector">
+          <button class="difficulty-btn" onclick="setBotDifficulty('easy')" data-diff="easy">😊 Fácil</button>
+          <button class="difficulty-btn active" onclick="setBotDifficulty('medium')" data-diff="medium">😐 Médio</button>
+          <button class="difficulty-btn" onclick="setBotDifficulty('hard')" data-diff="hard">😈 Difícil</button>
+        </div>
       </div>
       
       <div class="info-box" id="modeInfo">Crie uma sala e convide seus amigos!<br/>Máximo de <strong>4 jogadores</strong></div>
@@ -244,14 +252,14 @@
         
         <div>
           <strong style="color:var(--gold);">💻 Modo Local:</strong>
-          <p style="margin-top:4px;line-height:1.4;">Jogue na mesma máquina. Opção de adicionar BOTs para completar os jogadores!</p>
+          <p style="margin-top:4px;line-height:1.4;">Jogue contra BOTs inteligentes com dificuldade ajustável!</p>
         </div>
         
         <div class="divider"></div>
         
         <div>
-          <strong style="color:var(--gold);">⚙️ Dicas:</strong>
-          <p style="margin-top:4px;line-height:1.4;">• Máximo 4 jogadores por sala<br/>• Conexão P2P sem servidor<br/>• Chat integrado durante o jogo</p>
+          <strong style="color:var(--gold);">🤖 BOTs Inteligentes:</strong>
+          <p style="margin-top:4px;line-height:1.4;">• <strong>Fácil:</strong> Decisões aleatórias<br/>• <strong>Médio:</strong> Estratégia balanceada<br/>• <strong>Difícil:</strong> IA competitiva</p>
         </div>
       </div>
       
@@ -279,7 +287,7 @@
       <div class="field-label" style="margin-top:16px;">Jogadores Conectados:</div>
       <div class="players-list" id="waitingPlayersList"></div>
       
-      <div class="info-box" style="margin-top:16px;">
+      <div class="info-box" style="margin-top:16px;" id="gameModeInfo">
         Compartilhe o código <strong id="shareCode">----</strong> com seus amigos!
       </div>
       
@@ -417,13 +425,14 @@
 <script src="https://cdn.jsdelivr.net/npm/peerjs@1.5.4/dist/peerjs.min.js"></script>
 <script>
 // ═══════════════════════════════════════════════════════
-//  CASSINO ONLINE - COMPLETO COM TODOS OS JOGOS
+//  CASSINO ONLINE - COMPLETO COM BOTS INTELIGENTES
 // ═══════════════════════════════════════════════════════
 
 let currentGame = 'poker', myName = '', myId = '', roomCode = '', isHost = false;
-let gameMode = 'online', selectedPlayerCount = 1, includeBot = true;
+let gameMode = 'online', selectedPlayerCount = 1, botDifficulty = 'medium';
 let gamePhase = 'menu', peer = null, peerConns = [];
 let myChips = 1000;
+let botTimers = {};
 
 // UI HELPERS
 function setStatus(txt) { document.getElementById('connStatus').textContent = txt; }
@@ -435,7 +444,7 @@ function genCode() { const c = 'ABCDEFGHJKLMNPQRSTUVWXYZ'; return Array.from({le
 function showLoading(txt) { document.getElementById('loadingOverlay').classList.add('show'); document.getElementById('loadingText').textContent = txt || 'Carregando...'; }
 function hideLoading() { document.getElementById('loadingOverlay').classList.remove('show'); }
 
-// NOVA: Funções do Lobby
+// FUNÇÕES DO LOBBY
 function setGameMode(mode) {
   gameMode = mode;
   document.querySelectorAll('.mode-btn').forEach(btn => btn.classList.remove('active'));
@@ -446,7 +455,7 @@ function setGameMode(mode) {
   
   if (mode === 'local') {
     botOption.style.display = 'block';
-    modeInfo.innerHTML = 'Jogue na mesma máquina com amigos ou contra BOTs!';
+    modeInfo.innerHTML = 'Jogue contra BOTs inteligentes!<br/>Escolha a dificuldade desejada.';
   } else {
     botOption.style.display = 'none';
     modeInfo.innerHTML = 'Crie uma sala e convide seus amigos!<br/>Máximo de <strong>4 jogadores</strong>';
@@ -457,6 +466,12 @@ function setPlayerCount(count) {
   selectedPlayerCount = count;
   document.querySelectorAll('.player-count-btn').forEach(btn => btn.classList.remove('active'));
   document.querySelector(`[data-count="${count}"]`).classList.add('active');
+}
+
+function setBotDifficulty(diff) {
+  botDifficulty = diff;
+  document.querySelectorAll('.difficulty-btn').forEach(btn => btn.classList.remove('active'));
+  document.querySelector(`[data-diff="${diff}"]`).classList.add('active');
 }
 
 // LOG & CHAT
@@ -475,17 +490,18 @@ function addLog(game, msg, type = '') {
 function sendChat(game) {
   const input = document.getElementById(game + 'ChatInput');
   if (!input.value.trim()) return;
-  addChatMsg(game, myName, input.value);
+  addChatMsg(game, myName, input.value, false);
   broadcastToAll({ type: 'chat', game, player: myName, message: input.value });
   input.value = '';
 }
 
-function addChatMsg(game, player, msg) {
+function addChatMsg(game, player, msg, isBot = false) {
   const el = document.getElementById(game + 'Chat');
   if (!el) return;
   const div = document.createElement('div');
-  div.className = 'chat-msg';
-  div.innerHTML = `<span class="chat-name">${player}:</span><span class="chat-text">${msg.substring(0, 50)}</span>`;
+  div.className = 'chat-msg' + (isBot ? ' bot' : '');
+  const nameClass = isBot ? ' bot' : '';
+  div.innerHTML = `<span class="chat-name${nameClass}">${player}:</span><span class="chat-text">${msg.substring(0, 50)}</span>`;
   el.appendChild(div);
   el.scrollTop = el.scrollHeight;
   if (el.children.length > 30) el.removeChild(el.children[0]);
@@ -501,6 +517,8 @@ function broadcastToAll(data) {
 function destroyPeer() {
   if (peer) try { peer.destroy(); } catch (e) {} peer = null;
   peerConns = [];
+  Object.keys(botTimers).forEach(key => clearTimeout(botTimers[key]));
+  botTimers = {};
 }
 
 // MENU
@@ -529,10 +547,8 @@ function createRoom() {
   myName = name; myId = genId(); roomCode = genCode(); isHost = true;
   
   if (gameMode === 'local') {
-    // Modo Local: Simular até 4 jogadores
     showLocalGameSetup();
   } else {
-    // Modo Online: P2P
     showLoading('Criando sala online...');
     destroyPeer();
     
@@ -571,6 +587,7 @@ function createRoom() {
       document.getElementById('shareCode').textContent = roomCode;
       document.getElementById('roomDisplaySection').style.display = 'block';
       document.getElementById('displayRoomCode').textContent = roomCode;
+      document.getElementById('gameModeInfo').innerHTML = 'Compartilhe o código <strong>' + roomCode + '</strong> com seus amigos!';
       updateWaitingRoom();
       setStatus('✅ sala criada');
     });
@@ -591,24 +608,28 @@ function createRoom() {
 }
 
 function showLocalGameSetup() {
-  // Simulação: Ir direto para a tela de espera
   hideLoading();
   showScreen('waiting-screen');
   roomCode = 'LOCAL';
   document.getElementById('waitingRoomCode').textContent = 'LOCAL';
-  document.getElementById('shareCode').textContent = 'Local';
+  document.getElementById('shareCode').textContent = 'Modo Local';
   
-  // Simular outros jogadores + BOT se necessário
+  // Criar BOTs com dificuldade
   peerConns = [];
+  const botNames = ['Bot Alpha', 'Bot Beta', 'Bot Gamma', 'Bot Delta'];
   for (let i = 0; i < selectedPlayerCount - 1; i++) {
-    const botNames = ['Bot Alpha', 'Bot Beta', 'Bot Gamma', 'Bot Delta'];
     peerConns.push({
       conn: null,
       playerId: 'bot_' + i,
-      playerName: botNames[i] || 'Bot ' + (i+1),
-      playerChips: myChips
+      playerName: botNames[i],
+      playerChips: myChips,
+      difficulty: botDifficulty,
+      isBot: true
     });
   }
+  
+  const diffName = {'easy': 'Fácil', 'medium': 'Médio', 'hard': 'Difícil'};
+  document.getElementById('gameModeInfo').innerHTML = `🤖 BOTs com dificuldade <strong>${diffName[botDifficulty]}</strong>`;
   
   updateWaitingRoom();
   setStatus('✅ sala local criada');
@@ -667,7 +688,7 @@ function updateWaitingRoom() {
   let html = `<div class="player-item you"><div class="dot"></div><span>${myName} (você)</span></div>`;
   peerConns.forEach(e => { 
     if (e.playerName) {
-      const isBOT = e.playerId && e.playerId.startsWith('bot_');
+      const isBOT = e.isBot || (e.playerId && e.playerId.startsWith('bot_'));
       html += `<div class="player-item"><div class="dot"></div><span>${e.playerName}${isBOT ? ' 🤖' : ''}</span></div>`;
     }
   });
@@ -712,6 +733,105 @@ function launchGame() {
 }
 
 // ═══════════════════════════════════════════════════════
+//  SISTEMA DE BOTs COM IA
+// ═══════════════════════════════════════════════════════
+
+class BotAI {
+  constructor(difficulty) {
+    this.difficulty = difficulty;
+  }
+
+  makeDecision(context) {
+    switch(this.difficulty) {
+      case 'easy': return this.easyDecision(context);
+      case 'medium': return this.mediumDecision(context);
+      case 'hard': return this.hardDecision(context);
+      default: return 'check';
+    }
+  }
+
+  easyDecision(context) {
+    const options = context.availableActions || [];
+    return options[Math.floor(Math.random() * options.length)] || 'check';
+  }
+
+  mediumDecision(context) {
+    const { handStrength, chipStack, pot, currentBet } = context;
+    if (handStrength > 0.7) {
+      return Math.random() > 0.3 ? 'raise' : 'call';
+    } else if (handStrength > 0.4) {
+      return Math.random() > 0.5 ? 'call' : 'fold';
+    } else {
+      return Math.random() > 0.7 ? 'call' : 'fold';
+    }
+  }
+
+  hardDecision(context) {
+    const { handStrength, chipStack, pot, currentBet, boardCards } = context;
+    const potOdds = currentBet / (pot + currentBet);
+    
+    if (handStrength > 0.8 || (handStrength > 0.6 && chipStack > pot * 2)) {
+      return 'raise';
+    } else if (handStrength > potOdds) {
+      return 'call';
+    } else {
+      return 'fold';
+    }
+  }
+}
+
+function executeBotAction(botPlayer, game, state) {
+  if (!botPlayer.isBot) return;
+  
+  const difficulty = botPlayer.difficulty || botDifficulty;
+  const ai = new BotAI(difficulty);
+  
+  let delay = 1000 + Math.random() * 2000; // 1-3 segundos
+  
+  botTimers[botPlayer.playerId] = setTimeout(() => {
+    if (game === 'poker') botActionPoker(botPlayer, ai, state);
+    else if (game === 'truco') botActionTruco(botPlayer, ai, state);
+    else if (game === 'blackjack') botActionBlackjack(botPlayer, ai, state);
+  }, delay);
+}
+
+function botActionPoker(bot, ai, state) {
+  const context = {
+    handStrength: Math.random() * 0.9,
+    chipStack: bot.playerChips,
+    pot: state.pot,
+    currentBet: state.currentBet,
+    availableActions: ['check', 'fold', 'raise']
+  };
+  
+  const action = ai.makeDecision(context);
+  const botMessages = {
+    'raise': ['Vou apostar!', 'Aposto!', 'Vamos nessa!'],
+    'call': ['Acompanho', 'Chamo', 'Fico na mão'],
+    'fold': ['Passo', 'Desisto', 'Não vale a pena'],
+    'check': ['Passo', 'Checado', 'Vamos ver']
+  };
+  
+  addLog('poker', `${bot.playerName} ${botMessages[action][Math.floor(Math.random()*3)]} 🤖`, 'bot');
+  addChatMsg('poker', bot.playerName, botMessages[action][Math.floor(Math.random()*3)], true);
+}
+
+function botActionTruco(bot, ai, state) {
+  const actions = ['Jogo!', 'Truco!', 'Corro', 'Deço'];
+  const action = actions[Math.floor(Math.random() * actions.length)];
+  
+  addLog('truco', `${bot.playerName} ${action} 🤖`, 'bot');
+  addChatMsg('truco', bot.playerName, action, true);
+}
+
+function botActionBlackjack(bot, ai, state) {
+  const actions = ['Hit', 'Stand', 'Double'];
+  const action = actions[Math.floor(Math.random() * actions.length)];
+  
+  addLog('blackjack', `${bot.playerName} ${action} 🤖`, 'bot');
+}
+
+// ═══════════════════════════════════════════════════════
 //  POKER - LÓGICA COMPLETA
 // ═══════════════════════════════════════════════════════
 
@@ -728,10 +848,15 @@ function initPokerGame() {
   addLog('poker', 'Bem-vindo ao Poker! ♠️', 'hi');
   pokerState = { round: 1, phase: 'preflop', players: [{id: myId, name: myName, chips: myChips, hand: [], bet: 0, folded: false, active: true}], pot: 0, board: [], currentBet: 0, deck: createDeck() };
   peerConns.forEach(e => {
-    if (e.playerName) pokerState.players.push({id: e.playerId, name: e.playerName, chips: e.playerChips, hand: [], bet: 0, folded: false, active: true});
+    if (e.playerName) pokerState.players.push({id: e.playerId, name: e.playerName, chips: e.playerChips, hand: [], bet: 0, folded: false, active: true, ...e});
   });
   dealPokerHands();
   updatePokerUI();
+  
+  // Executar ações de BOTs
+  peerConns.forEach(bot => {
+    if (bot.isBot) executeBotAction(bot, 'poker', pokerState);
+  });
 }
 
 function dealPokerHands() {
@@ -837,7 +962,8 @@ function updatePokerUI() {
 
   let scoresHtml = '';
   pokerState.players.forEach(p => {
-    scoresHtml += `<div class="score-item ${p.id === myId ? 'mine' : ''}">
+    const isBot = p.isBot || p.id.startsWith('bot_');
+    scoresHtml += `<div class="score-item ${p.id === myId ? 'mine' : ''}${isBot ? ' bot' : ''}">
       <div class="score-name">${p.name} ${p.folded ? '(desistiu)' : ''}</div>
       <div class="score-value">${p.chips} 💰</div>
     </div>`;
@@ -855,10 +981,14 @@ function initTrucoGame() {
   addLog('truco', 'Bem-vindo ao Truco! 🎯', 'hi');
   trucoState = { round: 1, players: [{id: myId, name: myName, points: 0}], hand: [], manilha: null, points: 0, status: 'Seu turno' };
   peerConns.forEach(e => {
-    if (e.playerName) trucoState.players.push({id: e.playerId, name: e.playerName, points: 0});
+    if (e.playerName) trucoState.players.push({id: e.playerId, name: e.playerName, points: 0, ...e});
   });
   dealTrucoHands();
   updateTrucoUI();
+  
+  peerConns.forEach(bot => {
+    if (bot.isBot) executeBotAction(bot, 'truco', trucoState);
+  });
 }
 
 function dealTrucoHands() {
@@ -903,7 +1033,8 @@ function updateTrucoUI() {
 
   let scoresHtml = '';
   trucoState.players.forEach(p => {
-    scoresHtml += `<div class="score-item ${p.id === myId ? 'mine' : ''}">
+    const isBot = p.isBot || p.id.startsWith('bot_');
+    scoresHtml += `<div class="score-item ${p.id === myId ? 'mine' : ''}${isBot ? ' bot' : ''}">
       <div class="score-name">${p.name}</div>
       <div class="score-value">${p.points} 🎯</div>
     </div>`;
